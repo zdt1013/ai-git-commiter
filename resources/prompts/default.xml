@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <id>default</id>
+    <name>默认提示词</name>
+    <source>local</source>
+    <content>
+        <![CDATA[
+
+
+{preferredLanguagePrompt}
+{preferredLibraryPrompt}
+请根据以下代码变更生成一个简洁明了的git commit消息：
+必须使用{language}生成commit消息。
+
+{diff}
+        ]]>
+    </content>
+    <description>适用于大多数代码变更场景，适合需要简洁明了描述代码变更的情况</description>
+    <usage>
+        <step>将代码变更内容替换到 {diff} 占位符处</step>
+        <step>将语言设置替换到 {language} 占位符处</step>
+        <step>提示词会自动生成简洁的 commit 消息</step>
+    </usage>
+    <preferredLanguagePrompt>该项目使用偏好编程语言为：{preferredLanguages}</preferredLanguagePrompt>
+    <preferredLibraryPrompt>该项目使用偏好三方库为：{preferredLibraries}</preferredLibraryPrompt>
+    <preferredLanguages>
+        <language>typescript</language>
+        <language>javascript</language>
+        <language>python</language>
+        <language>java</language>
+        <language>go</language>
+    </preferredLanguages>
+    <preferredLibraries>
+        <library>react</library>
+        <library>vue</library>
+        <library>angular</library>
+        <library>express</library>
+        <library>django</library>
+    </preferredLibraries>
+</prompt> 

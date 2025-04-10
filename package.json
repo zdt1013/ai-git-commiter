@@ -1,0 +1,325 @@
+{
+  "name": "ai-git-commit",
+  "displayName": "AI Git Commit",
+  "description": "使用AI大模型自动生成Git Commit消息",
+  "version": "0.0.1",
+  "publisher": "ai-git-commit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zdt1013/ai-git-commit.git"
+  },
+  "engines": {
+    "vscode": "^1.75.0",
+    "node": ">=20.0.0"
+  },
+  "icon": "resources/icon.png",
+  "categories": [
+    "SCM Providers",
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "packageManager": "pnpm@8.15.4",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "ai-git-commit.generateCommitMessage",
+        "title": "生成AI Commit消息",
+        "icon": {
+          "light": "resources/icon.svg",
+          "dark": "resources/icon.svg"
+        }
+      },
+      {
+        "command": "ai-git-commit.managePrompts",
+        "title": "管理提示词模板"
+      },
+      {
+        "command": "ai-git-commit.addPrompt",
+        "title": "添加提示词模板"
+      },
+      {
+        "command": "ai-git-commit.editPrompt",
+        "title": "编辑提示词模板"
+      },
+      {
+        "command": "ai-git-commit.deletePrompt",
+        "title": "删除提示词模板"
+      },
+      {
+        "command": "ai-git-commit.usePrompt",
+        "title": "使用提示词模板"
+      },
+      {
+        "command": "ai-git-commit.managePrompts",
+        "title": "管理提示词"
+      },
+      {
+        "command": "ai-git-commit.downloadPrompts",
+        "title": "下载远程提示词"
+      }
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "ai-git-commit.generateCommitMessage",
+          "group": "navigation",
+          "when": "scmProvider == git"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "ai-git-commit.managePrompts",
+          "group": "ai-git-commit"
+        },
+        {
+          "command": "ai-git-commit.addPrompt",
+          "group": "ai-git-commit"
+        },
+        {
+          "command": "ai-git-commit.editPrompt",
+          "group": "ai-git-commit"
+        },
+        {
+          "command": "ai-git-commit.deletePrompt",
+          "group": "ai-git-commit"
+        },
+        {
+          "command": "ai-git-commit.usePrompt",
+          "group": "ai-git-commit"
+        },
+        {
+          "command": "ai-git-commit.downloadPrompts",
+          "group": "ai-git-commit"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "AI Git Commit",
+      "properties": {
+        "ai-git-commit.language": {
+          "type": "string",
+          "default": "中文",
+          "order": 0,
+          "enum": [
+            "简体中文",
+            "English"
+          ],
+          "description": "生成的Commit消息语言"
+        },
+        "ai-git-commit.provider": {
+          "type": "string",
+          "default": "OpenAI",
+          "order": 1,
+          "enum": [
+            "OpenAI",
+            "Gemini"
+          ],
+          "description": "AI提供商"
+        },
+        "ai-git-commit.openai.baseUrl": {
+          "type": "string",
+          "order": 2,
+          "default": "https://api.openai.com/v1",
+          "description": "OpenAI API基础URL"
+        },
+        "ai-git-commit.openai.apiKey": {
+          "type": "string",
+          "order": 3,
+          "default": "",
+          "description": "OpenAI API密钥"
+        },
+        "ai-git-commit.openai.model": {
+          "type": "string",
+          "order": 4,
+          "default": "gpt-3.5-turbo",
+          "description": "OpenAI模型名称"
+        },
+        "ai-git-commit.openai.temperature": {
+          "type": "number",
+          "order": 5,
+          "default": 0.7,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "OpenAI模型温度参数"
+        },
+        "ai-git-commit.openai.topP": {
+          "type": "number",
+          "order": 6,
+          "default": 1,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "OpenAI模型top_p参数"
+        },
+        "ai-git-commit.openai.maxTokens": {
+          "type": "number",
+          "order": 7,
+          "default": 500,
+          "minimum": 1,
+          "description": "OpenAI模型最大输出长度"
+        },
+        "ai-git-commit.gemini.baseUrl": {
+          "type": "string",
+          "order": 8,
+          "default": "https://generativelanguage.googleapis.com",
+          "description": "Google Gemini API基础URL"
+        },
+        "ai-git-commit.gemini.apiKey": {
+          "type": "string",
+          "order": 9,
+          "default": "",
+          "description": "Google Gemini API密钥"
+        },
+        "ai-git-commit.gemini.model": {
+          "type": "string",
+          "order": 10,
+          "default": "gemini-pro",
+          "description": "Google Gemini模型名称"
+        },
+        "ai-git-commit.gemini.temperature": {
+          "type": "number",
+          "order": 11,
+          "default": 0.7,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Gemini模型温度参数"
+        },
+        "ai-git-commit.gemini.topK": {
+          "type": "number",
+          "order": 12,
+          "default": 40,
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Gemini模型top_k参数"
+        },
+        "ai-git-commit.gemini.topP": {
+          "type": "number",
+          "order": 13,
+          "default": 0.95,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Gemini模型top_p参数"
+        },
+        "ai-git-commit.gemini.maxOutputTokens": {
+          "type": "number",
+          "order": 14,
+          "default": 500,
+          "minimum": 1,
+          "description": "Gemini模型最大输出长度"
+        },
+        "ai-git-commit.git-diff.wordDiff": {
+          "type": "boolean",
+          "order": 15,
+          "default": true,
+          "description": "显示单词级别的变更（而非整行），减少冗余内容"
+        },
+        "ai-git-commit.git-diff.unified": {
+          "type": "number",
+          "order": 16,
+          "default": 0,
+          "minimum": 0,
+          "description": "去除上下文行，仅保留实际变更"
+        },
+        "ai-git-commit.git-diff.noColor": {
+          "type": "boolean",
+          "order": 17,
+          "default": true,
+          "description": "移除颜色代码，避免额外 Token 开销"
+        },
+        "ai-git-commit.git-diff.diffFilter": {
+          "type": "string",
+          "order": 18,
+          "default": "ACMRT",
+          "description": "过滤文件变更类型：A(添加)、C(复制)、D(删除)、M(修改)、R(重命名)、T(类型变更)"
+        },
+        "ai-git-commit.git-diff.filterMeta": {
+          "type": "boolean",
+          "order": 19,
+          "default": true,
+          "description": "过滤掉冗余行（如 index、diff、Binary file 等元信息）"
+        },
+        "ai-git-commit.prompt.promptTemplates": {
+          "type": "string",
+          "order": 20,
+          "enum": [],
+          "description": "提示词模板列表"
+        },
+        "ai-git-commit.prompt.selectedPromptTemplateId": {
+          "type": "string",
+          "order": 21,
+          "default": "",
+          "readonly": true,
+          "description": "当前选中的提示词模板ID"
+        },
+        "ai-git-commit.prompt.selectedTemplatePrompt": {
+          "type": "string",
+          "order": 22,
+          "default": "",
+          "readonly": true,
+          "description": "当前选中的提示词模板内容"
+        },
+        "ai-git-commit.prompt.languageAwareness": {
+          "type": "string",
+          "order": 23,
+          "default": "",
+          "description": "编程语言感知"
+        },
+        "ai-git-commit.prompt.libraryAwareness": {
+          "type": "string",
+          "order": 24,
+          "default": "",
+          "description": "三方库感知"
+        },
+        "ai-git-commit.prompt.enableLanguageAwareness": {
+          "type": "boolean",
+          "order": 25,
+          "default": true,
+          "description": "是否启用编程语言感知"
+        },
+        "ai-git-commit.prompt.enableLibraryAwareness": {
+          "type": "boolean",
+          "order": 26,
+          "default": true,
+          "description": "是否启用三方库感知"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run package",
+    "compile": "vite build",
+    "watch": "vite build --mode development --watch",
+    "package": "vite build --mode production",
+    "lint": "eslint src --ext ts",
+    "package-vsix": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.17.30",
+    "@types/vscode": "^1.75.0",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "@vscode/vsce": "^2.24.0",
+    "eslint": "^8.57.0",
+    "glob": "^10.3.10",
+    "mocha": "^10.3.0",
+    "terser": "^5.39.0",
+    "typescript": "^5.4.2",
+    "vite": "^6.2.5"
+  },
+  "dependencies": {
+    "@google/genai": "^0.8.0",
+    "@types/xml2js": "^0.4.14",
+    "axios": "^1.6.7",
+    "openai": "^4.28.0",
+    "simple-git": "^3.27.0",
+    "uuid": "^11.1.0",
+    "xml2js": "^0.6.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}
