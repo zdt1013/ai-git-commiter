@@ -12,7 +12,7 @@
     "vscode": "^1.75.0",
     "node": ">=20.0.0"
   },
-  "icon": "resources/icon.png",
+  "icon": "asserts/icon.png",
   "categories": [
     "SCM Providers",
     "Other"
@@ -28,8 +28,8 @@
         "command": "ai-git-commit.generateCommitMessage",
         "title": "生成AI Commit消息",
         "icon": {
-          "light": "resources/icon.svg",
-          "dark": "resources/icon.svg"
+          "light": "asserts/icon.svg",
+          "dark": "asserts/icon.svg"
         }
       },
       {

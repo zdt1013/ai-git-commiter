@@ -21,7 +21,7 @@ export class PromptManager {
     constructor(private context: vscode.ExtensionContext) {
         // 设置存储路径
         this._promptsStoragePath = path.join(context.globalStorageUri.fsPath, 'prompts.json');
-        this._defaultPromptsPath = path.join(context.extensionPath, 'resources', 'prompts');
+        this._defaultPromptsPath = path.join(context.extensionPath, 'asserts', 'prompts');
         
         // 确保存储目录存在
         if (!fs.existsSync(path.dirname(this._promptsStoragePath))) {
@@ -128,7 +128,7 @@ export class PromptManager {
                 const data = fs.readFileSync(this._promptsStoragePath, 'utf8');
                 this._prompts = JSON.parse(data);
             } else {
-                // 从 resources/prompts 目录加载默认提示词
+                // 从 asserts/prompts 目录加载默认提示词
                 this._prompts = await this.loadDefaultPrompts();
                 await this.savePrompts();
             }
