@@ -33,10 +33,6 @@
         }
       },
       {
-        "command": "ai-git-commit.managePrompts",
-        "title": "管理提示词模板"
-      },
-      {
         "command": "ai-git-commit.addPrompt",
         "title": "添加提示词模板"
       },
@@ -53,10 +49,6 @@
         "title": "使用提示词模板"
       },
       {
-        "command": "ai-git-commit.managePrompts",
-        "title": "管理提示词"
-      },
-      {
         "command": "ai-git-commit.downloadPrompts",
         "title": "下载远程提示词"
       }
@@ -70,10 +62,6 @@
         }
       ],
       "commandPalette": [
-        {
-          "command": "ai-git-commit.managePrompts",
-          "group": "ai-git-commit"
-        },
         {
           "command": "ai-git-commit.addPrompt",
           "group": "ai-git-commit"
@@ -101,7 +89,7 @@
       "properties": {
         "ai-git-commit.language": {
           "type": "string",
-          "default": "中文",
+          "default": "简体中文",
           "order": 0,
           "enum": [
             "简体中文",
@@ -134,7 +122,7 @@
         "ai-git-commit.openai.model": {
           "type": "string",
           "order": 4,
-          "default": "gpt-3.5-turbo",
+          "default": "",
           "description": "OpenAI模型名称"
         },
         "ai-git-commit.openai.temperature": {
@@ -175,7 +163,7 @@
         "ai-git-commit.gemini.model": {
           "type": "string",
           "order": 10,
-          "default": "gemini-pro",
+          "default": "gemini-2.0-flash",
           "description": "Google Gemini模型名称"
         },
         "ai-git-commit.gemini.temperature": {
@@ -237,14 +225,8 @@
         "ai-git-commit.git-diff.filterMeta": {
           "type": "boolean",
           "order": 19,
-          "default": true,
+          "default": false,
           "description": "过滤掉冗余行（如 index、diff、Binary file 等元信息）"
-        },
-        "ai-git-commit.prompt.promptTemplates": {
-          "type": "string",
-          "order": 20,
-          "enum": [],
-          "description": "提示词模板列表"
         },
         "ai-git-commit.prompt.selectedPromptTemplateId": {
           "type": "string",
@@ -275,13 +257,13 @@
         "ai-git-commit.prompt.enableLanguageAwareness": {
           "type": "boolean",
           "order": 25,
-          "default": true,
+          "default": false,
           "description": "是否启用编程语言感知"
         },
         "ai-git-commit.prompt.enableLibraryAwareness": {
           "type": "boolean",
           "order": 26,
-          "default": true,
+          "default": false,
           "description": "是否启用三方库感知"
         }
       }

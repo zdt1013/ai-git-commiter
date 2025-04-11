@@ -168,5 +168,6 @@ export const CONFIG_CONSTANTS = {
     PROVIDERS: {
         OPENAI: 'OpenAI',
         GEMINI: 'Gemini'
-    }
+    },
+    LANGUAGE: "language"
 }; 
