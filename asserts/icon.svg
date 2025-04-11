@@ -1,11 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- 背景圆形 -->
-  <circle cx="64" cy="64" r="60" fill="#4CAF50"/>
-  
-  <!-- Git 标志 -->
-  <path d="M122.88 58.88L69.12 5.12C67.84 3.84 66.24 3.2 64.64 3.2C63.04 3.2 61.44 3.84 60.16 5.12L48.64 16.64L63.36 31.36C65.28 30.72 67.52 30.88 69.12 32.48C70.72 34.08 70.88 36.32 70.24 38.24L84.48 52.48C86.4 51.84 88.64 52 90.24 53.6C92.48 55.84 92.48 59.52 90.24 61.76C88 64 84.32 64 82.08 61.76C80.48 60.16 80.32 57.92 80.96 56L67.2 42.24V85.12C67.84 85.44 68.48 85.92 69.12 86.56C71.36 88.8 71.36 92.48 69.12 94.72C66.88 96.96 63.2 96.96 60.96 94.72C58.72 92.48 58.72 88.8 60.96 86.56C61.76 85.76 62.72 85.28 63.68 85.12V41.76C62.72 41.6 61.76 41.12 60.96 40.32C59.36 38.72 59.2 36.48 59.84 34.56L45.28 20L5.12 60.16C3.84 61.44 3.2 63.04 3.2 64.64C3.2 66.24 3.84 67.84 5.12 69.12L58.88 122.88C60.16 124.16 61.76 124.8 63.36 124.8C64.96 124.8 66.56 124.16 67.84 122.88L122.88 67.84C124.16 66.56 124.8 64.96 124.8 63.36C124.8 61.76 124.16 60.16 122.88 58.88Z" fill="white"/>
-  
-  <!-- AI 文字 -->
-  <text x="64" y="100" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#1A1A1A">AI</text>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="24" fill="#3F51B5"/>
+    <!-- 光芒 -->
+    <path d="M32 8L32 4" stroke="#7986CB" stroke-width="2" stroke-linecap="round"/>
+    <path d="M53.3137 10.6863L56.1421 7.8579" stroke="#7986CB" stroke-width="2" stroke-linecap="round"/>
+    <path d="M56 32L60 32" stroke="#7986CB" stroke-width="2" stroke-linecap="round"/>
+    <path d="M53.3137 53.3137L56.1421 56.1421" stroke="#7986CB" stroke-width="2" stroke-linecap="round"/>
+    <path d="M32 56L32 60" stroke="#7986CB" stroke-width="2" stroke-linecap="round"/>
+    <path d="M10.6863 53.3137L7.8579 56.1421" stroke="#7986CB" stroke-width="2" stroke-linecap="round"/>
+    <path d="M4 32L8 32" stroke="#7986CB" stroke-width="2" stroke-linecap="round"/>
+    <path d="M10.6863 10.6863L7.8579 7.8579" stroke="#7986CB" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- 齿轮 -->
+    <path d="M32 22C37.5228 22 42 26.4771 42 32C42 37.5228 37.5228 42 32 42C26.4771 42 22 37.5228 22 32C22 26.4771 26.4771 22 32 22Z" stroke="#EEEEEE" stroke-width="2"/>
+    <path d="M32 14L32 18" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round"/>
+    <path d="M50 32L46 32" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round"/>
+    <path d="M32 50L32 46" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round"/>
+    <path d="M14 32L18 32" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- AI 三角形 -->
+    <path d="M32 34L26 40H38L32 34Z" fill="#00BCD4" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- "Git" 字符 -->
+    <text x="22" y="54" font-size="12" fill="#EEEEEE" font-family="sans-serif">Git</text>
 </svg>
