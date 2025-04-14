@@ -12,27 +12,36 @@ import { PROMPT_CONSTANTS, GIT_CONSTANTS, AI_CONSTANTS, CONFIG_CONSTANTS } from 
  * @param provider AI提供商
  * @returns 配置是否完整
  */
-function checkAIConfig(config: vscode.WorkspaceConfiguration, provider: string): boolean {
+async function checkAIConfig(config: vscode.WorkspaceConfiguration, provider: string): Promise<boolean> {
     if (provider === CONFIG_CONSTANTS.PROVIDERS.OPENAI) {
         const apiKey = config.get<string>(CONFIG_CONSTANTS.OPENAI.API_KEY);
         const model = config.get<string>(CONFIG_CONSTANTS.OPENAI.MODEL);
         const baseUrl = config.get<string>(CONFIG_CONSTANTS.OPENAI.BASE_URL);
-        if (!baseUrl) {
-            vscode.window.showErrorMessage('请在设置中配置OpenAI API基础URL');
-            return false;
-        }
-        if (!apiKey) {
-            vscode.window.showErrorMessage('请在设置中配置OpenAI API密钥');
-            return false;
-        }
-        if (!model) {
-            vscode.window.showErrorMessage('请在设置中配置OpenAI模型');
+
+        if (!baseUrl || !apiKey || !model) {
+            const result = await vscode.window.showWarningMessage(
+                'OpenAI配置不完整，是否立即配置？',
+                { modal: true },
+                '配置',
+            );
+
+            if (result === '配置') {
+                await vscode.commands.executeCommand('workbench.action.openSettings', CONFIG_CONSTANTS.ROOT);
+            }
             return false;
         }
     } else if (provider === CONFIG_CONSTANTS.PROVIDERS.GEMINI) {
         const apiKey = config.get<string>(CONFIG_CONSTANTS.GEMINI.API_KEY);
         if (!apiKey) {
-            vscode.window.showErrorMessage('请在设置中配置Google Gemini API密钥');
+            const result = await vscode.window.showWarningMessage(
+                'Gemini配置不完整，是否立即配置？',
+                { modal: true },
+                '配置',
+            );
+
+            if (result === '配置') {
+                await vscode.commands.executeCommand('workbench.action.openSettings', CONFIG_CONSTANTS.ROOT);
+            }
             return false;
         }
     }
@@ -69,7 +78,7 @@ export function activate(context: vscode.ExtensionContext) {
                     const provider = config.get<string>('provider') || CONFIG_CONSTANTS.PROVIDERS.OPENAI;
 
                     // 检查AI配置是否完整
-                    if (!checkAIConfig(config, provider)) {
+                    if (!(await checkAIConfig(config, provider))) {
                         return;
                     }
 
