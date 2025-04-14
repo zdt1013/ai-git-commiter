@@ -26,8 +26,6 @@ export default defineConfig({
         'url',
         'stream',
         'zlib',
-        'events',
-        'simple-git',
         '@vscode/test-electron',
         'mocha',
         'glob',
@@ -48,7 +46,10 @@ export default defineConfig({
     }
   },
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js'],
+    alias: {
+      'node:events': 'events'
+    }
   },
   optimizeDeps: {
     exclude: ['fs', 'fs/promises', 'timers']
