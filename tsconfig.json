@@ -8,7 +8,9 @@
     "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "types": ["node"]
   },
   "include": ["src/**/*", "vite.config.ts", "src/test"],
   "exclude": ["node_modules", ".vscode-test"]

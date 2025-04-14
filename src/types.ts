@@ -51,6 +51,7 @@ export interface XmlPrompt {
     preferredLibraries?: Array<{ library: string[] }>;
     preferredLanguagePrompt?: string[];
     preferredLibraryPrompt?: string[];
+    version?: string[];
 }
 
 export interface PromptTemplate {
@@ -64,4 +65,5 @@ export interface PromptTemplate {
     preferredLanguagePrompt?: string;
     preferredLibraryPrompt?: string;
     url?: string;
+    version?: string;
 } 

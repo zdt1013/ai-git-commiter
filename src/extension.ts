@@ -42,7 +42,7 @@ function checkAIConfig(config: vscode.WorkspaceConfiguration, provider: string):
 // 激活扩展
 export function activate(context: vscode.ExtensionContext) {
     const extensionName = context.extension.packageJSON.displayName;
-    console.log(`扩展 "${extensionName}" 已激活`);
+    console.log(`${extensionName} is activated.`);
 
     // 初始化提示词管理器
     const promptManager = new PromptManager(context);
@@ -80,7 +80,6 @@ export function activate(context: vscode.ExtensionContext) {
                         vscode.window.showInformationMessage(GIT_CONSTANTS.ERROR.NO_CHANGES);
                         return;
                     }
-
 
                     const language = config.get<string>(CONFIG_CONSTANTS.LANGUAGE)!;
                     const customPrompt = config.get<string>(CONFIG_CONSTANTS.PROMPT.SELECTED_TEMPLATE_PROMPT) || '';

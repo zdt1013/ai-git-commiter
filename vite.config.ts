@@ -16,6 +16,7 @@ export default defineConfig({
         'vscode',
         'path',
         'fs',
+        'fs/promises',
         'os',
         'child_process',
         'util',
@@ -29,7 +30,8 @@ export default defineConfig({
         'simple-git',
         '@vscode/test-electron',
         'mocha',
-        'glob'
+        'glob',
+        'timers'
       ]
     },
     sourcemap: true,
@@ -47,5 +49,8 @@ export default defineConfig({
   },
   resolve: {
     extensions: ['.ts', '.js']
+  },
+  optimizeDeps: {
+    exclude: ['fs', 'fs/promises', 'timers']
   }
 });
