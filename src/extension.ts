@@ -59,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
 
             // 显示加载中提示
             vscode.window.withProgress({
-                location: vscode.ProgressLocation.Notification,
+                location: vscode.ProgressLocation.SourceControl,
                 title: AI_CONSTANTS.PROGRESS.TITLE,
                 cancellable: false
             }, async (_: vscode.Progress<{ message?: string; increment?: number }>) => {

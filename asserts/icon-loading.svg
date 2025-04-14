@@ -1,0 +1,25 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="24" fill="#9E9E9E"/>
+    <!-- 光芒 -->
+    <path d="M32 8L32 4" stroke="#BDBDBD" stroke-width="2" stroke-linecap="round"/>
+    <path d="M53.3137 10.6863L56.1421 7.8579" stroke="#BDBDBD" stroke-width="2" stroke-linecap="round"/>
+    <path d="M56 32L60 32" stroke="#BDBDBD" stroke-width="2" stroke-linecap="round"/>
+    <path d="M53.3137 53.3137L56.1421 56.1421" stroke="#BDBDBD" stroke-width="2" stroke-linecap="round"/>
+    <path d="M32 56L32 60" stroke="#BDBDBD" stroke-width="2" stroke-linecap="round"/>
+    <path d="M10.6863 53.3137L7.8579 56.1421" stroke="#BDBDBD" stroke-width="2" stroke-linecap="round"/>
+    <path d="M4 32L8 32" stroke="#BDBDBD" stroke-width="2" stroke-linecap="round"/>
+    <path d="M10.6863 10.6863L7.8579 7.8579" stroke="#BDBDBD" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- 齿轮 -->
+    <path d="M32 22C37.5228 22 42 26.4771 42 32C42 37.5228 37.5228 42 32 42C26.4771 42 22 37.5228 22 32C22 26.4771 26.4771 22 32 22Z" stroke="#EEEEEE" stroke-width="2"/>
+    <path d="M32 14L32 18" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round"/>
+    <path d="M50 32L46 32" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round"/>
+    <path d="M32 50L32 46" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round"/>
+    <path d="M14 32L18 32" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- AI 三角形 -->
+    <path d="M32 34L26 40H38L32 34Z" fill="#757575" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- "Git" 字符 -->
+    <text x="22" y="54" font-size="12" fill="#EEEEEE" font-family="sans-serif">Git</text>
+</svg>
