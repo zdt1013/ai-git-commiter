@@ -64,30 +64,42 @@ export class PromptManager {
     /**
      * 从 XML 文件中解析提示词
      */
+    /**
+     * 从XML文件解析提示词模板
+     * @param filePath XML文件路径
+     * @returns 解析成功的提示词模板对象，解析失败返回null
+     */
     private async parsePromptFromXml(filePath: string): Promise<PromptTemplate | null> {
         try {
+            // 读取XML文件内容
             const content = await readFile(filePath, 'utf8');
+            // 创建XML解析器
             const parser = new xml2js.Parser();
+            // 解析XML内容为JS对象
             const result = await parser.parseStringPromise(content);
 
+            // 检查是否包含prompt节点
             if (!result.prompt) {
                 return null;
             }
 
+            // 类型断言为XmlPrompt接口
             const prompt = result.prompt as XmlPrompt;
+            // 构建并返回提示词模板对象
             return {
-                id: prompt.id[0],
-                name: prompt.name[0],
-                content: prompt.content[0].trim(),
-                source: prompt.source?.[0] || 'local',
-                description: prompt.description?.[0],
-                preferredLanguages: prompt.preferredLanguages?.[0]?.language || [],
-                preferredLibraries: prompt.preferredLibraries?.[0]?.library || [],
-                preferredLanguagePrompt: prompt.preferredLanguagePrompt?.[0],
-                preferredLibraryPrompt: prompt.preferredLibraryPrompt?.[0],
-                version: prompt.version?.[0]
+                id: prompt.id[0],  // 提示词ID
+                name: prompt.name[0],  // 提示词名称
+                content: prompt.content[0].trim(),  // 提示词内容(去除首尾空格)
+                source: prompt.source?.[0] || 'local',  // 来源(默认为本地)
+                description: prompt.description?.[0],  // 描述信息(可选)
+                preferredLanguages: prompt.preferredLanguages?.[0]?.language || [],  // 偏好语言列表
+                preferredLibraries: prompt.preferredLibraries?.[0]?.library || [],  // 偏好库列表
+                preferredLanguagePrompt: prompt.preferredLanguagePrompt?.[0],  // 语言相关提示(可选)
+                preferredLibraryPrompt: prompt.preferredLibraryPrompt?.[0],  // 库相关提示(可选)
+                version: prompt.version?.[0]  // 版本号(可选)
             };
         } catch (error) {
+            // 捕获并记录解析错误
             console.error(`解析提示词文件失败 ${filePath}:`, error);
             return null;
         }
@@ -408,9 +420,9 @@ export class PromptManager {
             })
         );
 
-        // 使用提示词命令
+        // 选择提示词命令
         this.context.subscriptions.push(
-            vscode.commands.registerCommand(PROMPT_CONSTANTS.COMMANDS.USE_PROMPT, async () => {
+            vscode.commands.registerCommand(PROMPT_CONSTANTS.COMMANDS.SELECT_PROMPT, async () => {
                 // 让用户选择要使用的提示词
                 const selected = await this.selectPrompt(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.SELECT.USE);
                 if (!selected) return;

@@ -7,7 +7,7 @@ export const PROMPT_CONSTANTS = {
         ADD_PROMPT: 'ai-git-commit.addPrompt',
         EDIT_PROMPT: 'ai-git-commit.editPrompt',
         DELETE_PROMPT: 'ai-git-commit.deletePrompt',
-        USE_PROMPT: 'ai-git-commit.usePrompt',
+        SELECT_PROMPT: 'ai-git-commit.selectPrompt',
         DOWNLOAD_PROMPTS: 'ai-git-commit.downloadPrompts',
         GENERATE_COMMIT_MESSAGE: 'ai-git-commit.generateCommitMessage'
     },
