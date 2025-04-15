@@ -1,34 +1,3 @@
-// 配置项
-export interface AIConfig {
-    provider: string;
-    language: string;
-    customPrompt: string;
-    git?: {
-        wordDiff: boolean;
-        unified: number;
-        noColor: boolean;
-        diffFilter: string;
-        filterMeta: boolean;
-    };
-    openai?: {
-        baseUrl: string;
-        apiKey: string;
-        model: string;
-        temperature?: number;
-        topP?: number;
-        maxTokens?: number;
-    };
-    gemini?: {
-        baseUrl: string;
-        apiKey: string;
-        model: string;
-        temperature?: number;
-        topK?: number;
-        topP?: number;
-        maxOutputTokens?: number;
-    };
-}
-
 export interface AIResponse {
     success: boolean;
     message: string;

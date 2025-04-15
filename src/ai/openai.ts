@@ -83,4 +83,58 @@ export class OpenAIService {
             };
         }
     }
+
+    static async polishCommitMessage(message: string, language: string, promptTemplate: PromptTemplate): Promise<AIResponse> {
+        try {
+            // 从VS Code配置中获取OpenAI相关设置
+            const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
+            const baseUrl = config.get<string>(CONFIG_CONSTANTS.OPENAI.BASE_URL) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.BASE_URL;
+            const apiKey = config.get<string>(CONFIG_CONSTANTS.OPENAI.API_KEY);
+            const model = config.get<string>(CONFIG_CONSTANTS.OPENAI.MODEL) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.MODEL;
+            const temperature = config.get<number>(CONFIG_CONSTANTS.OPENAI.TEMPERATURE) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.TEMPERATURE;
+            const topP = config.get<number>(CONFIG_CONSTANTS.OPENAI.TOP_P) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.TOP_P;
+            const maxTokens = config.get<number>(CONFIG_CONSTANTS.OPENAI.MAX_TOKENS) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.MAX_TOKENS;
+
+            // 检查API密钥是否配置
+            if (!apiKey) {
+                return {
+                    success: false,
+                    message: '',
+                    error: '请在设置中配置OpenAI API密钥'
+                };
+            }
+
+            // 构建提示词：替换模板中的占位符
+            let prompt = promptTemplate.content
+                .replace('{message}', message)  // 插入原始消息
+                .replaceAll('{language}', language);  // 设置输出语言
+
+            // 初始化OpenAI客户端
+            const openai = new OpenAI({
+                apiKey: apiKey,
+                baseURL: baseUrl
+            });
+
+            const response = await openai.chat.completions.create({
+                model: model,
+                messages: [{ role: 'user', content: prompt }],
+                temperature: temperature,
+                top_p: topP,
+                max_tokens: maxTokens,
+                stream: false
+            });
+
+            return {
+                success: true,
+                message: response.choices[0].message.content || '',
+                error: ''
+            };
+        } catch (error: any) {
+            return {
+                success: false,
+                message: '',
+                error: error.message
+            };
+        }
+    }
 } 

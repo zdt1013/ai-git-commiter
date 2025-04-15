@@ -226,6 +226,13 @@
           "default": false,
           "description": "过滤掉冗余行（如 index、diff、Binary file 等元信息）"
         },
+        "ai-git-commit.git-diff.maxChanges": {
+          "type": "number",
+          "order": 20,
+          "default": 500,
+          "minimum": 1,
+          "description": "AI生成建议最大变更行数，超过此值将提示用户减少暂存文件或手动输入"
+        },
         "ai-git-commit.prompt.selectedPromptTemplateId": {
           "type": "string",
           "order": 21,

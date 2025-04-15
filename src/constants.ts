@@ -87,7 +87,11 @@ export const PROMPT_CONSTANTS = {
 export const GIT_CONSTANTS = {
     ERROR: {
         NO_REPOSITORY: '未找到Git仓库',
-        NO_CHANGES: '没有检测到代码变更'
+        NO_CHANGES: '没有检测到代码变更',
+        TOO_MANY_CHANGES: (maxChanges: number) => `变更行数过多（超过${maxChanges}行），请减少暂存文件数量或选择手动输入`
+    },
+    WARNING: {
+        MANUAL_INPUT: '您选择了手动输入，请输入简短的Commit消息，我们将帮您润色'
     }
 };
 
@@ -96,13 +100,16 @@ export const GIT_CONSTANTS = {
  */
 export const AI_CONSTANTS = {
     PROGRESS: {
-        TITLE: '正在生成Commit消息...'
+        TITLE: '正在生成Commit消息...',
+        POLISHING: '正在润色Commit消息...'
     },
     SUCCESS: {
-        GENERATE: '成功生成Commit消息'
+        GENERATE: '成功生成Commit消息',
+        POLISH: '成功润色Commit消息'
     },
     ERROR: {
-        GENERATE: '生成Commit消息失败'
+        GENERATE: '生成Commit消息失败',
+        POLISH: '润色Commit消息失败'
     }
 };
 
@@ -122,6 +129,18 @@ export const CONFIG_CONSTANTS = {
         LANGUAGE_AWARENESS: 'prompt.languageAwareness',
         ENABLE_LANGUAGE_AWARENESS: 'prompt.enableLanguageAwareness',
         ENABLE_LIBRARY_AWARENESS: 'prompt.enableLibraryAwareness'
+    },
+
+    // Git配置
+    GIT: {
+        DIFF: {
+            MAX_CHANGES: 'git-diff.maxChanges',
+            WORD_DIFF: 'git-diff.wordDiff',
+            UNIFIED: 'git-diff.unified',
+            NO_COLOR: 'git-diff.noColor',
+            DIFF_FILTER: 'git-diff.diffFilter',
+            FILTER_META: 'git-diff.filterMeta'
+        }
     },
 
     // OpenAI配置
