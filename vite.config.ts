@@ -1,8 +1,13 @@
 // vite.config.js
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import versionIncrementPlugin from './plugins/versionIncrementPlugin';
+
 
 export default defineConfig({
+  plugins: [versionIncrementPlugin({
+    env: ['production'] // 只在生产环境自增版本号
+  })],
   build: {
     lib: {
       entry: {

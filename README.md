@@ -34,6 +34,7 @@
 
 通过命令面板（Ctrl+Shift+P）可以访问以下提示词管理功能：
 
+- **📋 AI生成 Git Message (`ai-git-commit`)**：查看所有可用的提示词模板。
 - **➕ 添加提示词模板 (`ai-git-commit.addPrompt`)**：添加新的提示词模板。
 - **✏️ 编辑提示词模板 (`ai-git-commit.editPrompt`)**：编辑现有提示词模板。
 - **🗑️ 删除提示词模板 (`ai-git-commit.deletePrompt`)**：删除现有提示词模板。
