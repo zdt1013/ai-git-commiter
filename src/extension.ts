@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { GitService } from './git';
 import { PromptService } from './ai/prompt.service';
-import { PromptTemplate } from './types/types';
 import { PROMPT_CONSTANTS, GIT_CONSTANTS, AI_CONSTANTS } from './constants';
 import { ConfigService } from './config';
 import { AIServiceFactory } from './ai/ai-service.factory';
