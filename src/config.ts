@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import { ExtensionConfig } from './types/config';
 import { CONFIG_CONSTANTS } from './constants';
 import { AIServiceFactory } from './ai/ai-service.factory';
-import { PromptTemplate } from './types/types';
 
 /**
  * 配置服务类
@@ -45,12 +44,12 @@ export class ConfigService {
             },
             git: {
                 diff: {
-                    wordDiff: config.get<boolean>(CONFIG_CONSTANTS.GIT.DIFF.WORD_DIFF) ?? true,
-                    unified: config.get<number>(CONFIG_CONSTANTS.GIT.DIFF.UNIFIED) ?? 0,
-                    noColor: config.get<boolean>(CONFIG_CONSTANTS.GIT.DIFF.NO_COLOR) ?? true,
-                    diffFilter: config.get<string>(CONFIG_CONSTANTS.GIT.DIFF.DIFF_FILTER) ?? 'ACMRT',
-                    filterMeta: config.get<boolean>(CONFIG_CONSTANTS.GIT.DIFF.FILTER_META) ?? false,
-                    maxChanges: config.get<number>(CONFIG_CONSTANTS.GIT.DIFF.MAX_CHANGES) ?? 1000
+                    wordDiff: config.get<boolean>(CONFIG_CONSTANTS.GIT.DIFF.WORD_DIFF) ?? CONFIG_CONSTANTS.DEFAULTS.GIT.DIFF.WORD_DIFF,
+                    unified: config.get<number>(CONFIG_CONSTANTS.GIT.DIFF.UNIFIED) ?? CONFIG_CONSTANTS.DEFAULTS.GIT.DIFF.UNIFIED,
+                    noColor: config.get<boolean>(CONFIG_CONSTANTS.GIT.DIFF.NO_COLOR) ?? CONFIG_CONSTANTS.DEFAULTS.GIT.DIFF.NO_COLOR,
+                    diffFilter: config.get<string>(CONFIG_CONSTANTS.GIT.DIFF.DIFF_FILTER) ?? CONFIG_CONSTANTS.DEFAULTS.GIT.DIFF.DIFF_FILTER,
+                    filterMeta: config.get<boolean>(CONFIG_CONSTANTS.GIT.DIFF.FILTER_META) ?? CONFIG_CONSTANTS.DEFAULTS.GIT.DIFF.FILTER_META,
+                    maxChanges: config.get<number>(CONFIG_CONSTANTS.GIT.DIFF.MAX_CHANGES) ?? CONFIG_CONSTANTS.DEFAULTS.GIT.DIFF.MAX_CHANGES
                 }
             },
             prompt: {

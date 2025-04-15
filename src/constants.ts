@@ -189,6 +189,16 @@ export const CONFIG_CONSTANTS = {
             MAX_OUTPUT_TOKENS: 500,
             BASE_URL: 'https://generativelanguage.googleapis.com'
         },
+        GIT: {
+            DIFF: {
+                MAX_CHANGES: 100,
+                WORD_DIFF: true,
+                UNIFIED: 0,
+                NO_COLOR: true,
+                DIFF_FILTER: 'ACMRT',
+                FILTER_META: false
+            }
+        },
         LANGUAGE: '中文'
     },
 

@@ -1,5 +1,3 @@
-import { PromptTemplate } from './types';
-
 /**
  * Git差异配置
  */
