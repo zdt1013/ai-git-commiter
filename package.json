@@ -54,6 +54,10 @@
       {
         "command": "ai-git-commit.downloadPrompts",
         "title": "AI Git Commit: 下载远程提示词"
+      },
+      {
+        "command": "ai-git-commit.manualPolishCommitMessage",
+        "title": "AI Git Commit: 手动生成Commit消息（AI润色）"
       }
     ],
     "menus": {

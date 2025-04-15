@@ -6,7 +6,10 @@ import * as xml2js from 'xml2js';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { PromptTemplate, XmlPrompt } from '../types/types';
-import { PROMPT_CONSTANTS, CONFIG_CONSTANTS } from '../constants';
+import { PROMPT_CONSTANTS, CONFIG_CONSTANTS, GIT_CONSTANTS, AI_CONSTANTS } from '../constants';
+import { GitService } from '../git';
+import { ConfigService } from '../config';
+import { AIServiceFactory } from './ai-service.factory';
 
 /**
  * 提示词管理器类
@@ -476,6 +479,63 @@ export class PromptService {
                 // 下载并合并远程提示词
                 if (url) {
                     await this.downloadPrompts(url);
+                }
+            })
+        );
+
+        // 手动生成Commit消息（AI润色）命令
+        this.context.subscriptions.push(
+            vscode.commands.registerCommand(PROMPT_CONSTANTS.COMMANDS.MANUAL_POLISH_COMMIT_MESSAGE, async () => {
+                try {
+                    // 获取Git仓库
+                    const repository = await GitService.getCurrentRepository();
+                    if (!repository) {
+                        vscode.window.showErrorMessage(GIT_CONSTANTS.ERROR.NO_REPOSITORY);
+                        return;
+                    }
+
+                    // 获取配置
+                    const configService = new ConfigService();
+                    const config = configService.getExtensionConfig();
+
+                    // 检查AI配置是否完整
+                    if (!(await configService.checkAIConfig(config, config.provider))) {
+                        return;
+                    }
+
+                    // 获取用户输入的原始Commit消息
+                    const message = await vscode.window.showInputBox({
+                        placeHolder: '请输入简短的Commit消息',
+                        prompt: '请输入您想要润色的Commit消息'
+                    });
+
+                    if (!message) {
+                        return;
+                    }
+
+                    // 显示加载中提示
+                    vscode.window.withProgress({
+                        location: vscode.ProgressLocation.SourceControl,
+                        title: AI_CONSTANTS.PROGRESS.POLISHING,
+                        cancellable: false
+                    }, async (_: vscode.Progress<{ message?: string; increment?: number }>) => {
+                        // 从配置中获取选中的提示词模板
+                        const promptTemplate = this.getSelectedPrompt();
+
+                        // 使用工厂创建AI服务并润色消息
+                        const aiService = AIServiceFactory.createService();
+                        const result = await aiService.polishCommitMessage(message, config.language, promptTemplate);
+
+                        if (result?.success && result.message) {
+                            repository.inputBox.value = result.message;
+                            vscode.window.showInformationMessage(AI_CONSTANTS.SUCCESS.POLISH);
+                        } else {
+                            vscode.window.showErrorMessage(result?.error || AI_CONSTANTS.ERROR.POLISH);
+                        }
+                        return Promise.resolve();
+                    });
+                } catch (error: any) {
+                    vscode.window.showErrorMessage(`执行命令时出错: ${error.message}`);
                 }
             })
         );
