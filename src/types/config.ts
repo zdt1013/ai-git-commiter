@@ -1,3 +1,5 @@
+import { PromptTemplate } from './types';
+
 /**
  * Git差异配置
  */
@@ -39,5 +41,6 @@ export interface ExtensionConfig {
     };
     prompt: {
         selectedTemplatePrompt: string;
+        selectedPromptTemplateId: string;
     };
 } 

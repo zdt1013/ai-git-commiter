@@ -5,13 +5,13 @@ import * as path from 'path';
 import * as xml2js from 'xml2js';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import { PromptTemplate, XmlPrompt } from './types/types';
-import { PROMPT_CONSTANTS, CONFIG_CONSTANTS } from './constants';
+import { PromptTemplate, XmlPrompt } from '../types/types';
+import { PROMPT_CONSTANTS, CONFIG_CONSTANTS } from '../constants';
 
 /**
  * 提示词管理器类
  */
-export class PromptManager {
+export class PromptService {
     private _promptsStoragePath: string;
     private _prompts: PromptTemplate[] = [];
     private _onDidChangePrompts: vscode.EventEmitter<void> = new vscode.EventEmitter<void>();
@@ -96,6 +96,7 @@ export class PromptManager {
                 id: prompt.id[0],  // 提示词ID
                 name: prompt.name[0],  // 提示词名称
                 content: prompt.content[0].trim(),  // 提示词内容(去除首尾空格)
+                polishContent: prompt.polishContent[0].trim(),  // 润色提示词内容(去除首尾空格)
                 source: prompt.source?.[0] || 'local',  // 来源(默认为本地)
                 description: prompt.description?.[0],  // 描述信息(可选)
                 preferredLanguages: prompt.preferredLanguages?.[0]?.language || [],  // 偏好语言列表
@@ -208,7 +209,20 @@ export class PromptManager {
     private async downloadPrompts(url: string): Promise<void> {
         try {
             const response = await axios.get(url);
-            const remotePrompts: PromptTemplate[] = response.data;
+            let remotePrompts: PromptTemplate[] = response.data;
+
+            // 校验返回内容是否包含必要的设置项
+            const invalidPrompts = remotePrompts.filter(prompt => {
+                return !prompt.id || !prompt.name || !prompt.content || !prompt.polishContent;
+            });
+
+            if (invalidPrompts.length > 0) {
+                vscode.window.showErrorMessage(`下载的提示词中有${invalidPrompts.length}个缺少必要的设置项(id、name、content、polishContent)，已跳过这些提示词`);
+                // 过滤掉无效的提示词
+                remotePrompts = remotePrompts.filter(prompt => {
+                    return prompt.id && prompt.name && prompt.content && prompt.polishContent;
+                });
+            }
 
             // 合并提示词
             remotePrompts.forEach(remotePrompt => {
@@ -286,6 +300,15 @@ export class PromptManager {
 
                 if (!content) return;
 
+                // 获取用户输入的润色提示词内容
+                const polishContent = await vscode.window.showInputBox({
+                    prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.POLISH_CONTENT.PROMPT,
+                    placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.POLISH_CONTENT.PLACEHOLDER,
+                    ignoreFocusOut: true
+                });
+
+                if (!polishContent) return;
+
                 // 获取用户输入的偏好语言
                 const languagesInput = await vscode.window.showInputBox({
                     prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LANGUAGES.PROMPT,
@@ -309,6 +332,7 @@ export class PromptManager {
                     id: uuidv4(),
                     name,
                     content,
+                    polishContent,
                     preferredLanguages: languages,
                     preferredLibraries: libraries,
                     source: 'local'
@@ -498,5 +522,29 @@ export class PromptManager {
     public getPromptContent(id: string): string | undefined {
         const prompt = this._prompts.find(p => p.id === id);
         return prompt?.content;
+    }
+
+    /**
+     * 获取当前选中的提示词模板
+     * @returns 当前选中的提示词模板对象，如果未选中则返回默认模板
+     */
+    public getSelectedPrompt(): PromptTemplate {
+        const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
+        const selectedPromptId = config.get<string>(CONFIG_CONSTANTS.PROMPT.SELECTED_PROMPT_TEMPLATE_ID);
+
+        // 查找选中的模板
+        const selectedPrompt = this._prompts.find(p => p.id === selectedPromptId);
+        if (selectedPrompt) {
+            return selectedPrompt;
+        }
+
+        // 如果没有选中模板，返回默认模板
+        const defaultPrompt = this._prompts.find(p => p.id === 'default');
+        if (defaultPrompt) {
+            return defaultPrompt;
+        }
+
+        // 如果连默认模板都没有，返回第一个模板
+        return this._prompts[0];
     }
 }

@@ -1,21 +1,28 @@
 import * as vscode from 'vscode';
 import { ExtensionConfig } from './types/config';
 import { CONFIG_CONSTANTS } from './constants';
+import { AIServiceFactory } from './ai/ai-service.factory';
+import { PromptTemplate } from './types/types';
 
 /**
  * 配置服务类
  */
 export class ConfigService {
     private _onDidChangeConfig: vscode.EventEmitter<void> = new vscode.EventEmitter<void>();
+    private _disposables: vscode.Disposable[] = [];
     public readonly onDidChangeConfig: vscode.Event<void> = this._onDidChangeConfig.event;
 
     constructor() {
-        // 监听配置变化
-        vscode.workspace.onDidChangeConfiguration(e => {
-            if (e.affectsConfiguration(CONFIG_CONSTANTS.ROOT)) {
-                this._onDidChangeConfig.fire();
-            }
-        });
+        // 监听配置变更
+        this._disposables.push(
+            vscode.workspace.onDidChangeConfiguration(e => {
+                if (e.affectsConfiguration(`${CONFIG_CONSTANTS.ROOT}.${CONFIG_CONSTANTS.PROVIDER}`)) {
+                    // 当供应商设置变更时，重置AI服务实例
+                    AIServiceFactory.resetInstance();
+                    this._onDidChangeConfig.fire();
+                }
+            })
+        );
     }
 
     /**
@@ -47,7 +54,8 @@ export class ConfigService {
                 }
             },
             prompt: {
-                selectedTemplatePrompt: config.get<string>(CONFIG_CONSTANTS.PROMPT.SELECTED_TEMPLATE_PROMPT) || ''
+                selectedTemplatePrompt: config.get<string>(CONFIG_CONSTANTS.PROMPT.SELECTED_TEMPLATE_PROMPT) || '',
+                selectedPromptTemplateId: config.get<string>(CONFIG_CONSTANTS.PROMPT.SELECTED_PROMPT_TEMPLATE_ID) || '',
             }
         };
     }
@@ -89,5 +97,10 @@ export class ConfigService {
             }
         }
         return true;
+    }
+
+    dispose() {
+        this._disposables.forEach(d => d.dispose());
+        this._onDidChangeConfig.dispose();
     }
 } 

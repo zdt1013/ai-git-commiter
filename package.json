@@ -2,7 +2,7 @@
   "name": "ai-git-commit",
   "displayName": "AI Git Commit",
   "description": "使用AI大模型自动生成Git Commit消息",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "publisher": "ai-git-commit",
   "repository": {
     "type": "git",

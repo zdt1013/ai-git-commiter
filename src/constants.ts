@@ -28,6 +28,10 @@ export const PROMPT_CONSTANTS = {
                 PROMPT: '输入提示词内容 (使用 {diff} 作为代码差异的占位符)',
                 PLACEHOLDER: '例如：请根据以下代码变更生成一个关于功能更新的commit消息：\n\n{diff}'
             },
+            POLISH_CONTENT: {
+                PROMPT: '输入润色提示词内容 (使用 {diff} 作为原始消息的占位符)',
+                PLACEHOLDER: '例如：请根据以下原始消息生成一个更规范的commit消息：\n\n{diff}'
+            },
             PREFERRED_LANGUAGES: {
                 PROMPT: '输入偏好编程语言（多个语言用逗号分隔）',
                 PLACEHOLDER: '例如：TypeScript, JavaScript, Python'
@@ -120,11 +124,13 @@ export const CONFIG_CONSTANTS = {
     // 配置根节点
     ROOT: 'ai-git-commit',
 
+    // 提供商配置
+    PROVIDER: 'provider',
+
     // 提示词配置
     PROMPT: {
         SELECTED_TEMPLATE_PROMPT: 'prompt.selectedTemplatePrompt',
         SELECTED_PROMPT_TEMPLATE_ID: 'prompt.selectedPromptTemplateId',
-        PROMPT_TEMPLATES: 'prompt.promptTemplates',
         LIBRARY_AWARENESS: 'prompt.libraryAwareness',
         LANGUAGE_AWARENESS: 'prompt.languageAwareness',
         ENABLE_LANGUAGE_AWARENESS: 'prompt.enableLanguageAwareness',
@@ -166,6 +172,7 @@ export const CONFIG_CONSTANTS = {
 
     // 默认值
     DEFAULTS: {
+        PROVIDER: 'OpenAI',
         OPENAI: {
             BASE_URL: 'https://api.openai.com/v1',
             MODEL: 'gpt-3.5-turbo',

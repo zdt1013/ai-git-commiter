@@ -9,6 +9,7 @@ export interface XmlPrompt {
     id: string[];
     name: string[];
     content: string[];
+    polishContent: string[];
     source?: string[];
     description?: string[];
     preferredLanguages?: Array<{ language: string[] }>;
@@ -22,6 +23,7 @@ export interface PromptTemplate {
     id: string;
     name: string;
     content: string;
+    polishContent: string;
     source?: string;
     description?: string;
     preferredLanguages?: string[];

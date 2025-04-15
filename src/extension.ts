@@ -1,39 +1,10 @@
 import * as vscode from 'vscode';
 import { GitService } from './git';
-import { OpenAIService } from './ai/openai';
-import { GeminiService } from './ai/gemini';
-import { PromptManager } from './promptManager';
+import { PromptService } from './ai/prompt.service';
 import { PromptTemplate } from './types/types';
-import { Repository } from './types/git';
-import { PROMPT_CONSTANTS, GIT_CONSTANTS, AI_CONSTANTS, CONFIG_CONSTANTS } from './constants';
+import { PROMPT_CONSTANTS, GIT_CONSTANTS, AI_CONSTANTS } from './constants';
 import { ConfigService } from './config';
-
-/**
- * 润色用户输入的Commit消息
- * @param message 用户输入的原始消息
- * @param language 语言
- * @param promptTemplate 提示词模板
- * @param provider AI提供商
- * @returns 润色后的消息
- */
-async function polishCommitMessage(
-    message: string,
-    language: string,
-    promptTemplate: PromptTemplate,
-    provider: string
-): Promise<string | undefined> {
-    try {
-        let result;
-        if (provider === CONFIG_CONSTANTS.PROVIDERS.OPENAI) {
-            result = await OpenAIService.polishCommitMessage(message, language, promptTemplate);
-        } else if (provider === CONFIG_CONSTANTS.PROVIDERS.GEMINI) {
-            result = await GeminiService.polishCommitMessage(message, language, promptTemplate);
-        }
-        return result?.message;
-    } catch (error) {
-        throw error;
-    }
-}
+import { AIServiceFactory } from './ai/ai-service.factory';
 
 // 激活扩展
 export function activate(context: vscode.ExtensionContext) {
@@ -41,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
     console.log(`${extensionName} is activated.`);
 
     // 初始化服务
-    const promptManager = new PromptManager(context);
+    const promptService = new PromptService(context);
     const configService = new ConfigService();
 
     // 注册命令
@@ -62,17 +33,27 @@ export function activate(context: vscode.ExtensionContext) {
                 return;
             }
 
-            // 检查变更行数
-            if (await GitService.checkChangesLimit(repository, config.git.diff.maxChanges)) {
-                // 提示用户变更行数过多
-                const result = await vscode.window.showWarningMessage(
-                    GIT_CONSTANTS.ERROR.TOO_MANY_CHANGES(config.git.diff.maxChanges),
-                    { modal: true },
-                    '手动输入',
-                    '取消'
-                );
 
-                if (result === '手动输入') {
+            // 否则直接使用AI生成Commit消息
+            // 显示加载中提示
+            vscode.window.withProgress({
+                location: vscode.ProgressLocation.SourceControl,
+                title: AI_CONSTANTS.PROGRESS.TITLE,
+                cancellable: false
+            }, async (_: vscode.Progress<{ message?: string; increment?: number }>) => {
+                // 检查变更行数
+                if (await GitService.checkChangesLimit(repository, config.git.diff.maxChanges)) {
+                    // 如果变更行数超过限制，提示用户手动输入
+                    // 提示用户变更行数过多
+                    const confirmResult = await vscode.window.showWarningMessage(
+                        GIT_CONSTANTS.ERROR.TOO_MANY_CHANGES(config.git.diff.maxChanges),
+                        { modal: true },
+                        '手动输入',
+                    );
+                    if (confirmResult !== '手动输入') {
+                        return;
+                    }
+
                     const message = await vscode.window.showInputBox({
                         placeHolder: '请输入简短的Commit消息',
                         prompt: GIT_CONSTANTS.WARNING.MANUAL_INPUT
@@ -82,46 +63,20 @@ export function activate(context: vscode.ExtensionContext) {
                         return;
                     }
 
-                    // 显示加载中提示
-                    vscode.window.withProgress({
-                        location: vscode.ProgressLocation.SourceControl,
-                        title: AI_CONSTANTS.PROGRESS.POLISHING,
-                        cancellable: false
-                    }, async (_: vscode.Progress<{ message?: string; increment?: number }>) => {
-                        try {
-                            // 创建提示词模板
-                            const promptTemplate: PromptTemplate = {
-                                id: 'default',
-                                name: '默认提示词',
-                                content: config.prompt.selectedTemplatePrompt,
-                                preferredLanguages: [],
-                                preferredLibraries: [],
-                                source: 'local'
-                            };
+                    // 从配置中获取选中的提示词模板
+                    const promptTemplate = promptService.getSelectedPrompt();
 
-                            const polishedMessage = await polishCommitMessage(message, config.language, promptTemplate, config.provider);
-                            if (polishedMessage) {
-                                repository.inputBox.value = polishedMessage;
-                                vscode.window.showInformationMessage(AI_CONSTANTS.SUCCESS.POLISH);
-                            } else {
-                                vscode.window.showErrorMessage(AI_CONSTANTS.ERROR.POLISH);
-                            }
-                        } catch (error: any) {
-                            vscode.window.showErrorMessage(`${AI_CONSTANTS.ERROR.POLISH}: ${error.message}`);
-                        }
-                        return Promise.resolve();
-                    });
-                }
-                return;
-            }
+                    // 使用工厂创建AI服务并润色消息
+                    const aiService = AIServiceFactory.createService();
+                    const result = await aiService.polishCommitMessage(message, config.language, promptTemplate);
 
-            // 显示加载中提示
-            vscode.window.withProgress({
-                location: vscode.ProgressLocation.SourceControl,
-                title: AI_CONSTANTS.PROGRESS.TITLE,
-                cancellable: false
-            }, async (_: vscode.Progress<{ message?: string; increment?: number }>) => {
-                try {
+                    if (result?.success && result.message) {
+                        repository.inputBox.value = result.message;
+                        vscode.window.showInformationMessage(AI_CONSTANTS.SUCCESS.POLISH);
+                    } else {
+                        vscode.window.showErrorMessage(result?.error || AI_CONSTANTS.ERROR.POLISH);
+                    }
+                } else {
                     // 获取Git差异
                     if (!repository.rootUri) {
                         vscode.window.showErrorMessage(GIT_CONSTANTS.ERROR.NO_REPOSITORY);
@@ -134,23 +89,11 @@ export function activate(context: vscode.ExtensionContext) {
                         return;
                     }
 
-                    // 创建提示词模板
-                    const promptTemplate: PromptTemplate = {
-                        id: 'default',
-                        name: '默认提示词',
-                        content: config.prompt.selectedTemplatePrompt,
-                        preferredLanguages: [],
-                        preferredLibraries: [],
-                        source: 'local'
-                    };
-
-                    // 根据提供商生成Commit消息
-                    let result;
-                    if (config.provider === CONFIG_CONSTANTS.PROVIDERS.OPENAI) {
-                        result = await OpenAIService.generateCommitMessage(diff, config.language, promptTemplate);
-                    } else if (config.provider === CONFIG_CONSTANTS.PROVIDERS.GEMINI) {
-                        result = await GeminiService.generateCommitMessage(diff, config.language, promptTemplate);
-                    }
+                    // 从配置中获取选中的提示词模板
+                    const promptTemplate = promptService.getSelectedPrompt()
+                    // 使用工厂创建AI服务并生成Commit消息
+                    const aiService = AIServiceFactory.createService();
+                    const result = await aiService.generateCommitMessage(diff, config.language, promptTemplate);
 
                     if (result?.success && result.message) {
                         // 设置Commit消息
@@ -159,10 +102,7 @@ export function activate(context: vscode.ExtensionContext) {
                     } else {
                         vscode.window.showErrorMessage(result?.error || AI_CONSTANTS.ERROR.GENERATE);
                     }
-                } catch (error: any) {
-                    vscode.window.showErrorMessage(`${AI_CONSTANTS.ERROR.GENERATE}: ${error.message}`);
                 }
-
                 return Promise.resolve();
             });
         } catch (error: any) {
