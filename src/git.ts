@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { Repository } from './types';
 import { simpleGit, SimpleGit } from 'simple-git';
+import { GitExtension, Repository } from './types/git';
 
 export class GitService {
     //  获取Git差异
@@ -62,7 +62,7 @@ export class GitService {
      */
     static async getCurrentRepository(): Promise<Repository | null> {
         // 获取VS Code的Git扩展
-        const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
+        const gitExtension = vscode.extensions.getExtension<GitExtension>('vscode.git')?.exports;
         if (!gitExtension) {
             return null;
         }

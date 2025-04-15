@@ -36,11 +36,6 @@ export interface AIResponse {
     prompt?: PromptTemplate;  // 使用的提示词模板
 }
 
-export interface Repository {
-    rootUri: { fsPath: string };
-    inputBox: { value: string };
-}
-
 export interface XmlPrompt {
     id: string[];
     name: string[];

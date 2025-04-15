@@ -3,7 +3,7 @@ import { GitService } from './git';
 import { OpenAIService } from './ai/openai';
 import { GeminiService } from './ai/gemini';
 import { PromptManager } from './promptManager';
-import { PromptTemplate } from './types';
+import { PromptTemplate } from './types/types';
 import { PROMPT_CONSTANTS, GIT_CONSTANTS, AI_CONSTANTS, CONFIG_CONSTANTS } from './constants';
 
 /**

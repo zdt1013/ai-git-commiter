@@ -1,7 +1,7 @@
 import { GoogleGenAI } from '@google/genai';
 import * as vscode from 'vscode';
-import { AIResponse } from '../types';
-import { PromptTemplate } from '../types';
+import { AIResponse } from '../types/types';
+import { PromptTemplate } from '../types/types';
 import { CONFIG_CONSTANTS } from '../constants';
 
 export class GeminiService {
