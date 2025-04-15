@@ -84,7 +84,7 @@ export function activate(context: vscode.ExtensionContext) {
                     const diff = await GitService.getDiff(repository.rootUri.fsPath, config.git.diff);
 
                     if (!diff) {
-                        vscode.window.showInformationMessage(GIT_CONSTANTS.ERROR.NO_CHANGES);
+                        vscode.window.showInformationMessage(GIT_CONSTANTS.ERROR.NO_CHANGES, { modal: true });
                         return;
                     }
 
