@@ -2,7 +2,7 @@
   "name": "ai-git-commit",
   "displayName": "AI Git Commit",
   "description": "使用AI大模型自动生成Git Commit消息",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "publisher": "ai-git-commit",
   "repository": {
     "type": "git",
@@ -22,11 +22,14 @@
   "activationEvents": [
     "onCommand:ai-git-commit"
   ],
+  "enabledApiProposals": [
+    "inlineCompletionsAdditions"
+  ],
   "contributes": {
     "commands": [
       {
         "command": "extension.ai-git-commit",
-        "title": "AI Git Commit: 生成AI Commit消息",
+        "title": "AI Git Commit: AI生成 Commit消息",
         "icon": {
           "light": "asserts/icon.svg",
           "dark": "asserts/icon.svg"

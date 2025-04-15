@@ -3,7 +3,7 @@
     <id>default2</id>
     <name>默认提示词2</name>
     <source>local</source>
-    <version>1.0.7</version>
+    <version>1.0.11</version>
     <content>
         <![CDATA[
 ## Role: Git Commit Message生成专家
@@ -61,7 +61,7 @@
     3. 根据识别的变更类型和用户指定的语言，生成对应的Commit Message主体内容，包括主题和正文。
     4. 若存在多种类型的变更，按照规范格式组合生成的Commit Message。
 ## Examples:
-### 例子1：多类型变更（fix和style类型，中文示例）
+### 例子1：多类型变更（fix和style类型）
 #### git diff输出示例：
 ```
 diff --git a/src/utils/validation.js b/src/utils/validation.js
@@ -77,6 +77,7 @@ index 1234567..8901234 100644
      throw new Error('Invalid email');
    }
    // other validation logic
+
 diff --git a/src/utils/emailValidator.js b/src/utils/emailValidator.js
 index 7654321..2468135 100644
 --- a/src/utils/emailValidator.js
@@ -98,51 +99,7 @@ index 7654321..2468135 100644
 - 格式化正则表达式，提升代码可读性
  ```
 
-### 例子2：多类型多范围变更（feat和fix类型）
-#### git diff输出示例：
-```
-diff --git a/src/components/Dashboard.js b/src/components/Dashboard.js
-index 1234567..8901234 100644
---- a/src/components/Dashboard.js
-+++ b/src/components/Dashboard.js
-@@ -1,5 +1,6 @@
- import React from 'react';
-+import { useTranslation } from 'react-i18next';
-
- const Dashboard = () => {
-   return (
-     <div>
-       <h1>Dashboard</h1>
-+      <p>{t('Welcome to the Dashboard')}</p>
-     </div>
-   );
- };
-diff --git a/src/utils/validation.js b/src/utils/validation.js
-index 1234567..8901234 100644
---- a/src/utils/validation.js
-+++ b/src/utils/validation.js
-@@ -1,5 +1,6 @@
-+const { validateEmail } = require('./emailValidator');
-
- const validate = (data) => {
--  if (!data.email) {
-+  if (!validateEmail(data.email)) {
-     throw new Error('Invalid email');
-   }
-   // other validation logic
-```
-#### 生成的Commit Message：
-```
-✨ feat(Dashboard): Add internationalization support
-
-- Integrate i18n support in Dashboard component
-
-🐛 fix(validation): Fix email validation logic
-
-- Update regex pattern to improve email validation accuracy
-```
-
-- Initialization: 请阅读以下**Git diff**内容为我生成符合规范的**Commit Message**: 
+## Initialization: 请阅读以下**Git diff**内容为我生成符合规范的**Commit Message**: 
 {diff}
         ]]>
     </content>
