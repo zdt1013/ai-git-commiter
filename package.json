@@ -2,7 +2,7 @@
   "name": "ai-git-commit",
   "displayName": "AI Git Commit",
   "description": "使用AI大模型自动生成Git Commit消息",
-  "version": "0.0.6",
+  "version": "0.0.9",
   "publisher": "ai-git-commit",
   "repository": {
     "type": "git",
@@ -20,12 +20,12 @@
   "main": "./dist/extension.js",
   "packageManager": "pnpm@8.15.4",
   "activationEvents": [
-    "onSCMProvider:git"
+    "onCommand:ai-git-commit"
   ],
   "contributes": {
     "commands": [
       {
-        "command": "ai-git-commit.generateCommitMessage",
+        "command": "extension.ai-git-commit",
         "title": "AI Git Commit: 生成AI Commit消息",
         "icon": {
           "light": "asserts/icon.svg",
@@ -56,7 +56,7 @@
     "menus": {
       "scm/title": [
         {
-          "command": "ai-git-commit.generateCommitMessage",
+          "command": "extension.ai-git-commit",
           "group": "navigation",
           "when": "scmProvider == git"
         }
