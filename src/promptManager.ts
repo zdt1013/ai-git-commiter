@@ -38,8 +38,8 @@ export class PromptManager {
      */
     private async updateSettings(prompt: PromptTemplate): Promise<void> {
         const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
-        await config.update(CONFIG_CONSTANTS.PROMPT.SELECTED_TEMPLATE_PROMPT, prompt.content, true);
         await config.update(CONFIG_CONSTANTS.PROMPT.SELECTED_PROMPT_TEMPLATE_ID, prompt.id, true);
+        await config.update(CONFIG_CONSTANTS.PROMPT.SELECTED_TEMPLATE_PROMPT, prompt.content, true);
         await config.update(CONFIG_CONSTANTS.PROMPT.LANGUAGE_AWARENESS, prompt.preferredLanguages?.join(', ') || '', true);
         await config.update(CONFIG_CONSTANTS.PROMPT.LIBRARY_AWARENESS, prompt.preferredLibraries?.join(', ') || '', true);
     }
@@ -54,10 +54,16 @@ export class PromptManager {
         // 注册提示词管理命令
         this.registerCommands();
 
-        // 如果有默认提示词，更新设置项
-        const defaultPrompt = this._prompts.find(p => p.id === 'default');
-        if (defaultPrompt) {
-            await this.updateSettings(defaultPrompt);
+        // 获取当前选中的提示词ID
+        const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
+        const selectedPromptId = config.get<string>(CONFIG_CONSTANTS.PROMPT.SELECTED_PROMPT_TEMPLATE_ID);
+
+        // bugfix: 如果用户没有选择任何提示词，则设置默认提示词
+        if (!selectedPromptId) {
+            const defaultPrompt = this._prompts.find(p => p.id === 'default');
+            if (defaultPrompt) {
+                await this.updateSettings(defaultPrompt);
+            }
         }
     }
 

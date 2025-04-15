@@ -9,7 +9,7 @@ export const PROMPT_CONSTANTS = {
         DELETE_PROMPT: 'ai-git-commit.deletePrompt',
         SELECT_PROMPT: 'ai-git-commit.selectPrompt',
         DOWNLOAD_PROMPTS: 'ai-git-commit.downloadPrompts',
-        GENERATE_COMMIT_MESSAGE: 'ai-git-commit.generateCommitMessage'
+        GENERATE_COMMIT_MESSAGE: 'extension.ai-git-commit'
     },
 
     // 提示词管理相关文本
