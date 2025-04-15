@@ -76,7 +76,8 @@ export const PROMPT_CONSTANTS = {
     TAGS: {
         LANGUAGES: (languages: string[]) => `偏好编程语言: ${languages.join(', ')}`,
         LIBRARIES: (libraries: string[]) => `偏好三方库: ${libraries.join(', ')}`,
-        SOURCE: (source: string) => `来源: ${source}`
+        SOURCE: (source: string) => `来源: ${source}`,
+        VERSION: (version: string) => `版本: ${version}`,
     }
 };
 

@@ -5,7 +5,7 @@ import * as path from 'path';
 import * as xml2js from 'xml2js';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import { PromptTemplate, XmlPrompt } from './types';
+import { PromptTemplate, XmlPrompt } from './types/types';
 import { PROMPT_CONSTANTS, CONFIG_CONSTANTS } from './constants';
 
 /**
@@ -464,9 +464,10 @@ export class PromptManager {
         const items = this._prompts.map(prompt => {
             // 构建标签数组
             const tags: string[] = [];
+            if (prompt.version) tags.push(PROMPT_CONSTANTS.TAGS.VERSION(prompt.version));
+            if (prompt.source) tags.push(PROMPT_CONSTANTS.TAGS.SOURCE(prompt.source));
             if (prompt.preferredLanguages?.length) tags.push(PROMPT_CONSTANTS.TAGS.LANGUAGES(prompt.preferredLanguages));
             if (prompt.preferredLibraries?.length) tags.push(PROMPT_CONSTANTS.TAGS.LIBRARIES(prompt.preferredLibraries));
-            if (prompt.source) tags.push(PROMPT_CONSTANTS.TAGS.SOURCE(prompt.source));
 
             return {
                 label: prompt.name,
