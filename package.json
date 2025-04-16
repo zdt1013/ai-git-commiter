@@ -3,7 +3,7 @@
   "displayName": "AI Git Commit",
   "description": "使用AI大模型自动生成Git Commit消息",
   "version": "1.0.28",
-  "publisher": "ai-git-commit",
+  "publisher": "zdt1013",
   "repository": {
     "type": "git",
     "url": "https://github.com/zdt1013/ai-git-commit.git"

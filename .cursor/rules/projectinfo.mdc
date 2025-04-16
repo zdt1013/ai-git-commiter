@@ -1,0 +1,28 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+
+# 项目背景
+项目名称: AI Git Commit 自动生成插件
+描述: 该VSCode插件基于AI大模型，利用代码变更自动生成高质量的Commit消息，从而提高开发效率。插件使用TypeScript 5.4.x和Vite 6.x进行开发，并集成了Google的AI SDK（@google/genai）和OpenAI的SDK（openai）。
+
+# 编码标准
+1. 使用TypeScript 5.4.x作为主要开发语言，确保类型安全和代码可读性。
+2. 所有代码遵循Airbnb JavaScript风格指南，并使用Prettier进行格式化。
+3. 每个功能模块应有相应的单元测试，使用Jest作为测试框架。
+4. 函数和变量命名应具有描述性，始终使用小驼峰命名法（camelCase）。
+
+# 首选库
+1. @google/genai: 用于集成Google的AI SDK，生成Commit消息。
+2. openai: 用于集成OpenAI的SDK，增强AI模型的功能。
+3. vite: 使用Vite作为构建工具，提供快速的热更新和构建速度。
+4. pnpm: 使用pnpm作为包管理工具，优化依赖管理和安装速度。
+
+# 性能指南
+1. 确保AI模型调用的异步操作得到合理处理，避免阻塞主线程。
+2. 优化代码性能，避免不必要的重渲染和状态更新。
+3. 对于大数据量处理，尽量使用懒加载和分页加载策略。
+4. 定期进行性能测试，使用Chrome DevTools或其他工具监测性能瓶颈。
