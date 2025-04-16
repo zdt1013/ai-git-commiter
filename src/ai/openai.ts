@@ -4,6 +4,7 @@ import { AIResponse } from '../types/types';
 import { PromptTemplate } from '../types/types';
 import { CONFIG_CONSTANTS } from '../constants';
 import { IAIService } from './ai-service.interface';
+import { TextUtils } from '../utils/text-utils';
 
 export class OpenAIService implements IAIService {
     private static instance: OpenAIService | null = null;
@@ -57,11 +58,7 @@ export class OpenAIService implements IAIService {
             });
             const text = response.choices[0].message.content?.trim() || '';
             // 处理API返回的文本
-            let message = text?.trim() || "";
-            // 去除首尾的```符号，如果有的话
-            if (message.startsWith('```') && message.endsWith('```')) {
-                message = message.split('\n').slice(1, -1).join('\n').trim();
-            }
+            let message = TextUtils.removeCodeBlockMarkers(text);
             return {
                 success: true,
                 message,
