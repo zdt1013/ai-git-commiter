@@ -3,7 +3,7 @@
     <id>default</id>
     <name>默认提示词</name>
     <source>local</source>
-    <version>1.0.15</version>
+    <version>1.0.16</version>
     <content>
         <![CDATA[
 ## Role: Git Commit Message Generation Expert
@@ -105,7 +105,7 @@ Profile: You are an expert in Git submission guidelines, with a deep understandi
 ## Constrains:
     | Type     | Emoji | Description          | Example Scopes      |
     | -------- | ----- | -------------------- | ------------------- |
-    | init     | 🎉    | Initialize the project |  initialize   |
+    | init     | 🎉    | Initialize the project |  initialize  |
     | feat     | ✨    | New feature          | user, payment, dashboard, profile, search       |
     | fix      | 🐛    | Bug fix              | auth, data, login, api, validation         |
     | docs     | 📝    | Documentation        | README, API, CONTRIBUTING, docs, wiki, guides, comments, tutorial         |
