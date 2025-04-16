@@ -55,10 +55,16 @@ export class GeminiService implements IAIService {
                 }
             });
             const text = await result.text;
+            // 处理API返回的文本
+            let message = text?.trim() || "";
+            // 去除首尾的```符号，如果有的话
+            if (message.startsWith('```') && message.endsWith('```')) {
+                message = message.split('\n').slice(1, -1).join('\n').trim();
+            }
 
             return {
                 success: true,
-                message: text?.trim() || "",
+                message,
                 prompt: promptTemplate
             };
         } catch (error: any) {

@@ -55,10 +55,16 @@ export class OpenAIService implements IAIService {
                 max_tokens: maxTokens,
                 stream: false
             });
-
+            const text = response.choices[0].message.content?.trim() || '';
+            // 处理API返回的文本
+            let message = text?.trim() || "";
+            // 去除首尾的```符号，如果有的话
+            if (message.startsWith('```') && message.endsWith('```')) {
+                message = message.split('\n').slice(1, -1).join('\n').trim();
+            }
             return {
                 success: true,
-                message: response.choices[0].message.content?.trim() || '',
+                message,
                 prompt: promptTemplate
             };
         } catch (error: any) {
