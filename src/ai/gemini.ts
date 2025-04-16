@@ -85,7 +85,7 @@ export class GeminiService implements IAIService {
 
         // 如果启用了语言感知且有首选语言，添加到提示词中
         if (enableLanguageAwareness && promptTemplate.preferredLanguages?.length) {
-            const prefix = promptTemplate.preferredLanguagePrompt || '项目主要使用的编程语言：';
+            const prefix = promptTemplate.preferredLanguagePrompt || 'The preferred programming language for this project is: ';
             prompt = prompt.replace('{preferredLanguages}', `\n${prefix}${promptTemplate.preferredLanguages.join(', ')}`);
         } else {
             prompt = prompt.replace('{preferredLanguages}', '');
@@ -93,7 +93,7 @@ export class GeminiService implements IAIService {
 
         // 如果启用了库感知且有首选库，添加到提示词中
         if (enableLibraryAwareness && promptTemplate.preferredLibraries?.length) {
-            const prefix = promptTemplate.preferredLibraryPrompt || '项目主要使用的三方库：';
+            const prefix = promptTemplate.preferredLibraryPrompt || 'The project uses the following third-party libraries: ';
             prompt = prompt.replace('{preferredLibraries}', `\n${prefix}${promptTemplate.preferredLibraries.join(', ')}`);
         } else {
             prompt = prompt.replace('{preferredLibraries}', '');
