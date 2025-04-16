@@ -2,7 +2,7 @@
   "name": "ai-git-commit",
   "displayName": "AI Git Commit",
   "description": "使用AI大模型自动生成Git Commit消息",
-  "version": "0.0.27",
+  "version": "1.0.28",
   "publisher": "ai-git-commit",
   "repository": {
     "type": "git",
@@ -312,6 +312,6 @@
     "xml2js": "^0.6.2"
   },
   "keywords": [],
-  "author": "",
+  "author": "zdt",
   "license": "MIT"
 }
