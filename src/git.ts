@@ -17,10 +17,37 @@ export class GitService {
         noColor?: boolean;
         diffFilter?: string;
         filterMeta?: boolean;
+        area?: string;
     }): Promise<string | undefined> {
         try {
             this.git = simpleGit(repoPath);
-            const diffOptions: string[] = ['--cached'];
+            const diffOptions: string[] = [];
+
+            // 根据area配置决定是否使用--cached选项
+            if (options?.area === 'staged' || options?.area === 'cached') {
+                diffOptions.push('--cached');
+            } else if (options?.area === "working") {
+                diffOptions.push(`HEAD`);
+            } else if (options?.area === "auto") {
+                // 自动判断：先检查暂存区，如果有变更则返回暂存区变更，否则检查工作区
+                const stagedDiff = await this.git.diff(['--cached']);
+                if (stagedDiff && stagedDiff.trim() !== '') {
+                    // 暂存区有变更，使用暂存区
+                    diffOptions.push('--cached');
+                } else {
+                    // 暂存区无变更，检查工作区
+                    const workingDiff = await this.git.diff(['HEAD']);
+                    if (workingDiff && workingDiff.trim() !== '') {
+                        // 工作区有变更，使用工作区
+                        diffOptions.push('HEAD');
+                    } else {
+                        // 两个区域都没有变更
+                        return undefined;
+                    }
+                }
+            } else {
+                return undefined;
+            }
 
             // 添加word diff选项
             if (options?.wordDiff) {
@@ -79,12 +106,37 @@ export class GitService {
     /**
      * 获取当前Git仓库的变更行数
      * @param repoPath 仓库路径 
+     * @param area 变更区域
      * @return 返回变更行数
      */
-    static async getChangesCount(repoPath: string): Promise<number> {
+    static async getChangesCount(repoPath: string, area?: string): Promise<number> {
         try {
             this.git = simpleGit(repoPath);
-            const stats = (await this.git.diff(['--cached', '--shortstat'])).trim();
+            const diffOptions: string[] = [];
+
+            // 根据area配置决定是否使用--cached选项
+            if (area === 'staged' || area === 'cached') {
+                diffOptions.push(`--cached`); // staged 与 cached 等价
+            } else if (area === "working") {
+                diffOptions.push(`HEAD`);
+            } else if (area === "auto") {
+                // 自动判断：先检查暂存区，如果有变更则返回暂存区变更，否则检查工作区
+                const stagedDiff = await this.git.diff(['--cached']);
+                if (stagedDiff && stagedDiff.trim() !== '') {
+                    diffOptions.push(`--cached`);
+                } else {
+                    const workingDiff = await this.git.diff(['HEAD']);
+                    if (workingDiff && workingDiff.trim() !== '') {
+                        diffOptions.push(`HEAD`);
+                    } else {
+                        return 0;
+                    }
+                }
+            } else {
+                return -1;
+            }
+
+            const stats = (await this.git.diff([...diffOptions, '--shortstat'])).trim();
 
             let totalChanges = 0;
 
@@ -115,7 +167,7 @@ export class GitService {
             return totalChanges;
         } catch (error) {
             console.error('获取变更行数失败:', error);
-            return 0;
+            return -1;
         }
     }
 
@@ -123,13 +175,14 @@ export class GitService {
      * 检查变更行数是否超过限制
      * @param repository Git仓库
      * @param maxChanges 最大变更行数
+     * @param area 变更区域
      * @returns 是否超过限制
      */
-    public static async checkChangesLimit(repository: Repository, maxChanges: number): Promise<boolean> {
+    public static async checkChangesLimit(repository: Repository, maxChanges: number, area?: string): Promise<boolean> {
         if (!repository.rootUri) {
             return false;
         }
-        const changes = await this.getChangesCount(repository.rootUri.fsPath);
+        const changes = await this.getChangesCount(repository.rootUri.fsPath, area);
         return changes > maxChanges;
     }
 } 

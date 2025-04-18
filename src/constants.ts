@@ -165,7 +165,8 @@ export const CONFIG_CONSTANTS = {
             UNIFIED: 'git-diff.unified',
             NO_COLOR: 'git-diff.noColor',
             DIFF_FILTER: 'git-diff.diffFilter',
-            FILTER_META: 'git-diff.filterMeta'
+            FILTER_META: 'git-diff.filterMeta',
+            AREA: 'git-diff.area'
         }
     },
 
@@ -215,7 +216,8 @@ export const CONFIG_CONSTANTS = {
                 UNIFIED: 0,
                 NO_COLOR: true,
                 DIFF_FILTER: 'ACMRT',
-                FILTER_META: false
+                FILTER_META: false,
+                AREA: 'auto'
             }
         },
         LANGUAGE: '中文'

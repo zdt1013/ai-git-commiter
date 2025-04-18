@@ -2,7 +2,7 @@
   "name": "ai-git-commit",
   "displayName": "AI Git Commit",
   "description": "使用AI大模型自动生成Git Commit消息",
-  "version": "1.0.32",
+  "version": "1.0.34",
   "publisher": "zdt1013",
   "repository": {
     "type": "git",
@@ -84,7 +84,7 @@
         "ai-git-commit.language": {
           "type": "string",
           "default": "简体中文",
-          "order": 0,
+          "order": 1,
           "enum": [
             "简体中文",
             "English"
@@ -94,7 +94,7 @@
         "ai-git-commit.provider": {
           "type": "string",
           "default": "OpenAI",
-          "order": 1,
+          "order": 2,
           "enum": [
             "OpenAI",
             "Gemini"
@@ -107,28 +107,28 @@
         },
         "ai-git-commit.openai.baseUrl": {
           "type": "string",
-          "order": 2,
+          "order": 3,
           "default": "https://api.openai.com/v1",
           "description": "OpenAI API基础URL",
           "when": "ai-git-commit.provider == OpenAI"
         },
         "ai-git-commit.openai.apiKey": {
           "type": "string",
-          "order": 3,
+          "order": 4,
           "default": "",
           "description": "OpenAI API密钥",
           "when": "ai-git-commit.provider == OpenAI"
         },
         "ai-git-commit.openai.model": {
           "type": "string",
-          "order": 4,
+          "order": 5,
           "default": "",
           "description": "OpenAI模型名称",
           "when": "ai-git-commit.provider == OpenAI"
         },
         "ai-git-commit.openai.temperature": {
           "type": "number",
-          "order": 5,
+          "order": 6,
           "default": 0.7,
           "minimum": 0,
           "maximum": 2,
@@ -137,7 +137,7 @@
         },
         "ai-git-commit.openai.topP": {
           "type": "number",
-          "order": 6,
+          "order": 7,
           "default": 1,
           "minimum": 0,
           "maximum": 1,
@@ -146,7 +146,7 @@
         },
         "ai-git-commit.openai.maxTokens": {
           "type": "number",
-          "order": 7,
+          "order": 8,
           "default": 500,
           "minimum": 1,
           "description": "OpenAI模型最大输出长度",
@@ -154,28 +154,28 @@
         },
         "ai-git-commit.gemini.baseUrl": {
           "type": "string",
-          "order": 8,
+          "order": 9,
           "default": "https://generativelanguage.googleapis.com",
           "description": "Google Gemini API基础URL",
           "when": "ai-git-commit.provider == Gemini"
         },
         "ai-git-commit.gemini.apiKey": {
           "type": "string",
-          "order": 9,
+          "order": 10,
           "default": "",
           "description": "Google Gemini API密钥",
           "when": "ai-git-commit.provider == Gemini"
         },
         "ai-git-commit.gemini.model": {
           "type": "string",
-          "order": 10,
+          "order": 11,
           "default": "gemini-2.0-flash",
           "description": "Google Gemini模型名称",
           "when": "ai-git-commit.provider == Gemini"
         },
         "ai-git-commit.gemini.temperature": {
           "type": "number",
-          "order": 11,
+          "order": 12,
           "default": 0.7,
           "minimum": 0,
           "maximum": 1,
@@ -184,7 +184,7 @@
         },
         "ai-git-commit.gemini.topK": {
           "type": "number",
-          "order": 12,
+          "order": 13,
           "default": 40,
           "minimum": 1,
           "maximum": 100,
@@ -193,7 +193,7 @@
         },
         "ai-git-commit.gemini.topP": {
           "type": "number",
-          "order": 13,
+          "order": 14,
           "default": 0.95,
           "minimum": 0,
           "maximum": 1,
@@ -202,85 +202,101 @@
         },
         "ai-git-commit.gemini.maxOutputTokens": {
           "type": "number",
-          "order": 14,
+          "order": 15,
           "default": 500,
           "minimum": 1,
           "description": "Gemini模型最大输出长度",
           "when": "ai-git-commit.provider == Gemini"
         },
+        "ai-git-commit.git-diff.area": {
+          "type": "string",
+          "order": 16,
+          "default": "auto",
+          "enum": [
+            "auto",
+            "cached",
+            "working"
+          ],
+          "enumDescriptions": [
+            "自动选择暂存区或工作区变更（优先使用暂存区）",
+            "使用暂存区变更生成Commit消息",
+            "使用工作区变更生成Commit消息"
+          ],
+          "description": "使用暂存区或工作区的变更生成Commit消息"
+        },
         "ai-git-commit.git-diff.wordDiff": {
           "type": "boolean",
-          "order": 15,
+          "order": 17,
           "default": true,
           "description": "显示单词级别的变更（而非整行），减少冗余内容"
         },
         "ai-git-commit.git-diff.unified": {
           "type": "number",
-          "order": 16,
+          "order": 18,
           "default": 0,
           "minimum": 0,
           "description": "去除上下文行，仅保留实际变更"
         },
         "ai-git-commit.git-diff.noColor": {
           "type": "boolean",
-          "order": 17,
+          "order": 19,
           "default": true,
           "description": "移除颜色代码，避免额外 Token 开销"
         },
         "ai-git-commit.git-diff.diffFilter": {
           "type": "string",
-          "order": 18,
+          "order": 20,
           "default": "ACMRT",
           "description": "过滤文件变更类型：A(添加)、C(复制)、D(删除)、M(修改)、R(重命名)、T(类型变更)"
         },
         "ai-git-commit.git-diff.filterMeta": {
           "type": "boolean",
-          "order": 19,
+          "order": 21,
           "default": false,
           "description": "过滤掉冗余行（如 index、diff、Binary file 等元信息）"
         },
         "ai-git-commit.git-diff.maxChanges": {
           "type": "number",
-          "order": 20,
+          "order": 22,
           "default": 500,
           "minimum": 1,
           "description": "AI生成建议最大变更行数，超过此值将提示用户减少暂存文件或手动输入"
         },
         "ai-git-commit.prompt.selectedPromptTemplateId": {
           "type": "string",
-          "order": 21,
+          "order": 23,
           "default": "",
           "readonly": true,
           "description": "当前选中的提示词模板ID"
         },
         "ai-git-commit.prompt.selectedTemplatePrompt": {
           "type": "string",
-          "order": 22,
+          "order": 24,
           "default": "",
           "readonly": true,
           "description": "当前选中的提示词模板内容"
         },
         "ai-git-commit.prompt.languageAwareness": {
           "type": "string",
-          "order": 23,
+          "order": 25,
           "default": "",
           "description": "编程语言感知"
         },
         "ai-git-commit.prompt.libraryAwareness": {
           "type": "string",
-          "order": 24,
+          "order": 26,
           "default": "",
           "description": "三方库感知"
         },
         "ai-git-commit.prompt.enableLanguageAwareness": {
           "type": "boolean",
-          "order": 25,
+          "order": 27,
           "default": false,
           "description": "是否启用编程语言感知"
         },
         "ai-git-commit.prompt.enableLibraryAwareness": {
           "type": "boolean",
-          "order": 26,
+          "order": 28,
           "default": false,
           "description": "是否启用三方库感知"
         }

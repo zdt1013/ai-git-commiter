@@ -4,6 +4,8 @@ import { PromptService } from '../ai/prompt.service';
 import { PROMPT_CONSTANTS, GIT_CONSTANTS, AI_CONSTANTS, CONFIG_CONSTANTS } from '../constants';
 import { ConfigService } from '../config';
 import { AIServiceFactory } from '../ai/ai-service.factory';
+import { ExtensionConfig } from '../types/config';
+import { Repository } from '../types/git';
 
 export class CommitCommand {
     constructor(
@@ -43,16 +45,16 @@ export class CommitCommand {
         }
     }
 
-    private async handleCommitMessageGeneration(repository: any, config: any): Promise<void> {
+    private async handleCommitMessageGeneration(repository: Repository, config: ExtensionConfig): Promise<void> {
         // 检查变更行数
-        if (await GitService.checkChangesLimit(repository, config.git.diff.maxChanges)) {
+        if (await GitService.checkChangesLimit(repository, config.git.diff.maxChanges, config.git.diff.area)) {
             await this.handleLargeChanges(repository, config);
         } else {
             await this.handleNormalChanges(repository, config);
         }
     }
 
-    private async handleLargeChanges(repository: any, config: any): Promise<void> {
+    private async handleLargeChanges(repository: Repository, config: ExtensionConfig): Promise<void> {
         const confirmResult = await vscode.window.showWarningMessage(
             GIT_CONSTANTS.ERROR.TOO_MANY_CHANGES(config.git.diff.maxChanges),
             { modal: true },
@@ -84,13 +86,20 @@ export class CommitCommand {
         }
     }
 
-    private async handleNormalChanges(repository: any, config: any): Promise<void> {
+    private async handleNormalChanges(repository: Repository, config: ExtensionConfig): Promise<void> {
         if (!repository.rootUri) {
             vscode.window.showErrorMessage(GIT_CONSTANTS.ERROR.NO_REPOSITORY);
             return;
         }
 
-        const diff = await GitService.getDiff(repository.rootUri.fsPath, config.git.diff);
+        const diff = await GitService.getDiff(repository.rootUri.fsPath, {
+            wordDiff: config.git.diff.wordDiff,
+            unified: config.git.diff.unified,
+            noColor: config.git.diff.noColor,
+            diffFilter: config.git.diff.diffFilter,
+            filterMeta: config.git.diff.filterMeta,
+            area: config.git.diff.area
+        });
 
         if (!diff) {
             vscode.window.showInformationMessage(GIT_CONSTANTS.ERROR.NO_CHANGES, { modal: true });

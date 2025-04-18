@@ -8,6 +8,7 @@ export interface GitDiffConfig {
     diffFilter: string;
     filterMeta: boolean;
     maxChanges: number;
+    area: string;
 }
 
 /**
