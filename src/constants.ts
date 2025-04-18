@@ -11,7 +11,8 @@ export const PROMPT_CONSTANTS = {
         DOWNLOAD_PROMPTS: 'ai-git-commit.downloadPrompts',
         GENERATE_COMMIT_MESSAGE: 'extension.ai-git-commit',
         MANUAL_POLISH_COMMIT_MESSAGE: 'ai-git-commit.manualPolishCommitMessage',
-        SWITCH_AI_MODEL: 'ai-git-commit.switchAIModel'
+        SWITCH_AI_MODEL: 'ai-git-commit.switchAIModel',
+        OPEN_SETTINGS: 'ai-git-commit.settings'
     },
 
     // 提示词管理相关文本

@@ -10,6 +10,7 @@ import { DeletePromptCommand } from './prompt/delete-prompt.command';
 import { SelectPromptCommand } from './prompt/select-prompt.command';
 import { DownloadPromptCommand } from './prompt/download-prompt.command';
 import { ManualPolishCommand } from './prompt/manual-polish.command';
+import { OpenSettingsCommand } from './open-settings.command';
 
 export class CommandRegistry {
     constructor(
@@ -109,6 +110,16 @@ export class CommandRegistry {
             () => manualPolishCommand.execute()
         );
 
+        // 注册打开设置命令
+        const openSettingsCommand = new OpenSettingsCommand(
+            this.context
+        );
+
+        const openSettingsDisposable = vscode.commands.registerCommand(
+            PROMPT_CONSTANTS.COMMANDS.OPEN_SETTINGS,
+            () => openSettingsCommand.execute()
+        );
+
         // 将命令添加到订阅列表
         this.context.subscriptions.push(
             commitDisposable,
@@ -118,7 +129,8 @@ export class CommandRegistry {
             deletePromptDisposable,
             selectPromptDisposable,
             downloadPromptDisposable,
-            manualPolishDisposable
+            manualPolishDisposable,
+            openSettingsDisposable
         );
     }
 } 

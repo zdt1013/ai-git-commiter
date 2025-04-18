@@ -58,6 +58,8 @@
 - **✅ 选择提示词模版 (`ai-git-commit.selectPrompt`)**：选择并使用现有提示词模板。
 - **⬇️ 下载远程提示词 (`ai-git-commit.downloadPrompts`)**：下载远程提示词模板。
 - **✍️ 手动润色Commit消息 (`ai-git-commit.manualPolishCommitMessage`)**：手动输入变更，AI润色生成Commit消息。
+- **🔄 切换AI模型 (`ai-git-commit.switchAIModel`)**：切换AI模型，配置好OpenAI（baseUrl、ApiKey)，即可调用选择，仍可在设置项中手动输入。
+- **⚙️ 打开设置项 (`ai-git-commit.settings`)**：查看所有相关设置项。
 
 ## ⚠️ 注意事项
 
