@@ -2,7 +2,7 @@
   "name": "ai-git-commit",
   "displayName": "AI Git Commit",
   "description": "使用AI大模型自动生成Git Commit消息",
-  "version": "1.0.28",
+  "version": "1.0.30",
   "publisher": "zdt1013",
   "repository": {
     "type": "git",
@@ -59,6 +59,10 @@
       {
         "command": "ai-git-commit.manualPolishCommitMessage",
         "title": "AI Git Commit: 手动生成Commit消息（AI润色）"
+      },
+      {
+        "command": "ai-git-commit.switchAIModel",
+        "title": "AI Git Commit: 切换AI模型"
       }
     ],
     "menus": {

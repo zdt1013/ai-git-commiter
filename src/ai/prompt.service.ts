@@ -4,25 +4,25 @@ import { readFile, access, constants, readdir, writeFile } from 'fs/promises';
 import * as path from 'path';
 import * as xml2js from 'xml2js';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
 import { PromptTemplate, XmlPrompt } from '../types/types';
-import { PROMPT_CONSTANTS, CONFIG_CONSTANTS, GIT_CONSTANTS, AI_CONSTANTS } from '../constants';
-import { GitService } from '../git';
-import { ConfigService } from '../config';
-import { AIServiceFactory } from './ai-service.factory';
+import { PROMPT_CONSTANTS, CONFIG_CONSTANTS } from '../constants';
 
 /**
- * 提示词管理器类
+ * 提示词管理器类 - 单例模式
  */
 export class PromptService {
+    private static _instance: PromptService | null = null;
+    private static _initializing: Promise<void> | null = null;
     private _promptsStoragePath: string;
     private _prompts: PromptTemplate[] = [];
     private _onDidChangePrompts: vscode.EventEmitter<void> = new vscode.EventEmitter<void>();
     private _defaultPromptsPath: string;
+    private readonly _context: vscode.ExtensionContext;
 
     public readonly onDidChangePrompts: vscode.Event<void> = this._onDidChangePrompts.event;
 
-    constructor(private context: vscode.ExtensionContext) {
+    private constructor(context: vscode.ExtensionContext) {
+        this._context = context;
         // 设置存储路径
         this._promptsStoragePath = path.join(context.globalStorageUri.fsPath, 'prompts.json');
         this._defaultPromptsPath = path.join(context.extensionPath, 'asserts', 'prompts');
@@ -31,32 +31,30 @@ export class PromptService {
         if (!fs.existsSync(path.dirname(this._promptsStoragePath))) {
             fs.mkdirSync(path.dirname(this._promptsStoragePath), { recursive: true });
         }
-
-        // 初始化提示词
-        this.initialize();
     }
 
     /**
-     * 更新设置项
+     * 获取 PromptService 实例
+     * @param context VSCode扩展上下文
+     * @returns Promise<PromptService> 初始化完成的 PromptService 实例
      */
-    private async updateSettings(prompt: PromptTemplate): Promise<void> {
-        const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
-        await config.update(CONFIG_CONSTANTS.PROMPT.SELECTED_PROMPT_TEMPLATE_ID, prompt.id, true);
-        await config.update(CONFIG_CONSTANTS.PROMPT.SELECTED_TEMPLATE_PROMPT, prompt.content, true);
-        await config.update(CONFIG_CONSTANTS.PROMPT.LANGUAGE_AWARENESS, prompt.preferredLanguages?.join(', ') || '', true);
-        await config.update(CONFIG_CONSTANTS.PROMPT.LIBRARY_AWARENESS, prompt.preferredLibraries?.join(', ') || '', true);
+    public static async getInstance(context: vscode.ExtensionContext): Promise<PromptService> {
+        if (!PromptService._instance) {
+            PromptService._instance = new PromptService(context);
+            PromptService._initializing = PromptService._instance.initialize();
+        }
+
+        // 等待初始化完成
+        await PromptService._initializing;
+        return PromptService._instance;
     }
 
     /**
      * 初始化提示词管理器
      */
-    private async initialize(): Promise<void> {
+    public async initialize(): Promise<void> {
         // 加载提示词
         await this.loadPrompts();
-
-        // 注册提示词管理命令
-        this.registerCommands();
-
         // 获取当前选中的提示词ID
         const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
         const selectedPromptId = config.get<string>(CONFIG_CONSTANTS.PROMPT.SELECTED_PROMPT_TEMPLATE_ID);
@@ -65,7 +63,7 @@ export class PromptService {
         if (!selectedPromptId) {
             const defaultPrompt = this._prompts.find(p => p.id === 'default');
             if (defaultPrompt) {
-                await this.updateSettings(defaultPrompt);
+                await this.updateSelectedPrompt(defaultPrompt);
             }
         }
     }
@@ -209,7 +207,7 @@ export class PromptService {
     /**
      * 下载远程提示词
      */
-    private async downloadPrompts(url: string): Promise<void> {
+    public async downloadPrompts(url: string): Promise<void> {
         try {
             const response = await axios.get(url);
             let remotePrompts: PromptTemplate[] = response.data;
@@ -269,305 +267,6 @@ export class PromptService {
             fs.existsSync(path.join(this._defaultPromptsPath, `${prompt.id}.xml`));
     }
 
-    /**
-     * 注册所有提示词管理相关的命令
-     */
-    private registerCommands(): void {
-        // 添加提示词命令
-        this.context.subscriptions.push(
-            vscode.commands.registerCommand(PROMPT_CONSTANTS.COMMANDS.ADD_PROMPT, async () => {
-                // 获取用户输入的新提示词名称
-                const name = await vscode.window.showInputBox({
-                    prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.NAME.PROMPT,
-                    placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.NAME.PLACEHOLDER,
-                    validateInput: (value) => {
-                        if (!value) {
-                            return PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.NAME.VALIDATION.EMPTY;
-                        }
-                        const exists = this._prompts.some(p => p.name === value);
-                        if (exists) {
-                            return PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.NAME.VALIDATION.EXISTS;
-                        }
-                        return null;
-                    }
-                });
-
-                if (!name) return;
-
-                // 获取用户输入的提示词内容
-                const content = await vscode.window.showInputBox({
-                    prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.CONTENT.PROMPT,
-                    placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.CONTENT.PLACEHOLDER,
-                    ignoreFocusOut: true
-                });
-
-                if (!content) return;
-
-                // 获取用户输入的润色提示词内容
-                const polishContent = await vscode.window.showInputBox({
-                    prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.POLISH_CONTENT.PROMPT,
-                    placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.POLISH_CONTENT.PLACEHOLDER,
-                    ignoreFocusOut: true
-                });
-
-                if (!polishContent) return;
-
-                // 获取用户输入的偏好语言
-                const languagesInput = await vscode.window.showInputBox({
-                    prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LANGUAGES.PROMPT,
-                    placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LANGUAGES.PLACEHOLDER,
-                    ignoreFocusOut: true
-                });
-
-                // 获取用户输入的偏好库
-                const librariesInput = await vscode.window.showInputBox({
-                    prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LIBRARIES.PROMPT,
-                    placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LIBRARIES.PLACEHOLDER,
-                    ignoreFocusOut: true
-                });
-
-                // 处理语言和库的输入
-                const languages = languagesInput ? languagesInput.split(',').map(lang => lang.trim()) : [];
-                const libraries = librariesInput ? librariesInput.split(',').map(lib => lib.trim()) : [];
-
-                // 创建新提示词并保存
-                this._prompts.push({
-                    id: uuidv4(),
-                    name,
-                    content,
-                    polishContent,
-                    preferredLanguages: languages,
-                    preferredLibraries: libraries,
-                    source: 'local'
-                });
-                this.savePrompts();
-                vscode.window.showInformationMessage(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.SUCCESS.ADD(name));
-            })
-        );
-
-        // 编辑提示词命令
-        this.context.subscriptions.push(
-            vscode.commands.registerCommand(PROMPT_CONSTANTS.COMMANDS.EDIT_PROMPT, async () => {
-                // 让用户选择要编辑的提示词
-                const selected = await this.selectPrompt(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.SELECT.EDIT);
-                if (!selected) return;
-
-                // 检查是否为默认提示词（不可编辑）
-                if (this.isDefaultPrompt(selected)) {
-                    vscode.window.showWarningMessage('默认提示词不能修改');
-                    return;
-                }
-
-                // 获取修改后的名称
-                const name = await vscode.window.showInputBox({
-                    prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.NAME.PROMPT,
-                    value: selected.name,
-                    validateInput: (value) => {
-                        if (!value) {
-                            return PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.NAME.VALIDATION.EMPTY;
-                        }
-                        const exists = this._prompts.some(p => p.id !== selected.id && p.name === value);
-                        if (exists) {
-                            return PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.NAME.VALIDATION.EXISTS;
-                        }
-                        return null;
-                    }
-                });
-
-                if (!name) return;
-
-                // 获取修改后的内容
-                const content = await vscode.window.showInputBox({
-                    prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.CONTENT.PROMPT,
-                    value: selected.content,
-                    ignoreFocusOut: true
-                });
-
-                if (!content) return;
-
-                // 获取修改后的偏好语言
-                const languagesInput = await vscode.window.showInputBox({
-                    prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LANGUAGES.PROMPT,
-                    value: selected.preferredLanguages?.join(', ') || '',
-                    placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LANGUAGES.PLACEHOLDER,
-                    ignoreFocusOut: true
-                });
-
-                // 获取修改后的偏好库
-                const librariesInput = await vscode.window.showInputBox({
-                    prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LIBRARIES.PROMPT,
-                    value: selected.preferredLibraries?.join(', ') || '',
-                    placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LIBRARIES.PLACEHOLDER,
-                    ignoreFocusOut: true
-                });
-
-                // 处理语言和库的输入
-                const preferredLanguages = languagesInput ? languagesInput.split(',').map(lang => lang.trim()) : [];
-                const preferredLibraries = librariesInput ? librariesInput.split(',').map(lib => lib.trim()) : [];
-
-                // 更新提示词并保存
-                const index = this._prompts.findIndex(p => p.id === selected.id);
-                if (index !== -1) {
-                    this._prompts[index] = {
-                        ...selected,
-                        name,
-                        content,
-                        preferredLanguages,
-                        preferredLibraries
-                    };
-                    this.savePrompts();
-                    vscode.window.showInformationMessage(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.SUCCESS.EDIT(name));
-                }
-            })
-        );
-
-        // 删除提示词命令
-        this.context.subscriptions.push(
-            vscode.commands.registerCommand(PROMPT_CONSTANTS.COMMANDS.DELETE_PROMPT, async () => {
-                // 让用户选择要删除的提示词
-                const selected = await this.selectPrompt(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.SELECT.DELETE);
-                if (!selected) return;
-
-                // 检查是否为默认提示词（不可删除）
-                if (this.isDefaultPrompt(selected)) {
-                    vscode.window.showWarningMessage('默认提示词不能删除');
-                    return;
-                }
-
-                // 确认删除操作
-                const confirmed = await vscode.window.showWarningMessage(
-                    PROMPT_CONSTANTS.PROMPT_MANAGEMENT.CONFIRM.DELETE(selected.name),
-                    { modal: true },
-                    PROMPT_CONSTANTS.PROMPT_MANAGEMENT.CONFIRM.CONFIRM_BUTTON
-                );
-
-                // 执行删除并保存
-                if (confirmed === PROMPT_CONSTANTS.PROMPT_MANAGEMENT.CONFIRM.CONFIRM_BUTTON) {
-                    const index = this._prompts.findIndex(p => p.id === selected.id);
-                    if (index !== -1) {
-                        this._prompts.splice(index, 1);
-                        this.savePrompts();
-                        vscode.window.showInformationMessage(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.SUCCESS.DELETE(selected.name));
-                    }
-                }
-            })
-        );
-
-        // 选择提示词命令
-        this.context.subscriptions.push(
-            vscode.commands.registerCommand(PROMPT_CONSTANTS.COMMANDS.SELECT_PROMPT, async () => {
-                // 让用户选择要使用的提示词
-                const selected = await this.selectPrompt(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.SELECT.USE);
-                if (!selected) return;
-
-                // 更新设置项为选中的提示词
-                await this.updateSettings(selected);
-
-                vscode.window.showInformationMessage(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.SUCCESS.USE(selected.name));
-            })
-        );
-
-        // 下载远程提示词命令
-        this.context.subscriptions.push(
-            vscode.commands.registerCommand(PROMPT_CONSTANTS.COMMANDS.DOWNLOAD_PROMPTS, async () => {
-                // 获取用户输入的远程URL
-                const url = await vscode.window.showInputBox({
-                    prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.REMOTE_URL.PROMPT,
-                    placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.REMOTE_URL.PLACEHOLDER
-                });
-
-                // 下载并合并远程提示词
-                if (url) {
-                    await this.downloadPrompts(url);
-                }
-            })
-        );
-
-        // 手动生成Commit消息（AI润色）命令
-        this.context.subscriptions.push(
-            vscode.commands.registerCommand(PROMPT_CONSTANTS.COMMANDS.MANUAL_POLISH_COMMIT_MESSAGE, async () => {
-                try {
-                    // 获取Git仓库
-                    const repository = await GitService.getCurrentRepository();
-                    if (!repository) {
-                        vscode.window.showErrorMessage(GIT_CONSTANTS.ERROR.NO_REPOSITORY);
-                        return;
-                    }
-
-                    // 获取配置
-                    const configService = new ConfigService();
-                    const config = configService.getExtensionConfig();
-
-                    // 检查AI配置是否完整
-                    if (!(await configService.checkAIConfig(config, config.provider))) {
-                        return;
-                    }
-
-                    // 获取用户输入的原始Commit消息
-                    const message = await vscode.window.showInputBox({
-                        placeHolder: '请输入简短的Commit消息',
-                        prompt: '请输入您想要润色的Commit消息'
-                    });
-
-                    if (!message) {
-                        return;
-                    }
-
-                    // 显示加载中提示
-                    vscode.window.withProgress({
-                        location: vscode.ProgressLocation.SourceControl,
-                        title: AI_CONSTANTS.PROGRESS.POLISHING,
-                        cancellable: false
-                    }, async (_: vscode.Progress<{ message?: string; increment?: number }>) => {
-                        // 从配置中获取选中的提示词模板
-                        const promptTemplate = this.getSelectedPrompt();
-
-                        // 使用工厂创建AI服务并润色消息
-                        const aiService = AIServiceFactory.createService();
-                        const result = await aiService.polishCommitMessage(message, config.language, promptTemplate);
-
-                        if (result?.success && result.message) {
-                            repository.inputBox.value = result.message;
-                            vscode.window.showInformationMessage(AI_CONSTANTS.SUCCESS.POLISH);
-                        } else {
-                            vscode.window.showErrorMessage(result?.error || AI_CONSTANTS.ERROR.POLISH);
-                        }
-                        return Promise.resolve();
-                    });
-                } catch (error: any) {
-                    vscode.window.showErrorMessage(`执行命令时出错: ${error.message}`);
-                }
-            })
-        );
-    }
-
-    /**
-     * 选择提示词
-     */
-    private async selectPrompt(placeHolder: string): Promise<PromptTemplate | undefined> {
-        const items = this._prompts.map(prompt => {
-            // 构建标签数组
-            const tags: string[] = [];
-            if (prompt.version) tags.push(PROMPT_CONSTANTS.TAGS.VERSION(prompt.version));
-            if (prompt.source) tags.push(PROMPT_CONSTANTS.TAGS.SOURCE(prompt.source));
-            if (prompt.preferredLanguages?.length) tags.push(PROMPT_CONSTANTS.TAGS.LANGUAGES(prompt.preferredLanguages));
-            if (prompt.preferredLibraries?.length) tags.push(PROMPT_CONSTANTS.TAGS.LIBRARIES(prompt.preferredLibraries));
-
-            return {
-                label: prompt.name,
-                description: tags.join(' | '),
-                detail: prompt.content.length > 50 ? prompt.content.substring(0, 50) + '...' : prompt.content,
-                prompt
-            };
-        });
-
-        const selected = await vscode.window.showQuickPick(items, {
-            placeHolder,
-            matchOnDescription: true
-        });
-
-        return selected?.prompt;
-    }
 
     /**
      * 获取所有提示词
@@ -606,5 +305,34 @@ export class PromptService {
 
         // 如果连默认模板都没有，返回第一个模板
         return this._prompts[0];
+    }
+
+    public async updateSelectedPrompt(prompt: PromptTemplate): Promise<void> {
+        const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
+        await config.update(CONFIG_CONSTANTS.PROMPT.SELECTED_PROMPT_TEMPLATE_ID, prompt.id, true);
+        await config.update(CONFIG_CONSTANTS.PROMPT.SELECTED_TEMPLATE_PROMPT, prompt.content, true);
+        await config.update(CONFIG_CONSTANTS.PROMPT.LANGUAGE_AWARENESS, prompt.preferredLanguages?.join(', ') || '', true);
+        await config.update(CONFIG_CONSTANTS.PROMPT.LIBRARY_AWARENESS, prompt.preferredLibraries?.join(', ') || '', true);
+    }
+
+    public addPrompt(prompt: PromptTemplate): void {
+        this._prompts.push(prompt);
+        this.savePrompts();
+    }
+
+    public updatePrompt(prompt: PromptTemplate): void {
+        const index = this._prompts.findIndex(p => p.id === prompt.id);
+        if (index !== -1) {
+            this._prompts[index] = prompt;
+            this.savePrompts();
+        }
+    }
+
+    public deletePrompt(id: string): void {
+        const index = this._prompts.findIndex(p => p.id === id);
+        if (index !== -1) {
+            this._prompts.splice(index, 1);
+            this.savePrompts();
+        }
     }
 }

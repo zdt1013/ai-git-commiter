@@ -4,14 +4,16 @@ import { CONFIG_CONSTANTS } from './constants';
 import { AIServiceFactory } from './ai/ai-service.factory';
 
 /**
- * 配置服务类
+ * 配置服务类 - 单例模式
  */
 export class ConfigService {
+    private static _instance: ConfigService | null = null;
+    private static _initializing: Promise<void> | null = null;
     private _onDidChangeConfig: vscode.EventEmitter<void> = new vscode.EventEmitter<void>();
     private _disposables: vscode.Disposable[] = [];
     public readonly onDidChangeConfig: vscode.Event<void> = this._onDidChangeConfig.event;
 
-    constructor() {
+    private constructor() {
         // 监听配置变更
         this._disposables.push(
             vscode.workspace.onDidChangeConfiguration(e => {
@@ -22,6 +24,30 @@ export class ConfigService {
                 }
             })
         );
+    }
+
+    /**
+     * 初始化配置服务
+     */
+    private async initialize(): Promise<void> {
+        // 这里可以添加任何需要的异步初始化逻辑
+        // 目前没有异步初始化需求，但保留此方法以保持一致性
+        await Promise.resolve();
+    }
+
+    /**
+     * 获取 ConfigService 实例
+     * @returns Promise<ConfigService> 初始化完成的 ConfigService 实例
+     */
+    public static async getInstance(): Promise<ConfigService> {
+        if (!ConfigService._instance) {
+            ConfigService._instance = new ConfigService();
+            ConfigService._initializing = ConfigService._instance.initialize();
+        }
+
+        // 等待初始化完成
+        await ConfigService._initializing;
+        return ConfigService._instance;
     }
 
     /**

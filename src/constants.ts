@@ -10,7 +10,8 @@ export const PROMPT_CONSTANTS = {
         SELECT_PROMPT: 'ai-git-commit.selectPrompt',
         DOWNLOAD_PROMPTS: 'ai-git-commit.downloadPrompts',
         GENERATE_COMMIT_MESSAGE: 'extension.ai-git-commit',
-        MANUAL_POLISH_COMMIT_MESSAGE: 'ai-git-commit.manualPolishCommitMessage'
+        MANUAL_POLISH_COMMIT_MESSAGE: 'ai-git-commit.manualPolishCommitMessage',
+        SWITCH_AI_MODEL: 'ai-git-commit.switchAIModel'
     },
 
     // 提示词管理相关文本
@@ -49,6 +50,7 @@ export const PROMPT_CONSTANTS = {
 
         // 选择框提示
         SELECT: {
+            TITLE: "选择提示词",
             EDIT: '选择要编辑的提示词',
             DELETE: '选择要删除的提示词',
             USE: '选择要使用的提示词'
@@ -97,6 +99,12 @@ export const GIT_CONSTANTS = {
     },
     WARNING: {
         MANUAL_INPUT: '您选择了手动输入，请输入简短的Commit消息，我们将帮您润色'
+    },
+    BUTTONS: {
+        MANUAL_INPUT: '手动输入'
+    },
+    INPUT: {
+        COMMIT_MESSAGE_PLACEHOLDER: '请输入简短的Commit消息'
     }
 };
 
@@ -106,15 +114,25 @@ export const GIT_CONSTANTS = {
 export const AI_CONSTANTS = {
     PROGRESS: {
         TITLE: '正在生成Commit消息...',
-        POLISHING: '正在润色Commit消息...'
+        POLISHING: '正在润色Commit消息...',
+        LOADING_MODELS: '正在加载可用模型列表...'
     },
     SUCCESS: {
         GENERATE: '成功生成Commit消息',
-        POLISH: '成功润色Commit消息'
+        POLISH: '成功润色Commit消息',
+        SWITCH_MODEL: '成功切换AI模型'
     },
     ERROR: {
         GENERATE: '生成Commit消息失败',
-        POLISH: '润色Commit消息失败'
+        POLISH: '润色Commit消息失败',
+        LOAD_MODELS: '加载可用模型列表失败',
+        UNSUPPORTED_PROVIDER: '当前AI服务商不支持读取可用模型列表',
+        NO_BASE_URL: '未设置OpenAI基础URL，请先配置',
+        NO_AVAILABLE_MODELS: '未找到可用的AI模型'
+    },
+    UI: {
+        MODEL_SELECTION_PLACEHOLDER: '选择要使用的AI模型',
+        MODEL_SELECTION_TITLE: 'AI模型选择'
     }
 };
 

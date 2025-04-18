@@ -5,6 +5,7 @@ import { PromptTemplate } from '../types/types';
 import { CONFIG_CONSTANTS } from '../constants';
 import { IAIService } from './ai-service.interface';
 import { TextUtils } from '../utils/text-utils';
+import { AIModel } from '../types/model';
 
 export class OpenAIService implements IAIService {
     private static instance: OpenAIService | null = null;
@@ -37,6 +38,30 @@ export class OpenAIService implements IAIService {
             });
         }
         return this.openaiClient;
+    }
+
+    /**
+     * 获取可用的AI模型列表
+     * @returns 模型列表
+     */
+    public async getAvailableModels(): Promise<AIModel[]> {
+        try {
+            const openai = this.getOpenAIClient();
+            const response = await openai.models.list();
+
+            // 提取所有模型的更多信息
+            const models = response.data
+                .map(model => ({
+                    id: model.id,
+                    owner_by: model.owned_by || 'unknown',
+                    created: model.created
+                }));
+
+            return models;
+        } catch (error: any) {
+            console.error('获取OpenAI模型列表失败:', error);
+            throw new Error(`获取OpenAI模型列表失败: ${error.message}`);
+        }
     }
 
     private async callOpenAI(prompt: string, promptTemplate: PromptTemplate): Promise<AIResponse> {

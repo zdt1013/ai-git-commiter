@@ -5,6 +5,7 @@ import { PromptTemplate } from '../types/types';
 import { CONFIG_CONSTANTS } from '../constants';
 import { IAIService } from './ai-service.interface';
 import { TextUtils } from '../utils/text-utils';
+import { AIModel } from '../types/model';
 
 export class GeminiService implements IAIService {
     private static instance: GeminiService | null = null;
@@ -33,6 +34,15 @@ export class GeminiService implements IAIService {
             this.genAIClient = new GoogleGenAI({ apiKey });
         }
         return this.genAIClient;
+    }
+
+    /**
+     * 获取可用的AI模型列表
+     * @returns 模型列表
+     */
+    public async getAvailableModels(): Promise<AIModel[]> {
+        // 目前Gemini不支持获取可用模型列表
+        throw new Error('当前AI服务商不支持读取可用模型列表');
     }
 
     private async callGemini(prompt: string, promptTemplate: PromptTemplate): Promise<AIResponse> {

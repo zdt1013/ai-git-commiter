@@ -7,7 +7,7 @@ import { CONFIG_CONSTANTS } from '../constants';
 export class AIServiceFactory {
     private static instance: IAIService | null = null;
 
-    static createService(): IAIService {
+    static getAIService(): IAIService {
         if (this.instance) {
             return this.instance;
         }
