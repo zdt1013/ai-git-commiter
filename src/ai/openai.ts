@@ -7,6 +7,7 @@ import { IAIService } from './ai-service.interface';
 import { TextUtils } from '../utils/text-utils';
 import { AIModel } from '../types/model';
 
+
 export class OpenAIService implements IAIService {
     private static instance: OpenAIService | null = null;
     private openaiClient: OpenAI | null = null;
@@ -64,25 +65,37 @@ export class OpenAIService implements IAIService {
         }
     }
 
+    /**
+     * 调用OpenAI API生成文本
+     * @param prompt - 提示词文本
+     * @param promptTemplate - 提示词模板
+     * @returns 返回AI响应结果
+     */
     private async callOpenAI(prompt: string, promptTemplate: PromptTemplate): Promise<AIResponse> {
         try {
+            // 从配置中获取OpenAI相关参数
             const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
             const model = config.get<string>(CONFIG_CONSTANTS.OPENAI.MODEL) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.MODEL;
             const temperature = config.get<number>(CONFIG_CONSTANTS.OPENAI.TEMPERATURE) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.TEMPERATURE;
             const topP = config.get<number>(CONFIG_CONSTANTS.OPENAI.TOP_P) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.TOP_P;
             const maxTokens = config.get<number>(CONFIG_CONSTANTS.OPENAI.MAX_TOKENS) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.MAX_TOKENS;
 
+            // 获取OpenAI客户端实例
             const openai = this.getOpenAIClient();
+
+            // 调用OpenAI API生成文本
             const response = await openai.chat.completions.create({
                 model: model,
                 messages: [{ role: 'user', content: prompt }],
-                temperature: temperature,
-                top_p: topP,
-                max_tokens: maxTokens,
-                stream: false
+                temperature: temperature, // 控制输出的随机性
+                top_p: topP,             // 控制词汇选择的多样性
+                max_tokens: maxTokens,    // 限制生成文本的最大长度
+                stream: false            // 是否启用流式响应
             });
+
+            // 提取生成的文本内容
             const text = response.choices[0].message.content?.trim() || '';
-            // 处理API返回的文本
+            // 移除代码块标记并返回处理后的文本
             let message = TextUtils.removeCodeBlockMarkers(text);
             return {
                 success: true,
@@ -90,6 +103,7 @@ export class OpenAIService implements IAIService {
                 prompt: promptTemplate
             };
         } catch (error: any) {
+            // 错误处理和日志记录
             console.error('OpenAI API调用失败:', error);
             return {
                 success: false,

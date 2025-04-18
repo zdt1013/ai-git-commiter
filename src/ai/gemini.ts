@@ -45,8 +45,15 @@ export class GeminiService implements IAIService {
         throw new Error('当前AI服务商不支持读取可用模型列表');
     }
 
+    /**
+     * 调用Gemini API生成文本
+     * @param prompt - 提示词文本
+     * @param promptTemplate - 提示词模板
+     * @returns 返回AI响应结果
+     */
     private async callGemini(prompt: string, promptTemplate: PromptTemplate): Promise<AIResponse> {
         try {
+            // 从配置中获取Gemini相关参数
             const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
             const model = config.get<string>(CONFIG_CONSTANTS.GEMINI.MODEL) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.MODEL;
             const temperature = config.get<number>(CONFIG_CONSTANTS.GEMINI.TEMPERATURE) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.TEMPERATURE;
@@ -54,21 +61,26 @@ export class GeminiService implements IAIService {
             const topP = config.get<number>(CONFIG_CONSTANTS.GEMINI.TOP_P) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.TOP_P;
             const maxOutputTokens = config.get<number>(CONFIG_CONSTANTS.GEMINI.MAX_OUTPUT_TOKENS) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.MAX_OUTPUT_TOKENS;
 
+            // 获取Gemini客户端实例
             const genAI = this.getGenAIClient();
+
+            // 调用Gemini API生成文本
             const result = await genAI.models.generateContent({
                 model,
                 contents: prompt,
                 config: {
-                    temperature,
-                    topK,
-                    topP,
-                    maxOutputTokens,
+                    temperature,    // 控制输出的随机性
+                    topK,          // 控制词汇选择的多样性
+                    topP,          // 控制词汇选择的概率阈值
+                    maxOutputTokens // 限制生成文本的最大长度
                 }
             });
+
+            // 获取生成的文本内容
             let text = await result.text;
-            // 处理API返回的文本
+            // 移除空白字符
             text = text?.trim() || "";
-            // 处理API返回的文本
+            // 移除代码块标记并返回处理后的文本
             let message = TextUtils.removeCodeBlockMarkers(text);
 
             return {
@@ -77,6 +89,7 @@ export class GeminiService implements IAIService {
                 prompt: promptTemplate
             };
         } catch (error: any) {
+            // 错误处理和日志记录
             console.error('Gemini API调用失败:', error);
             return {
                 success: false,
