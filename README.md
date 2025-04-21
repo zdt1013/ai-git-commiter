@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="asserts/icon.png" alt="AI Git Commit Logo" width="200" height="200">
-  <h1>AI Git Commit</h1>
+  <img src="asserts/icon.png" alt="AI Git Commiter Logo" width="200" height="200">
+  <h1>AI Git Commiter</h1>
   <p>这是一个基于AI大模型的Git Commit自动生成的VSCode插件。它可以帮助您根据代码变更自动生成高质量的Commit消息，提高开发效率。</p>
 </div>
 
@@ -31,7 +31,7 @@
 
 ## 📦 安装
 
-在VSCode扩展商店中搜索"AI Git Commit"并安装。
+在VSCode扩展商店中搜索"AI Git Commiter"并安装。
 
 ## 🚀 使用方法
 
@@ -52,15 +52,15 @@
 
 通过命令面板（Ctrl+Shift+P）可以访问以下提示词管理功能：
 
-- **📋 AI生成 Git Message (`ai-git-commit`)**：查看所有可用的提示词模板。
-- **➕ 添加提示词模板 (`ai-git-commit.addPrompt`)**：添加新的提示词模板。
-- **✏️ 编辑提示词模板 (`ai-git-commit.editPrompt`)**：编辑现有提示词模板。
-- **🗑️ 删除提示词模板 (`ai-git-commit.deletePrompt`)**：删除现有提示词模板。
-- **✅ 选择提示词模版 (`ai-git-commit.selectPrompt`)**：选择并使用现有提示词模板。
-- **⬇️ 下载远程提示词 (`ai-git-commit.downloadPrompts`)**：下载远程提示词模板。
-- **✍️ 手动润色Commit消息 (`ai-git-commit.manualPolishCommitMessage`)**：手动输入变更，AI润色生成Commit消息。
-- **🔄 切换AI模型 (`ai-git-commit.switchAIModel`)**：切换AI模型，配置好OpenAI（baseUrl、ApiKey)，即可调用选择，仍可在设置项中手动输入。
-- **⚙️ 打开设置项 (`ai-git-commit.settings`)**：查看所有相关设置项。
+- **📋 AI生成 Git Message (`ai-git-commiter`)**：查看所有可用的提示词模板。
+- **➕ 添加提示词模板 (`ai-git-commiter.addPrompt`)**：添加新的提示词模板。
+- **✏️ 编辑提示词模板 (`ai-git-commiter.editPrompt`)**：编辑现有提示词模板。
+- **🗑️ 删除提示词模板 (`ai-git-commiter.deletePrompt`)**：删除现有提示词模板。
+- **✅ 选择提示词模版 (`ai-git-commiter.selectPrompt`)**：选择并使用现有提示词模板。
+- **⬇️ 下载远程提示词 (`ai-git-commiter.downloadPrompts`)**：下载远程提示词模板。
+- **✍️ 手动润色Commit消息 (`ai-git-commiter.manualPolishCommitMessage`)**：手动输入变更，AI润色生成Commit消息。
+- **🔄 切换AI模型 (`ai-git-commiter.switchAIModel`)**：切换AI模型，配置好OpenAI（baseUrl、ApiKey)，即可调用选择，仍可在设置项中手动输入。
+- **⚙️ 打开设置项 (`ai-git-commiter.settings`)**：查看所有相关设置项。
 
 ## ⚠️ 注意事项
 

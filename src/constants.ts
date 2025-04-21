@@ -4,15 +4,15 @@
 export const PROMPT_CONSTANTS = {
     // 命令ID
     COMMANDS: {
-        ADD_PROMPT: 'ai-git-commit.addPrompt',
-        EDIT_PROMPT: 'ai-git-commit.editPrompt',
-        DELETE_PROMPT: 'ai-git-commit.deletePrompt',
-        SELECT_PROMPT: 'ai-git-commit.selectPrompt',
-        DOWNLOAD_PROMPTS: 'ai-git-commit.downloadPrompts',
-        GENERATE_COMMIT_MESSAGE: 'extension.ai-git-commit',
-        MANUAL_POLISH_COMMIT_MESSAGE: 'ai-git-commit.manualPolishCommitMessage',
-        SWITCH_AI_MODEL: 'ai-git-commit.switchAIModel',
-        OPEN_SETTINGS: 'ai-git-commit.settings'
+        ADD_PROMPT: 'ai-git-commiter.addPrompt',
+        EDIT_PROMPT: 'ai-git-commiter.editPrompt',
+        DELETE_PROMPT: 'ai-git-commiter.deletePrompt',
+        SELECT_PROMPT: 'ai-git-commiter.selectPrompt',
+        DOWNLOAD_PROMPTS: 'ai-git-commiter.downloadPrompts',
+        GENERATE_COMMIT_MESSAGE: 'extension.ai-git-commiter',
+        MANUAL_POLISH_COMMIT_MESSAGE: 'ai-git-commiter.manualPolishCommitMessage',
+        SWITCH_AI_MODEL: 'ai-git-commiter.switchAIModel',
+        OPEN_SETTINGS: 'ai-git-commiter.settings'
     },
 
     // 提示词管理相关文本
@@ -142,7 +142,7 @@ export const AI_CONSTANTS = {
  */
 export const CONFIG_CONSTANTS = {
     // 配置根节点
-    ROOT: 'ai-git-commit',
+    ROOT: 'ai-git-commiter',
 
     // 提供商配置
     PROVIDER: 'provider',

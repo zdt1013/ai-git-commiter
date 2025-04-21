@@ -6,7 +6,7 @@ alwaysApply: true
 
 
 # 项目背景
-项目名称: AI Git Commit 自动生成插件
+项目名称: AI Git Commiter 自动生成插件
 描述: 该VSCode插件基于AI大模型，利用代码变更自动生成高质量的Commit消息，从而提高开发效率。插件使用TypeScript 5.4.x和Vite 6.x进行开发，并集成了Google的AI SDK（@google/genai）和OpenAI的SDK（openai）。
 
 # 编码标准
