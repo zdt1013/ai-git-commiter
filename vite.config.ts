@@ -34,7 +34,8 @@ export default defineConfig({
         '@vscode/test-electron',
         'mocha',
         'glob',
-        'timers'
+        'timers',
+        "simple-git"
       ]
     },
     sourcemap: true,
