@@ -31,7 +31,9 @@
 
 ## 📦 安装
 
-在VSCode扩展商店中搜索"AI Git Commiter"并安装。
+方法1：在VSCode扩展商店中搜索"AI Git Commiter"并安装。
+
+方法2：访问[VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=zdt1013.ai-git-commiter)下载安装。
 
 ## 🚀 使用方法
 
