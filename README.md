@@ -2,6 +2,12 @@
   <img src="asserts/icon.png" alt="AI Git Commiter Logo" width="200" height="200">
   <h1>AI Git Commiter</h1>
   <p>这是一个基于AI大模型的Git Commit自动生成的VSCode插件。它可以帮助您根据代码变更自动生成高质量的Commit消息，提高开发效率。</p>
+  
+   [![Release](https://img.shields.io/endpoint?url=https://www.pinnumber.rr.nu/badges/release/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/releases/latest)
+   [![Stars](https://img.shields.io/endpoint?url=https://www.pinnumber.rr.nu/badges/stars/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/stargazers)
+   [![GitHub](https://img.shields.io/github/license/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/blob/main/LICENSE)
+   [![GitHub last commit](https://img.shields.io/github/last-commit/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/commits/main)
+   [![GitHub issues](https://img.shields.io/github/issues/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/issues)
 </div>
 
 ## 🎯 插件由来
