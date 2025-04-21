@@ -102,6 +102,7 @@ jobs:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.build_changelog.outputs.changelog }}
+          draft: true
 
       # 9. 上传 .vsix 文件到 Release 作为资产
       - name: Upload VSIX to Release
