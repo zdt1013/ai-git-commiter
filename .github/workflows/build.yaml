@@ -11,11 +11,16 @@ on:
 
 # 添加权限配置
 permissions:
-  contents: write
-  packages: write
+  contents: read
 
 jobs:
   build-and-release:
+    permissions:
+      # write permission is required to create a github release
+      contents: write
+      # write permission is required for autolabeler
+      # otherwise, read permission is required at least
+      pull-requests: write
     runs-on: ubuntu-latest
 
     steps:
@@ -47,26 +52,11 @@ jobs:
       - name: Package VSCode Extension
         run: pnpm run vscode:package
 
-      # 6. Bump version and push tag
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_release_rules: <keyword>(release_type):<changelog_section>
-
-      # 7. 创建 GitHub Release
-      - name: Create GitHub Release
+      # 6. 创建 GitHub Release
+      - uses: release-drafter/release-drafter@v6
         id: create_release
-        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.tag_version.outputs.new_tag }}
-          release_name: Release v${{ steps.tag_version.outputs.new_version }}
-          body: ${{steps.tag_version.outputs.changelog}}
-          draft: true
-          prerelease: false
 
       # 8. 上传 .vsix 文件到 Release 作为资产
       - name: Upload VSIX to Release
@@ -76,5 +66,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./ai-git-commiter-latest.vsix
-          asset_name: ai-git-commiter-v${{ steps.tag_version.outputs.new_version }}.vsix
+          asset_name: ai-git-commiter-v${{ steps.create_release.outputs.resolved_version }}.vsix
           asset_content_type: application/octet-stream
