@@ -215,7 +215,7 @@ export const CONFIG_CONSTANTS = {
                 WORD_DIFF: true,
                 UNIFIED: 0,
                 NO_COLOR: true,
-                DIFF_FILTER: 'ACMRT',
+                DIFF_FILTER: 'ACDMRT',
                 FILTER_META: false,
                 AREA: 'auto'
             }

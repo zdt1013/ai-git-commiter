@@ -246,7 +246,7 @@
         "ai-git-commit.git-diff.diffFilter": {
           "type": "string",
           "order": 20,
-          "default": "ACMRT",
+          "default": "ACDMRT",
           "description": "过滤文件变更类型：A(添加)、C(复制)、D(删除)、M(修改)、R(重命名)、T(类型变更)"
         },
         "ai-git-commit.git-diff.filterMeta": {
