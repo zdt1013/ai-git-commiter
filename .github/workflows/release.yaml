@@ -54,11 +54,11 @@ jobs:
         run: pnpm run vscode:package
 
       # 6. Build Changelog
-      - name: Build Changelog
-        id: build_changelog
-        uses: mikepenz/release-changelog-builder-action@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Build Changelog
+      #   id: build_changelog
+      #   uses: mikepenz/release-changelog-builder-action@v5
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Bump version and push tag
         id: tag_version
@@ -67,17 +67,13 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       # 7. 创建 GitHub Release
-      - name: Create Release
+      - name: Create a GitHub release
         id: create_release
-        uses: mikepenz/action-gh-release@v0.2.0-a03 #softprops/action-gh-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ steps.tag_version.outputs.new_tag }}
-          release_name: Release v${{ steps.version.outputs.new_version }}
-          body: ${{steps.build_changelog.outputs.changelog}}
-          draft: false
-          prerelease: false
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
 
       # 8. 上传 .vsix 文件到 Release 作为资产
       - name: Upload VSIX to Release
@@ -87,5 +83,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./ai-git-commiter-latest.vsix
-          asset_name: ai-git-commiter-v${{ steps.version.outputs.new_version }}.vsix
+          asset_name: ai-git-commiter-v${{ steps.tag_version.outputs.new_version }}.vsix
           asset_content_type: application/octet-stream
