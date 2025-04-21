@@ -38,23 +38,12 @@ jobs:
       - name: Package VSCode Extension
         run: pnpm run vscode:package
 
-      # 6. 生成 Changelog（仅包含 feat 和 fix 类型的提交）
-      - name: Generate Changelog
-        id: generate_changelog
-        run: |
-          echo "## Changelog" > CHANGELOG.md
-          echo "" >> CHANGELOG.md
-          # 获取当前标签
-          CURRENT_TAG=${GITHUB_REF#refs/tags/}
-          # 获取上一个标签
-          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^)
-          echo "Comparing from $PREVIOUS_TAG to $CURRENT_TAG"
-          # 使用 git log 获取 feat 和 fix 类型的提交
-          git log $PREVIOUS_TAG..$CURRENT_TAG --pretty=format:"- %s" --grep="^feat:" --grep="^fix:" >> CHANGELOG.md
-          # 读取 CHANGELOG.md 内容并设置为输出
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          cat CHANGELOG.md >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+      # 6. 生成 Changelog
+      - name: Build Changelog
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # 7. 创建 GitHub Release
       - name: Create GitHub Release
@@ -65,7 +54,7 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}  # 使用当前的标签名
           release_name: Release ${{ github.ref_name }}
-          body: ${{ steps.generate_changelog.outputs.changelog }}
+          body: ${{steps.build_changelog.outputs.changelog}}
           draft: false
           prerelease: false
 
@@ -77,5 +66,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./*.vsix
-          asset_name: your-extension.vsix  # 你可以根据需要动态命名
+          asset_name: ai-git-commiter-${{ github.ref_name }}.vsix
           asset_content_type: application/octet-stream
