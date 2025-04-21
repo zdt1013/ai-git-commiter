@@ -2,9 +2,9 @@ name: Release VSCode Extension
 
 # 触发条件：当version文件变更时触发
 on:
-  branch:
-    - main
   push:
+    branches:
+      - main
     paths:
       - 'VERSION'
   workflow_dispatch:  # 允许手动触发
