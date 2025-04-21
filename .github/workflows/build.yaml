@@ -12,6 +12,7 @@ on:
 # 添加权限配置
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   build-and-release:
@@ -55,6 +56,8 @@ jobs:
       # 6. 创建 GitHub Release
       - uses: release-drafter/release-drafter@v6
         id: create_release
+        with:
+          config-name: release-drafter.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
