@@ -16,16 +16,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # 2. 设置 Node.js 环境并缓存 pnpm 依赖
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      # 2. 全局安装 pnpm
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
         with:
-          node-version: '18'  # 根据需要指定 Node.js 版本
-          cache: 'pnpm'
+          version: 10
+          run_install: false
 
-      # 3. 全局安装 pnpm
-      - name: Install pnpm
-        run: npm install -g pnpm
+      # 3. 设置 Node.js 环境并缓存 pnpm 依赖
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
 
       # 4. 安装项目依赖
       - name: Install Dependencies
