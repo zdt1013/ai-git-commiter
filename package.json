@@ -309,7 +309,7 @@
     "watch": "vite build --mode development --watch",
     "package": "vite build --mode production",
     "lint": "eslint src --ext ts",
-    "vscode:package": "vsce package --no-dependencies"
+    "vscode:package": "vsce package --no-dependencies --out ai-git-commiter-latest.vsix"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
