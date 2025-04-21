@@ -106,20 +106,27 @@ export class GitService {
     /**
      * 获取当前Git仓库的变更行数
      * @param repoPath 仓库路径 
-     * @param area 变更区域
+     * @param options diff选项
      * @return 返回变更行数
      */
-    static async getChangesCount(repoPath: string, area?: string): Promise<number> {
+    static async getChangesCount(repoPath: string, options?: {
+        wordDiff?: boolean;
+        unified?: number;
+        noColor?: boolean;
+        diffFilter?: string;
+        filterMeta?: boolean;
+        area?: string;
+    }): Promise<number> {
         try {
             this.git = simpleGit(repoPath);
             const diffOptions: string[] = [];
 
             // 根据area配置决定是否使用--cached选项
-            if (area === 'staged' || area === 'cached') {
+            if (options?.area === 'staged' || options?.area === 'cached') {
                 diffOptions.push(`--cached`); // staged 与 cached 等价
-            } else if (area === "working") {
+            } else if (options?.area === "working") {
                 diffOptions.push(`HEAD`);
-            } else if (area === "auto") {
+            } else if (options?.area === "auto") {
                 // 自动判断：先检查暂存区，如果有变更则返回暂存区变更，否则检查工作区
                 const stagedDiff = await this.git.diff(['--cached']);
                 if (stagedDiff && stagedDiff.trim() !== '') {
@@ -134,6 +141,26 @@ export class GitService {
                 }
             } else {
                 return -1;
+            }
+
+            // 添加word diff选项
+            if (options?.wordDiff) {
+                diffOptions.push('--word-diff');
+            }
+
+            // 添加上下文行数选项
+            if (options?.unified !== undefined) {
+                diffOptions.push(`-U${options.unified}`);
+            }
+
+            // 添加颜色选项
+            if (options?.noColor) {
+                diffOptions.push('--no-color');
+            }
+
+            // 添加文件过滤选项
+            if (options?.diffFilter) {
+                diffOptions.push(`--diff-filter=${options.diffFilter}`);
             }
 
             const stats = (await this.git.diff([...diffOptions, '--shortstat'])).trim();
@@ -175,14 +202,21 @@ export class GitService {
      * 检查变更行数是否超过限制
      * @param repository Git仓库
      * @param maxChanges 最大变更行数
-     * @param area 变更区域
+     * @param options diff选项
      * @returns 是否超过限制
      */
-    public static async checkChangesLimit(repository: Repository, maxChanges: number, area?: string): Promise<boolean> {
+    public static async checkChangesLimit(repository: Repository, maxChanges: number, options?: {
+        wordDiff?: boolean;
+        unified?: number;
+        noColor?: boolean;
+        diffFilter?: string;
+        filterMeta?: boolean;
+        area?: string;
+    }): Promise<boolean> {
         if (!repository.rootUri) {
             return false;
         }
-        const changes = await this.getChangesCount(repository.rootUri.fsPath, area);
+        const changes = await this.getChangesCount(repository.rootUri.fsPath, options);
         return changes > maxChanges;
     }
 } 

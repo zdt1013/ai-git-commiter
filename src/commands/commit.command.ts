@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { GitService } from '../git';
 import { PromptService } from '../ai/prompt.service';
-import { PROMPT_CONSTANTS, GIT_CONSTANTS, AI_CONSTANTS, CONFIG_CONSTANTS } from '../constants';
+import { GIT_CONSTANTS, AI_CONSTANTS } from '../constants';
 import { ConfigService } from '../config';
 import { AIServiceFactory } from '../ai/ai-service.factory';
 import { ExtensionConfig } from '../types/config';
@@ -47,7 +47,14 @@ export class CommitCommand {
 
     private async handleCommitMessageGeneration(repository: Repository, config: ExtensionConfig): Promise<void> {
         // 检查变更行数
-        if (await GitService.checkChangesLimit(repository, config.git.diff.maxChanges, config.git.diff.area)) {
+        if (await GitService.checkChangesLimit(repository, config.git.diff.maxChanges, {
+            wordDiff: config.git.diff.wordDiff,
+            unified: config.git.diff.unified,
+            noColor: config.git.diff.noColor,
+            diffFilter: config.git.diff.diffFilter,
+            filterMeta: config.git.diff.filterMeta,
+            area: config.git.diff.area
+        })) {
             await this.handleLargeChanges(repository, config);
         } else {
             await this.handleNormalChanges(repository, config);
