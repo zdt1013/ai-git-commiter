@@ -54,28 +54,31 @@ jobs:
         run: pnpm run vscode:package
 
       # 6. Build Changelog
-      # - name: Build Changelog
-      #   id: build_changelog
-      #   uses: mikepenz/release-changelog-builder-action@v5
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+      # 7. 生成 Changelog
+      - name: Build Changelog
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v5
+        with:
+          mode: "COMMIT"
+          fromTag: ${{ steps.tag_version.outputs.previous_tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 7. 创建 GitHub Release
+      # 8. 创建 GitHub Release
       - name: Create a GitHub release
         id: create_release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
+          body: ${{ steps.build_changelog.outputs.changelog }}
 
-      # 8. 上传 .vsix 文件到 Release 作为资产
+      # 9. 上传 .vsix 文件到 Release 作为资产
       - name: Upload VSIX to Release
         uses: actions/upload-release-asset@v1
         env:
