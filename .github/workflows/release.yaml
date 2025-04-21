@@ -71,21 +71,21 @@ jobs:
               "template": "#{{CHANGELOG}}",
               "categories": [
                 {
-                    "title": "## Feature",
+                    "title": "## ✨ Feature",
                     "labels": ["feat", "feature"]
                 },
                 {
-                    "title": "## Fix",
+                    "title": "## 🐛 Fix",
                     "labels": ["fix", "bug"]
                 },
                 {
-                    "title": "## Other",
+                    "title": "## 🔧 Other",
                     "labels": []
                 }
               ],
               "label_extractor": [
                 {
-                  "pattern": "^(build|chore|ci|init|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([\\w\\-\\.]+\\))?(!)?: ([\\w ])+([\\s\\S]*)",
+                  "pattern": "(build|chore|ci|init|docs|feat|fix|perf|refactor|revert|style|test){1}",
                   "on_property": "title",
                   "target": "$1"
                 }
