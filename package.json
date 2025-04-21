@@ -19,7 +19,7 @@
     "Other"
   ],
   "main": "./dist/extension.js",
-  "packageManager": "pnpm@8.15.4",
+  "packageManager": "pnpm@10.8.1",
   "activationEvents": [
     "onCommand:ai-git-commiter"
   ],
