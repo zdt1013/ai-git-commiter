@@ -67,10 +67,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.version.outputs.new_version }}
-          release_name: Release v${{ steps.version.outputs.new_version }}
+          tag_name: v${{ steps.tag_version.outputs.new_tag }}
+          release_name: Release v${{ steps.tag_version.outputs.new_version }}
           body: ${{steps.build_changelog.outputs.changelog}}
-          draft: false
+          draft: true
           prerelease: false
 
       # 9. 上传 .vsix 文件到 Release 作为资产
@@ -81,5 +81,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./*.vsix
-          asset_name: ai-git-commiter-v${{ steps.version.outputs.new_version }}.vsix
+          asset_name: ai-git-commiter-v${{ steps.tag_version.outputs.new_version }}.vsix
           asset_content_type: application/octet-stream
