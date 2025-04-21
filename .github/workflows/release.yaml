@@ -53,13 +53,31 @@ jobs:
       - name: Package VSCode Extension
         run: pnpm run vscode:package
 
-      # 6. 创建 GitHub Release
-      - uses: release-drafter/release-drafter@v6
-        id: create_release
-        with:
-          config-name: release-drafter.yml
+      # 6. Build Changelog
+      - name: Build Changelog
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 7. 创建 GitHub Release
+      - name: Create Release
+        id: create_release
+        uses: mikepenz/action-gh-release@v0.2.0-a03 #softprops/action-gh-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          release_name: Release v${{ steps.version.outputs.new_version }}
+          body: ${{steps.build_changelog.outputs.changelog}}
+          draft: false
+          prerelease: false
 
       # 8. 上传 .vsix 文件到 Release 作为资产
       - name: Upload VSIX to Release
@@ -69,5 +87,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./ai-git-commiter-latest.vsix
-          asset_name: ai-git-commiter-v${{ steps.create_release.outputs.resolved_version }}.vsix
+          asset_name: ai-git-commiter-v${{ steps.version.outputs.new_version }}.vsix
           asset_content_type: application/octet-stream
