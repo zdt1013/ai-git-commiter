@@ -47,14 +47,7 @@ export class CommitCommand {
 
     private async handleCommitMessageGeneration(repository: Repository, config: ExtensionConfig): Promise<void> {
         // 检查变更行数
-        if (await GitService.checkChangesLimit(repository, config.git.diff.maxChanges, {
-            wordDiff: config.git.diff.wordDiff,
-            unified: config.git.diff.unified,
-            noColor: config.git.diff.noColor,
-            diffFilter: config.git.diff.diffFilter,
-            filterMeta: config.git.diff.filterMeta,
-            area: config.git.diff.area
-        })) {
+        if (await GitService.checkChangesLimit(repository, config.git.diff.maxChanges, config.git.diff.area, config.git.diff.diffFilter)) {
             await this.handleLargeChanges(repository, config);
         } else {
             await this.handleNormalChanges(repository, config);

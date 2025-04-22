@@ -30,14 +30,14 @@ export class GitService {
                 diffOptions.push(`HEAD`);
             } else if (options?.area === "auto") {
                 // 自动判断：先检查暂存区，如果有变更则返回暂存区变更，否则检查工作区
-                const stagedDiff = await this.git.diff(['--cached']);
-                if (stagedDiff && stagedDiff.trim() !== '') {
+                const stagedChanges = await this.getChangesCount(repoPath, 'staged', options?.diffFilter);
+                if (stagedChanges > 0) {
                     // 暂存区有变更，使用暂存区
                     diffOptions.push('--cached');
                 } else {
                     // 暂存区无变更，检查工作区
-                    const workingDiff = await this.git.diff(['HEAD']);
-                    if (workingDiff && workingDiff.trim() !== '') {
+                    const workingChanges = await this.getChangesCount(repoPath, 'working', options?.diffFilter);
+                    if (workingChanges > 0) {
                         // 工作区有变更，使用工作区
                         diffOptions.push('HEAD');
                     } else {
@@ -106,61 +106,34 @@ export class GitService {
     /**
      * 获取当前Git仓库的变更行数
      * @param repoPath 仓库路径 
-     * @param options diff选项
+     * @param area 变更区域
+     * @param diffFilter 文件过滤选项
      * @return 返回变更行数
      */
-    static async getChangesCount(repoPath: string, options?: {
-        wordDiff?: boolean;
-        unified?: number;
-        noColor?: boolean;
-        diffFilter?: string;
-        filterMeta?: boolean;
-        area?: string;
-    }): Promise<number> {
+    static async getChangesCount(repoPath: string, area?: string, diffFilter?: string): Promise<number> {
         try {
             this.git = simpleGit(repoPath);
             const diffOptions: string[] = [];
 
             // 根据area配置决定是否使用--cached选项
-            if (options?.area === 'staged' || options?.area === 'cached') {
+            if (area === 'staged' || area === 'cached') {
                 diffOptions.push(`--cached`); // staged 与 cached 等价
-            } else if (options?.area === "working") {
+            } else if (area === "working") {
                 diffOptions.push(`HEAD`);
-            } else if (options?.area === "auto") {
+            } else if (area === "auto") {
                 // 自动判断：先检查暂存区，如果有变更则返回暂存区变更，否则检查工作区
-                const stagedDiff = await this.git.diff(['--cached']);
-                if (stagedDiff && stagedDiff.trim() !== '') {
-                    diffOptions.push(`--cached`);
-                } else {
-                    const workingDiff = await this.git.diff(['HEAD']);
-                    if (workingDiff && workingDiff.trim() !== '') {
-                        diffOptions.push(`HEAD`);
-                    } else {
-                        return 0;
-                    }
+                const stagedChanges = await this.getChangesCount(repoPath, 'staged', diffFilter);
+                if (stagedChanges > 0) {
+                    return stagedChanges;
                 }
+                return await this.getChangesCount(repoPath, 'working', diffFilter);
             } else {
                 return -1;
             }
 
-            // 添加word diff选项
-            if (options?.wordDiff) {
-                diffOptions.push('--word-diff');
-            }
-
-            // 添加上下文行数选项
-            if (options?.unified !== undefined) {
-                diffOptions.push(`-U${options.unified}`);
-            }
-
-            // 添加颜色选项
-            if (options?.noColor) {
-                diffOptions.push('--no-color');
-            }
-
             // 添加文件过滤选项
-            if (options?.diffFilter) {
-                diffOptions.push(`--diff-filter=${options.diffFilter}`);
+            if (diffFilter) {
+                diffOptions.push(`--diff-filter=${diffFilter}`);
             }
 
             const stats = (await this.git.diff([...diffOptions, '--shortstat'])).trim();
@@ -202,21 +175,20 @@ export class GitService {
      * 检查变更行数是否超过限制
      * @param repository Git仓库
      * @param maxChanges 最大变更行数
-     * @param options diff选项
+     * @param area 变更区域
+     * @param diffFilter 文件过滤选项
      * @returns 是否超过限制
      */
-    public static async checkChangesLimit(repository: Repository, maxChanges: number, options?: {
-        wordDiff?: boolean;
-        unified?: number;
-        noColor?: boolean;
-        diffFilter?: string;
-        filterMeta?: boolean;
-        area?: string;
-    }): Promise<boolean> {
+    public static async checkChangesLimit(
+        repository: Repository,
+        maxChanges: number,
+        area?: string,
+        diffFilter?: string
+    ): Promise<boolean> {
         if (!repository.rootUri) {
             return false;
         }
-        const changes = await this.getChangesCount(repository.rootUri.fsPath, options);
+        const changes = await this.getChangesCount(repository.rootUri.fsPath, area, diffFilter);
         return changes > maxChanges;
     }
 } 
