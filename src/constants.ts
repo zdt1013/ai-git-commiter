@@ -95,7 +95,7 @@ export const PROMPT_CONSTANTS = {
 export const GIT_CONSTANTS = {
     ERROR: {
         NO_REPOSITORY: '未找到Git仓库',
-        NO_CHANGES: '暂存区没有检测到代码变更',
+        NO_CHANGES: '未检测到代码变更',
         TOO_MANY_CHANGES: (maxChanges: number) => `变更行数过多（超过${maxChanges}行），请减少暂存文件数量或选择手动输入`
     },
     WARNING: {
