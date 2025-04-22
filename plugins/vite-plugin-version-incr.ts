@@ -10,7 +10,7 @@ interface VersionIncrementOptions {
 /**
  * 版本自增插件
 **/
-export default function versionIncrementPlugin(options: VersionIncrementOptions = {}): PluginOption {
+export default function versionIncrPlugin(options: VersionIncrementOptions = {}): PluginOption {
     return {
         name: 'version-increment',  // 插件名称
         apply: 'build',  // 只在构建时应用
