@@ -146,7 +146,7 @@ export class PromptService {
         // 加载默认提示词
         const defaultPrompts = await this.loadDefaultPrompts();
         try {
-            access(this._promptsStoragePath, constants.R_OK | constants.W_OK);
+            await access(this._promptsStoragePath, constants.F_OK | constants.W_OK);
             const data = await readFile(this._promptsStoragePath, 'utf8');
             this._prompts = JSON.parse(data);
 
