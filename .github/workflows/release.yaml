@@ -49,16 +49,19 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      # 5. 打包 VSCode 扩展（这会自动更新package.json中的版本号）
-      - name: Package VSCode Extension
-        run: pnpm run vscode:package-latest
-
-      # 6. Build Changelog
+      # 5. Build Changelog
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 6. 打包 VSCode 扩展（这会自动更新package.json中的版本号）
+      - name: Package VSCode Extension
+        run: pnpm run vscode:package-latest
+        env:
+          BUILD_VERSION: ${{ steps.tag_version.outputs.new_version }}
+
       # 7. 生成 Changelog
       - name: Build Changelog
         id: build_changelog
@@ -115,3 +118,9 @@ jobs:
           asset_path: ./ai-git-commiter-latest.vsix
           asset_name: ai-git-commiter-v${{ steps.tag_version.outputs.new_version }}.vsix
           asset_content_type: application/octet-stream
+      
+      # 10. 自动提交代码
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        id: auto-commit-action
+        with:
+          commit_message: "👷 ci(package.json): Update version to ${{ steps.tag_version.outputs.new_version }}"

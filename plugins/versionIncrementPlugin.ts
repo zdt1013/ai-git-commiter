@@ -15,6 +15,17 @@ export default function versionIncrementPlugin(options: VersionIncrementOptions 
         name: 'version-increment',  // 插件名称
         apply: 'build',  // 只在构建时应用
         buildStart() {
+            // 读取package.json文件
+            const packagePath = path.resolve(process.cwd(), 'package.json');
+            const pkg = JSON.parse(fs.readFileSync(packagePath, 'utf-8'));
+            // 获取环境变量是否存在指定版本号的参数
+            const buildVersion = process.env.BUILD_VERSION;
+            if (buildVersion) {
+                // 如果存在BUILD_VERSION，则直接使用该版本号
+                pkg.version = buildVersion;
+                fs.writeFileSync(packagePath, JSON.stringify(pkg, null, 2));  // 保持2空格缩进格式
+                return;
+            }
             // 获取当前Vite的--mode参数，默认为development
             const currentMode = options.mode || 'development';
 
@@ -24,9 +35,7 @@ export default function versionIncrementPlugin(options: VersionIncrementOptions 
                 return;
             }
 
-            // 读取package.json文件
-            const packagePath = path.resolve(process.cwd(), 'package.json');
-            const pkg = JSON.parse(fs.readFileSync(packagePath, 'utf-8'));
+
 
             // 将版本号按点分割并转换为数字
             // 支持格式：major.minor.patch (99.99.999)

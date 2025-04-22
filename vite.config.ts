@@ -38,7 +38,6 @@ export default defineConfig(({ mode }) => {
           'timers',
           "events",
           "node:events",
-          // "simple-git"  //todo：github actions编译报错。 解开注释后，无法编译通过，但插件无法正常使用
         ]
       },
       sourcemap: true,
