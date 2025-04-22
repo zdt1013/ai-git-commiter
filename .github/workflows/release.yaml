@@ -51,7 +51,7 @@ jobs:
 
       # 5. 打包 VSCode 扩展（这会自动更新package.json中的版本号）
       - name: Package VSCode Extension
-        run: pnpm run vscode:package
+        run: pnpm run vscode:package-latest
 
       # 6. Build Changelog
       - name: Bump version and push tag

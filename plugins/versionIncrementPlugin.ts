@@ -4,6 +4,7 @@ import { PluginOption } from 'vite';
 
 interface VersionIncrementOptions {
     env?: string[]; // 指定需要自增的环境
+    mode?: string; // 当前模式
 }
 
 /**
@@ -14,12 +15,12 @@ export default function versionIncrementPlugin(options: VersionIncrementOptions 
         name: 'version-increment',  // 插件名称
         apply: 'build',  // 只在构建时应用
         buildStart() {
-            // 获取当前环境变量，默认为development
-            const currentEnv = process.env.NODE_ENV || 'development';
+            // 获取当前Vite的--mode参数，默认为development
+            const currentMode = options.mode || 'development';
 
             // 检查当前环境是否在指定的自增环境中
             // 如果options.env有值且不包含当前环境，则跳过版本自增
-            if (options.env && !options.env.includes(currentEnv)) {
+            if (options.env && !options.env.includes(currentMode)) {
                 return;
             }
 

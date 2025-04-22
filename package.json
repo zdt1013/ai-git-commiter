@@ -2,7 +2,7 @@
   "name": "ai-git-commiter",
   "displayName": "AI Git Commiter",
   "description": "使用AI大模型自动生成Git Commit消息",
-  "version": "1.0.38",
+  "version": "1.0.40",
   "publisher": "zdt1013",
   "repository": {
     "type": "git",
@@ -304,12 +304,15 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run package",
     "compile": "vite build",
     "watch": "vite build --mode development --watch",
     "package": "vite build --mode production",
+    "package-dev": "vite build --mode development",
+    "package-latest": "vite build --mode production-latest",
     "lint": "eslint src --ext ts",
-    "vscode:package": "vsce package --no-dependencies --out ai-git-commiter-latest.vsix"
+    "vscode:package": "pnpm run package && vsce package --no-dependencies",
+    "vscode:package-dev": "pnpm run package-dev && vsce package --no-dependencies --out ai-git-commiter-dev.vsix",
+    "vscode:package-latest": "pnpm run package-latest && vsce package --no-dependencies --out ai-git-commiter-latest.vsix"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
@@ -318,7 +321,7 @@
     "@types/vscode": "^1.75.0",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@typescript-eslint/parser": "^7.3.1",
-    "@vscode/vsce": "^2.24.0",
+    "@vscode/vsce": "^3.3.2",
     "eslint": "^8.57.0",
     "glob": "^10.3.10",
     "mocha": "^10.3.0",
