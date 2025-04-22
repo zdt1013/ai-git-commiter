@@ -5,8 +5,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'VERSION'
   workflow_dispatch:  # 允许手动触发
 
 # 添加权限配置
