@@ -30,6 +30,7 @@ export class AIServiceFactory {
     }
 
     static resetInstance(): void {
+        this.instance?.resetInstance();
         this.instance = null;
     }
 } 

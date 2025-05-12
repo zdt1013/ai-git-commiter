@@ -147,6 +147,9 @@ export const CONFIG_CONSTANTS = {
     // 提供商配置
     PROVIDER: 'provider',
 
+    // 通用配置
+    ENABLE_THINKING: 'enable_thinking',
+
     // 提示词配置
     PROMPT: {
         SELECTED_TEMPLATE_PROMPT: 'prompt.selectedTemplatePrompt',
@@ -194,6 +197,7 @@ export const CONFIG_CONSTANTS = {
     // 默认值
     DEFAULTS: {
         PROVIDER: 'OpenAI',
+        ENABLE_THINKING: false,
         OPENAI: {
             BASE_URL: 'https://api.openai.com/v1',
             MODEL: 'gpt-3.5-turbo',

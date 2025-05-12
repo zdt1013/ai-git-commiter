@@ -17,7 +17,7 @@ export class ConfigService {
         // 监听配置变更
         this._disposables.push(
             vscode.workspace.onDidChangeConfiguration(e => {
-                if (e.affectsConfiguration(`${CONFIG_CONSTANTS.ROOT}.${CONFIG_CONSTANTS.PROVIDER}`)) {
+                if (e.affectsConfiguration(`${CONFIG_CONSTANTS.ROOT}`)) {
                     // 当供应商设置变更时，重置AI服务实例
                     AIServiceFactory.resetInstance();
                     this._onDidChangeConfig.fire();

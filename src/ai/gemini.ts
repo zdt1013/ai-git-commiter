@@ -22,6 +22,10 @@ export class GeminiService implements IAIService {
         return GeminiService.instance;
     }
 
+    resetInstance(): void {
+        GeminiService.instance = null;
+    }
+
     private getGenAIClient(): GoogleGenAI {
         if (this.genAIClient === null) {
             const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);

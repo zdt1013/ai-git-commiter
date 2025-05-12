@@ -6,6 +6,9 @@ import { CONFIG_CONSTANTS } from '../constants';
 import { IAIService } from './ai-service.interface';
 import { TextUtils } from '../utils/text-utils';
 import { AIModel } from '../types/model';
+import { ChatCompletionChunk, ChatCompletionCreateParamsStreaming } from 'openai/resources/chat/completions';
+import { Stream } from 'openai/streaming';
+import { ConfigService } from '../config';
 
 
 export class OpenAIService implements IAIService {
@@ -14,6 +17,10 @@ export class OpenAIService implements IAIService {
 
     private constructor() {
         // 私有构造函数，防止外部直接实例化
+    }
+
+    resetInstance(): void {
+        OpenAIService.instance = null;
     }
 
     public static getInstance(): OpenAIService {
@@ -52,7 +59,7 @@ export class OpenAIService implements IAIService {
 
             // 提取所有模型的更多信息
             const models = response.data
-                .map(model => ({
+                .map((model: { id: string; owned_by?: string; created: number }) => ({
                     id: model.id,
                     owner_by: model.owned_by || 'unknown',
                     created: model.created
@@ -79,24 +86,33 @@ export class OpenAIService implements IAIService {
             const temperature = config.get<number>(CONFIG_CONSTANTS.OPENAI.TEMPERATURE) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.TEMPERATURE;
             const topP = config.get<number>(CONFIG_CONSTANTS.OPENAI.TOP_P) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.TOP_P;
             const maxTokens = config.get<number>(CONFIG_CONSTANTS.OPENAI.MAX_TOKENS) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.MAX_TOKENS;
+            const enableThinking = config.get<boolean>(CONFIG_CONSTANTS.ENABLE_THINKING) ?? CONFIG_CONSTANTS.DEFAULTS.ENABLE_THINKING;
 
             // 获取OpenAI客户端实例
             const openai = this.getOpenAIClient();
 
             // 调用OpenAI API生成文本
-            const response = await openai.chat.completions.create({
+            const createBody: ChatCompletionCreateParamsStreaming = {
                 model: model,
                 messages: [{ role: 'user', content: prompt }],
-                temperature: temperature, // 控制输出的随机性
-                top_p: topP,             // 控制词汇选择的多样性
-                max_tokens: maxTokens,    // 限制生成文本的最大长度
-                stream: false            // 是否启用流式响应
-            });
+                temperature: temperature,
+                top_p: topP,
+                max_tokens: maxTokens,
+                stream: true,
+                chat_template_kwargs: { "enable_thinking": enableThinking },
+                enable_thinking: enableThinking,
+            } as any;
+            const stream = await openai.chat.completions.create(createBody) as Stream<ChatCompletionChunk>;
 
-            // 提取生成的文本内容
-            const text = response.choices[0].message.content?.trim() || '';
+            // 收集流式响应的完整消息
+            let fullMessage = '';
+            for await (const chunk of stream) {
+                const content = chunk.choices[0]?.delta?.content || '';
+                fullMessage += content;
+            }
+
             // 移除代码块标记并返回处理后的文本
-            let message = TextUtils.removeCodeBlockMarkers(text);
+            let message = TextUtils.removeCodeBlockMarkers(fullMessage.trim());
             return {
                 success: true,
                 message,

@@ -105,30 +105,36 @@
           ],
           "description": "AI提供商"
         },
+        "ai-git-commiter.enable_thinking": {
+          "type": "boolean",
+          "default": false,
+          "order": 3,
+          "description": "是否启用推理"
+        },
         "ai-git-commiter.openai.baseUrl": {
           "type": "string",
-          "order": 3,
+          "order": 4,
           "default": "https://api.openai.com/v1",
           "description": "OpenAI API基础URL",
           "when": "ai-git-commiter.provider == OpenAI"
         },
         "ai-git-commiter.openai.apiKey": {
           "type": "string",
-          "order": 4,
+          "order": 5,
           "default": "",
           "description": "OpenAI API密钥",
           "when": "ai-git-commiter.provider == OpenAI"
         },
         "ai-git-commiter.openai.model": {
           "type": "string",
-          "order": 5,
+          "order": 6,
           "default": "",
           "description": "OpenAI模型名称",
           "when": "ai-git-commiter.provider == OpenAI"
         },
         "ai-git-commiter.openai.temperature": {
           "type": "number",
-          "order": 6,
+          "order": 7,
           "default": 0.7,
           "minimum": 0,
           "maximum": 2,
@@ -137,7 +143,7 @@
         },
         "ai-git-commiter.openai.topP": {
           "type": "number",
-          "order": 7,
+          "order": 8,
           "default": 1,
           "minimum": 0,
           "maximum": 1,
@@ -146,7 +152,7 @@
         },
         "ai-git-commiter.openai.maxTokens": {
           "type": "number",
-          "order": 8,
+          "order": 9,
           "default": 500,
           "minimum": 1,
           "description": "OpenAI模型最大输出长度",
@@ -154,28 +160,28 @@
         },
         "ai-git-commiter.gemini.baseUrl": {
           "type": "string",
-          "order": 9,
+          "order": 10,
           "default": "https://generativelanguage.googleapis.com",
           "description": "Google Gemini API基础URL",
           "when": "ai-git-commiter.provider == Gemini"
         },
         "ai-git-commiter.gemini.apiKey": {
           "type": "string",
-          "order": 10,
+          "order": 11,
           "default": "",
           "description": "Google Gemini API密钥",
           "when": "ai-git-commiter.provider == Gemini"
         },
         "ai-git-commiter.gemini.model": {
           "type": "string",
-          "order": 11,
+          "order": 12,
           "default": "gemini-2.0-flash",
           "description": "Google Gemini模型名称",
           "when": "ai-git-commiter.provider == Gemini"
         },
         "ai-git-commiter.gemini.temperature": {
           "type": "number",
-          "order": 12,
+          "order": 13,
           "default": 0.7,
           "minimum": 0,
           "maximum": 1,
@@ -184,7 +190,7 @@
         },
         "ai-git-commiter.gemini.topK": {
           "type": "number",
-          "order": 13,
+          "order": 14,
           "default": 40,
           "minimum": 1,
           "maximum": 100,
@@ -193,7 +199,7 @@
         },
         "ai-git-commiter.gemini.topP": {
           "type": "number",
-          "order": 14,
+          "order": 15,
           "default": 0.95,
           "minimum": 0,
           "maximum": 1,
@@ -202,7 +208,7 @@
         },
         "ai-git-commiter.gemini.maxOutputTokens": {
           "type": "number",
-          "order": 15,
+          "order": 16,
           "default": 500,
           "minimum": 1,
           "description": "Gemini模型最大输出长度",
@@ -210,7 +216,7 @@
         },
         "ai-git-commiter.git-diff.area": {
           "type": "string",
-          "order": 16,
+          "order": 17,
           "default": "auto",
           "enum": [
             "auto",
@@ -226,77 +232,77 @@
         },
         "ai-git-commiter.git-diff.wordDiff": {
           "type": "boolean",
-          "order": 17,
+          "order": 18,
           "default": true,
           "description": "显示单词级别的变更（而非整行），减少冗余内容"
         },
         "ai-git-commiter.git-diff.unified": {
           "type": "number",
-          "order": 18,
+          "order": 19,
           "default": 0,
           "minimum": 0,
           "description": "去除上下文行，仅保留实际变更"
         },
         "ai-git-commiter.git-diff.noColor": {
           "type": "boolean",
-          "order": 19,
+          "order": 20,
           "default": true,
           "description": "移除颜色代码，避免额外 Token 开销"
         },
         "ai-git-commiter.git-diff.diffFilter": {
           "type": "string",
-          "order": 20,
+          "order": 21,
           "default": "ACDMRT",
           "description": "过滤文件变更类型：A(添加)、C(复制)、D(删除)、M(修改)、R(重命名)、T(类型变更)"
         },
         "ai-git-commiter.git-diff.filterMeta": {
           "type": "boolean",
-          "order": 21,
+          "order": 22,
           "default": false,
           "description": "过滤掉冗余行（如 index、diff、Binary file 等元信息）"
         },
         "ai-git-commiter.git-diff.maxChanges": {
           "type": "number",
-          "order": 22,
+          "order": 23,
           "default": 500,
           "minimum": 1,
           "description": "AI生成建议最大变更行数，超过此值将提示用户减少暂存文件或手动输入"
         },
         "ai-git-commiter.prompt.selectedPromptTemplateId": {
           "type": "string",
-          "order": 23,
+          "order": 24,
           "default": "",
           "readonly": true,
           "description": "当前选中的提示词模板ID"
         },
         "ai-git-commiter.prompt.selectedTemplatePrompt": {
           "type": "string",
-          "order": 24,
+          "order": 25,
           "default": "",
           "readonly": true,
           "description": "当前选中的提示词模板内容"
         },
         "ai-git-commiter.prompt.languageAwareness": {
           "type": "string",
-          "order": 25,
+          "order": 26,
           "default": "",
           "description": "编程语言感知"
         },
         "ai-git-commiter.prompt.libraryAwareness": {
           "type": "string",
-          "order": 26,
+          "order": 27,
           "default": "",
           "description": "三方库感知"
         },
         "ai-git-commiter.prompt.enableLanguageAwareness": {
           "type": "boolean",
-          "order": 27,
+          "order": 28,
           "default": false,
           "description": "是否启用编程语言感知"
         },
         "ai-git-commiter.prompt.enableLibraryAwareness": {
           "type": "boolean",
-          "order": 28,
+          "order": 29,
           "default": false,
           "description": "是否启用三方库感知"
         }
@@ -333,7 +339,7 @@
     "@google/genai": "^0.8.0",
     "@types/xml2js": "^0.4.14",
     "axios": "^1.6.7",
-    "openai": "^4.28.0",
+    "openai": "^4.97.0",
     "simple-git": "^3.27.0",
     "uuid": "^11.1.0",
     "xml2js": "^0.6.2"
