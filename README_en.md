@@ -17,6 +17,8 @@
 
 ## 🕑 Changelog
 
+- **v1.0.43**
+  * Fixed the issue of incorrect switching between Chinese and English README links.
 - **v1.0.42**
   * This version only adds the English version of the README documentation.
 - **v1.0.41**
