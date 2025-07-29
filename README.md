@@ -10,6 +10,8 @@
    [![GitHub issues](https://img.shields.io/github/issues/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/issues)
 </div>
 
+ **中文** · [English](./README_EN.md)
+
 ## 🎯 插件由来
 
 在开发过程中，我们发现现有的Git Commit消息生成插件存在以下问题：
