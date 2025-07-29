@@ -13,7 +13,7 @@
 
 [中文](./README.md) ·  **English**
 
-> Tips: If you find this plugin useful or have suggestions, feel free to give it a Star or open an issue on GitHub.
+> Tips: If you find this plugin useful or have suggestions, feel free to give it a **Star** or open an **issue** on GitHub.
 
 ## 🕑 Changelog
 

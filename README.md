@@ -11,9 +11,9 @@
    [![GitHub issues](https://img.shields.io/github/issues/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/issues)
 </div>
 
- **中文** · [English](./README_EN.md)
+ **中文** · [English](./README_en.md)
 
-> Tips: 如果觉得好用或有使用的建议，欢迎去Github上Start 或 issue。
+> Tips: 如果觉得好用或有使用的建议，欢迎去Github上 **Start** 或 **issue**。
 
 ## 🕑 更新历史
 
