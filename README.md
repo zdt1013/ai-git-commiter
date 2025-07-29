@@ -3,14 +3,26 @@
   <h1>AI Git Commiter</h1>
   <p>这是一个基于AI大模型的Git Commit自动生成的VSCode插件。它可以帮助您根据代码变更自动生成高质量的Commit消息，提高开发效率。</p>
   
-   [![Release](https://img.shields.io/endpoint?url=https://www.pinnumber.rr.nu/badges/release/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/releases/latest)
-   [![Stars](https://img.shields.io/endpoint?url=https://www.pinnumber.rr.nu/badges/stars/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/stargazers)
-   [![GitHub](https://img.shields.io/github/license/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/blob/main/LICENSE)
+   [![Forks](https://img.shields.io/github/forks/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/network/members)
+   [![Stars](https://img.shields.io/github/stars/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/stargazers)
+   [![Release](https://img.shields.io/github/release/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/releases)
+   [![License](https://img.shields.io/github/license/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/blob/main/LICENSE)
    [![GitHub last commit](https://img.shields.io/github/last-commit/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/commits/main)
    [![GitHub issues](https://img.shields.io/github/issues/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/issues)
 </div>
 
  **中文** · [English](./README_EN.md)
+
+> Tips: 如果觉得好用或有使用的建议，欢迎去Github上Start 或 issue。
+
+## 🕑 更新历史
+
+- **v1.0.42**
+  * 本版本仅新增 README 英文版文档。
+- **v1.0.41**
+  * 优化提示词，在遇到多个二进制文件变更时的生成消息格式。
+
+
 
 ## 🎯 插件由来
 

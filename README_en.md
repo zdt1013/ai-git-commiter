@@ -3,14 +3,24 @@
   <h1>AI Git Commiter</h1>
   <p>This is a VSCode extension for automatically generating Git commit messages based on AI large models. It helps you generate high-quality commit messages according to code changes, improving development efficiency.</p>
 
-  [![Release](https://img.shields.io/endpoint?url=https://www.pinnumber.rr.nu/badges/release/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/releases/latest)
-  [![Stars](https://img.shields.io/endpoint?url=https://www.pinnumber.rr.nu/badges/stars/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/stargazers)
-  [![GitHub](https://img.shields.io/github/license/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/blob/main/LICENSE)
-  [![GitHub last commit](https://img.shields.io/github/last-commit/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/commits/main)
-  [![GitHub issues](https://img.shields.io/github/issues/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/issues)
+   [![Forks](https://img.shields.io/github/forks/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/network/members)
+   [![Stars](https://img.shields.io/github/stars/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/stargazers)
+   [![Release](https://img.shields.io/github/release/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/releases)
+   [![License](https://img.shields.io/github/license/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/blob/main/LICENSE)
+   [![GitHub last commit](https://img.shields.io/github/last-commit/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/commits/main)
+   [![GitHub issues](https://img.shields.io/github/issues/zdt1013/ai-git-commiter)](https://github.com/zdt1013/ai-git-commiter/issues)
 </div>
 
 [中文](./README.md) ·  **English**
+
+> Tips: If you find this plugin useful or have suggestions, feel free to give it a Star or open an issue on GitHub.
+
+## 🕑 Changelog
+
+- **v1.0.42**
+  * This version only adds the English version of the README documentation.
+- **v1.0.41**
+  * Optimized prompt wording for generating commit messages when multiple binary files are changed.
 
 ## 🎯 Background
 
