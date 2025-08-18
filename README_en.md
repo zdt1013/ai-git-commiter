@@ -16,6 +16,12 @@
 > Tips: If you find this plugin useful or have suggestions, feel free to give it a **Star** or open an **issue** on GitHub.
 
 ## 🕑 Changelog
+- **v1.0.44**
+  * Optimization: Improved the default prompt template to enhance output quality.
+  * Optimization: Implemented streaming output for Commit Message generation, significantly improving the user experience during the generation process.
+   <p align="center">
+   <img src="docs/stream_output.gif" alt="Commit Message Streaming Output Demo" width="600">
+   </p>
 
 - **v1.0.43**
   * Fixed the issue of incorrect switching between Chinese and English README links.

@@ -3,7 +3,7 @@
     <id>default</id>
     <name>默认提示词</name>
     <source>local</source>
-    <version>1.0.23</version>
+    <version>1.0.26</version>
     <content>
         <![CDATA[
 ## Role: Git Commit Message Generation Expert
@@ -40,7 +40,7 @@ Profile: You are an expert in version control and code management, with a deep u
     | i18n     | 🌐    | Internationalization | locale, translation, localization, language |
 ## Language: Always respond in **{language}**.
 ## OutputFormat: Only output the generated Commit Message, without any other unnecessary content.
-    1. The format of a Commit Message:
+    1. The format of a Commit Message is as follows (do not include the ``` symbols):
     ```
     <emoji> <type>(<scope>): <subject>
     <BLANK LINE>
@@ -128,7 +128,7 @@ Profile: You are an expert in Git submission guidelines, with a deep understandi
 
 ## Language: Always respond in **{language}**.
 ## OutputFormat: Only output the generated Commit Message, without any other unnecessary content.
-    1. The format of Commit Message:
+    1. The format of a Commit Message is as follows (do not include the ``` symbols):
     ```
     <emoji> <type>(<scope>): <subject>
     <BLANK LINE>
@@ -146,7 +146,7 @@ Profile: You are an expert in Git submission guidelines, with a deep understandi
 ## Examples:
 Example 1:
 User input: "Fixed the password verification error on the login page and added internationalization support to the new user profile page."
-Your output:
+Your output  (do not include the ``` symbols):
 ```
 🐛 fix(auth): Fix the password verification error on the login page.
 

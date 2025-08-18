@@ -12,7 +12,7 @@ export abstract class BasePromptCommand {
         const items = this.promptService.getPrompts().map(prompt => ({
             label: prompt.name,
             description: prompt.source === 'default' ? '默认提示词' : '自定义提示词',
-            detail: `偏好语言: ${prompt.preferredLanguages?.join(', ') || '无'}\n偏好库: ${prompt.preferredLibraries?.join(', ') || '无'}`,
+            detail: `版本号: ${prompt.version || '无'}\n偏好语言: ${prompt.preferredLanguages?.join(', ') || '无'}\n偏好库: ${prompt.preferredLibraries?.join(', ') || '无'}`,
             prompt
         }));
 

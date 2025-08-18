@@ -1,3 +1,4 @@
+// 流式返回后，AIResponse 已不再使用；保留类型以兼容旧代码，但不再被导出给新代码使用
 export interface AIResponse {
     success: boolean;
     message: string;

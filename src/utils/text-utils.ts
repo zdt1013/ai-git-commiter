@@ -15,8 +15,15 @@ export class TextUtils {
         let result = text.trim();
 
         // 去除首尾的```符号，如果有的话
-        if (result.startsWith('```') && result.endsWith('```')) {
-            result = result.split('\n').slice(1, -1).join('\n').trim();
+        const lines = result.split('\n');
+        if (lines.length > 0) {
+            if (lines[0].trim() === '```') {
+                lines.shift();
+            }
+            if (lines.length > 0 && lines[lines.length - 1].trim() === '```') {
+                lines.pop();
+            }
+            result = lines.join('\n').trim();
         }
 
         return result;

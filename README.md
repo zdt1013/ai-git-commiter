@@ -17,6 +17,13 @@
 
 ## 🕑 更新历史
 
+- **v1.0.44**
+  * 优化：默认提示词优化，提升输出质量。
+  * 优化：实现Commit Message的流式生成输出，显著提升生成过程中的等待体验。
+   <p align="center">
+   <img src="docs/stream_output.gif" alt="Commit Message流式生成演示" width="600">
+   </p>
+
 - **v1.0.43**
   * 修复中英文README链接错误切换问题。
 - **v1.0.42**

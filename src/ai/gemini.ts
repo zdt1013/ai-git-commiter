@@ -1,6 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
 import * as vscode from 'vscode';
-import { AIResponse } from '../types/types';
 import { PromptTemplate } from '../types/types';
 import { CONFIG_CONSTANTS } from '../constants';
 import { IAIService } from './ai-service.interface';
@@ -50,61 +49,47 @@ export class GeminiService implements IAIService {
     }
 
     /**
-     * 调用Gemini API生成文本
+     * 调用Gemini API生成文本（非官方流式，按整体返回一次分片）
      * @param prompt - 提示词文本
-     * @param promptTemplate - 提示词模板
-     * @returns 返回AI响应结果
+     * @param _promptTemplate - 提示词模板（保留参数以便未来扩展）
+     * @returns 返回字符串分片的异步生成器
      */
-    private async callGemini(prompt: string, promptTemplate: PromptTemplate): Promise<AIResponse> {
+    private async *callGemini(prompt: string, _promptTemplate: PromptTemplate): AsyncGenerator<string> {
+        // 从配置中获取Gemini相关参数
+        const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
+        const model = config.get<string>(CONFIG_CONSTANTS.GEMINI.MODEL) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.MODEL;
+        const temperature = config.get<number>(CONFIG_CONSTANTS.GEMINI.TEMPERATURE) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.TEMPERATURE;
+        const topK = config.get<number>(CONFIG_CONSTANTS.GEMINI.TOP_K) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.TOP_K;
+        const topP = config.get<number>(CONFIG_CONSTANTS.GEMINI.TOP_P) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.TOP_P;
+        const maxOutputTokens = config.get<number>(CONFIG_CONSTANTS.GEMINI.MAX_OUTPUT_TOKENS) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.MAX_OUTPUT_TOKENS;
+
+        // 获取Gemini客户端实例
+        const genAI = this.getGenAIClient();
+
         try {
-            // 从配置中获取Gemini相关参数
-            const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
-            const model = config.get<string>(CONFIG_CONSTANTS.GEMINI.MODEL) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.MODEL;
-            const temperature = config.get<number>(CONFIG_CONSTANTS.GEMINI.TEMPERATURE) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.TEMPERATURE;
-            const topK = config.get<number>(CONFIG_CONSTANTS.GEMINI.TOP_K) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.TOP_K;
-            const topP = config.get<number>(CONFIG_CONSTANTS.GEMINI.TOP_P) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.TOP_P;
-            const maxOutputTokens = config.get<number>(CONFIG_CONSTANTS.GEMINI.MAX_OUTPUT_TOKENS) || CONFIG_CONSTANTS.DEFAULTS.GEMINI.MAX_OUTPUT_TOKENS;
-
-            // 获取Gemini客户端实例
-            const genAI = this.getGenAIClient();
-
-            // 调用Gemini API生成文本
             const result = await genAI.models.generateContent({
                 model,
                 contents: prompt,
                 config: {
-                    temperature,    // 控制输出的随机性
-                    topK,          // 控制词汇选择的多样性
-                    topP,          // 控制词汇选择的概率阈值
-                    maxOutputTokens // 限制生成文本的最大长度
+                    temperature,
+                    topK,
+                    topP,
+                    maxOutputTokens
                 }
             });
 
-            // 获取生成的文本内容
             let text = await result.text;
-            // 移除空白字符
-            text = text?.trim() || "";
-            // 移除代码块标记并返回处理后的文本
-            let message = TextUtils.removeCodeBlockMarkers(text);
-
-            return {
-                success: true,
-                message,
-                prompt: promptTemplate
-            };
+            text = TextUtils.removeCodeBlockMarkers(text?.trim() || '');
+            if (text) {
+                yield text;
+            }
         } catch (error: any) {
-            // 错误处理和日志记录
             console.error('Gemini API调用失败:', error);
-            return {
-                success: false,
-                message: '',
-                error: `Gemini API调用失败: ${error.message}`,
-                prompt: promptTemplate
-            };
+            throw new Error(`Gemini API调用失败: ${error.message}`);
         }
     }
 
-    async generateCommitMessage(diff: string, language: string, promptTemplate: PromptTemplate): Promise<AIResponse> {
+    generateCommitMessage(diff: string, language: string, promptTemplate: PromptTemplate): AsyncGenerator<string> {
         // 构建提示词：替换模板中的占位符
         let prompt = promptTemplate.content
             .replace('{diff}', diff)
@@ -131,16 +116,14 @@ export class GeminiService implements IAIService {
             prompt = prompt.replace('{preferredLibraries}', '');
         }
 
-        const response = await this.callGemini(prompt, promptTemplate);
-        return response;
+        return this.callGemini(prompt, promptTemplate);
     }
 
-    async polishCommitMessage(message: string, language: string, promptTemplate: PromptTemplate): Promise<AIResponse> {
+    polishCommitMessage(message: string, language: string, promptTemplate: PromptTemplate): AsyncGenerator<string> {
         let prompt = promptTemplate.polishContent
             .replace('{diff}', message)
             .replaceAll('{language}', language);
 
-        const response = await this.callGemini(prompt, promptTemplate);
-        return response;
+        return this.callGemini(prompt, promptTemplate);
     }
 } 

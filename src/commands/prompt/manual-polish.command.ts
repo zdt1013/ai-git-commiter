@@ -4,6 +4,7 @@ import { BasePromptCommand } from './base-prompt.command';
 import { PROMPT_CONSTANTS, GIT_CONSTANTS, AI_CONSTANTS } from '../../constants';
 import { ConfigService } from '../../config';
 import { AIServiceFactory } from '../../ai/ai-service.factory';
+import { TextUtils } from '../../utils/text-utils';
 
 export class ManualPolishCommand extends BasePromptCommand {
     constructor(
@@ -50,15 +51,20 @@ export class ManualPolishCommand extends BasePromptCommand {
                 // 从配置中获取选中的提示词模板
                 const promptTemplate = this.promptService.getSelectedPrompt();
 
-                // 使用工厂创建AI服务并润色消息
+                // 使用工厂创建AI服务并润色消息（流式）
                 const aiService = AIServiceFactory.getAIService();
-                const result = await aiService.polishCommitMessage(message, config.language, promptTemplate);
-
-                if (result?.success && result.message) {
-                    repository.inputBox.value = result.message;
+                try {
+                    const stream = aiService.polishCommitMessage(message, config.language, promptTemplate);
+                    let aggregated = '';
+                    for await (const chunk of stream) {
+                        aggregated += chunk;
+                        repository.inputBox.value = aggregated;
+                    }
+                    // 移除代码块标记符并更新输入框的最终内容
+                    repository.inputBox.value = TextUtils.removeCodeBlockMarkers(aggregated.trim());
                     vscode.window.showInformationMessage(AI_CONSTANTS.SUCCESS.POLISH);
-                } else {
-                    vscode.window.showErrorMessage(result?.error || AI_CONSTANTS.ERROR.POLISH);
+                } catch (error: any) {
+                    vscode.window.showErrorMessage(error?.message || AI_CONSTANTS.ERROR.POLISH);
                 }
                 return Promise.resolve();
             });
