@@ -29,7 +29,7 @@ export class CommandRegistry {
 
         const commitDisposable = vscode.commands.registerCommand(
             PROMPT_CONSTANTS.COMMANDS.GENERATE_COMMIT_MESSAGE,
-            () => commitCommand.execute()
+            (args) => commitCommand.execute(args)
         );
 
         // 注册切换AI模型命令

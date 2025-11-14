@@ -93,14 +93,14 @@ export class GitService {
      * 获取当前VS Code打开的Git仓库信息
      * @returns 返回当前仓库的Repository对象，如果没有找到则返回null
      */
-    static async getCurrentRepository(): Promise<Repository | undefined> {
+    static async getCurrentRepository(rootUri: vscode.Uri): Promise<Repository | null> {
         const gitExtension = vscode.extensions.getExtension<GitExtension>('vscode.git')?.exports;
         if (!gitExtension) {
-            return undefined;
+            return null;
         }
         const api = gitExtension.getAPI(1);
-        const repositories = api.repositories;
-        return repositories[0];
+        // const repositories = api.repositories;
+        return api.getRepository(rootUri);
     }
 
     /**

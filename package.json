@@ -75,6 +75,11 @@
           "command": "extension.ai-git-commiter",
           "group": "navigation",
           "when": "scmProvider == git"
+        },
+        {
+          "command": "extension.ai-git-commiter",
+          "group": "inline",
+          "when": "scmProvider == git"
         }
       ]
     },

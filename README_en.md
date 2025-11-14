@@ -16,6 +16,10 @@
 > Tips: If you find this plugin useful or have suggestions, feel free to give it a **Star** or open an **issue** on GitHub.
 
 ## 🕑 Changelog
+- **v1.0.45**
+  * Fixed an issue where the plugin button was not displayed in VS Code version >= 1.106 when using multiple workspaces [Issue #4](https://github.com/zdt1013/ai-git-commiter/issues/4).
+  * Also fixed an issue where, when using multiple workspaces, clicking the plugin would only generate a commit message for the first repository.
+
 - **v1.0.44**
   * Optimization: Improved the default prompt template to enhance output quality.
   * Optimization: Implemented streaming output for Commit Message generation, significantly improving the user experience during the generation process.
