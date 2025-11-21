@@ -106,7 +106,8 @@ export const GIT_CONSTANTS = {
     },
     INPUT: {
         COMMIT_MESSAGE_PLACEHOLDER: '请输入简短的Commit消息'
-    }
+    },
+    NEED_SELECTION: '需要选择一个Git仓库才能继续操作'
 };
 
 /**

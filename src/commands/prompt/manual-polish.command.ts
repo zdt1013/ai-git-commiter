@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { GitService } from '../../git';
 import { BasePromptCommand } from './base-prompt.command';
-import { PROMPT_CONSTANTS, GIT_CONSTANTS, AI_CONSTANTS } from '../../constants';
+import { GIT_CONSTANTS, AI_CONSTANTS } from '../../constants';
 import { ConfigService } from '../../config';
 import { AIServiceFactory } from '../../ai/ai-service.factory';
 import { TextUtils } from '../../utils/text-utils';
@@ -18,7 +18,7 @@ export class ManualPolishCommand extends BasePromptCommand {
     public async execute(): Promise<void> {
         try {
             // 获取Git仓库
-            const repository = await GitService.getCurrentRepository();
+            const repository = await GitService.getCurrentRepository(null);
             if (!repository) {
                 vscode.window.showErrorMessage(GIT_CONSTANTS.ERROR.NO_REPOSITORY);
                 return;

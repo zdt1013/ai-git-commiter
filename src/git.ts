@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { simpleGit, SimpleGit } from 'simple-git';
 import { GitExtension, Repository } from './types/git';
+import { GIT_CONSTANTS } from './constants';
 
 export class GitService {
     private static git: SimpleGit;
@@ -93,14 +94,44 @@ export class GitService {
      * 获取当前VS Code打开的Git仓库信息
      * @returns 返回当前仓库的Repository对象，如果没有找到则返回null
      */
-    static async getCurrentRepository(rootUri: vscode.Uri): Promise<Repository | null> {
+    static async getCurrentRepository(rootUri: vscode.Uri | null): Promise<Repository | null> {
         const gitExtension = vscode.extensions.getExtension<GitExtension>('vscode.git')?.exports;
         if (!gitExtension) {
             return null;
         }
         const api = gitExtension.getAPI(1);
-        // const repositories = api.repositories;
-        return api.getRepository(rootUri);
+        if (!rootUri) {
+            const repositories = api.repositories;
+            if (repositories.length === 0) {
+                // 没有仓库时返回null
+                return null;
+            } else if (repositories.length === 1) {
+                // 只有一个仓库时直接返回
+                return repositories[0];
+            } else {
+                // 多个仓库时，尝试获取活动编辑器所在的仓库
+                const activeEditor = vscode.window.activeTextEditor;
+                if (activeEditor) {
+                    const activeDocUri = activeEditor.document.uri;
+                    const activeRepo = api.getRepository(activeDocUri);
+                    if (activeRepo) {
+                        return activeRepo;
+                    }
+                } else {
+                    // 如果没有活动编辑器，弹窗让用户选择仓库
+                    const repoItems = repositories.map(repo => ({
+                        label: repo.rootUri.fsPath,
+                        repo: repo
+                    }));
+                    // 显示快速选择菜单,让用户选择仓库
+                    const selected = await vscode.window.showQuickPick(repoItems, {
+                        placeHolder: GIT_CONSTANTS.NEED_SELECTION
+                    });
+                    return selected ? selected.repo : null;
+                }
+            }
+        }
+        return rootUri ? api.getRepository(rootUri) : null;
     }
 
     /**
