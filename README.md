@@ -15,7 +15,21 @@
 
 > Tips: 如果觉得好用或有使用的建议，欢迎去Github上 **Start** 或 **issue**。
 
+> 截止此版本（v1.0.46）发布，双插件商店下载量已累计下载超过 **860+** 次，计划超过 **1000** 次后，重构更智能版本，敬请期待。
+  <p align="center">
+   <img src="docs/2025112102.png" alt="" width="300">
+   <img src="docs/2025112103.png" alt="" width="300">
+  </p>
+
 ## 🕑 更新历史
+- **v1.0.46**
+  * 新增特性（含bug紧急修复）：执行《手动润色Commit消息》时智能判断用户想要操作的项目仓库。
+    1. 当打开单个项目时，默认为当前项目仓库。
+    2. 当打开多项目工作空间时，获取当前是否有激活的编辑器窗口，如果有则默认为激活窗口所属的项目仓库。
+    3. 当打开多项目工作空间时，获取当前是否有激活的编辑器窗口，如果无则弹出下拉，用户自主选择项目仓库。
+  <p align="center">
+   <img src="docs/2025112101.png" alt="" width="600">
+   </p>
 
 - **v1.0.45**
   * 修复 VS Code >= V1.106版本多工作区，插件按钮不显示问题。[Issue #4](https://github.com/zdt1013/ai-git-commiter/issues/4)
@@ -25,7 +39,7 @@
   * 优化：默认提示词优化，提升输出质量。
   * 优化：实现Commit Message的流式生成输出，显著提升生成过程中的等待体验。
    <p align="center">
-   <img src="docs/stream_output.gif" alt="Commit Message流式生成演示" width="600">
+   <img src="docs/stream_output.gif" alt="Commit Message流式生成演示" width="400">
    </p>
 
 - **v1.0.43**
@@ -66,7 +80,7 @@
 
 方法1：在VSCode扩展商店中搜索"AI Git Commiter"并安装（Cursor、Windsurf、Trace等相同）。
 
-方法2：访问[VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=zdt1013.ai-git-commiter)下载安装。
+方法2：访问 [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=zdt1013.ai-git-commiter)或 [Open VSX Regitry (Cursor、Trace等三方AI代码编辑器基于此插件商店)](https://open-vsx.org/extension/zdt1013/ai-git-commiter)下载安装。
 
 方法3：本地编译打包
 1. 克隆代码仓库: `git clone https://github.com/zdt1013/ai-git-commiter.git`
