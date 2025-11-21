@@ -2,7 +2,7 @@
   "name": "ai-git-commiter",
   "displayName": "AI Git Commiter",
   "description": "使用AI大模型自动生成Git Commit消息",
-  "version": "1.0.45",
+  "version": "1.0.46",
   "publisher": "zdt1013",
   "repository": {
     "type": "git",
