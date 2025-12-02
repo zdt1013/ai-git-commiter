@@ -18,7 +18,7 @@ export class CommitCommand {
     public async execute(args: any): Promise<void> {
         try {
             // 获取当前选中的仓库的Repository对象
-            const repository = await GitService.getCurrentRepository(args.rootUri);
+            const repository = await GitService.getCurrentRepository(args?.rootUri);
             if (!repository) {
                 vscode.window.showErrorMessage(GIT_CONSTANTS.ERROR.NO_REPOSITORY);
                 return;
