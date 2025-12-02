@@ -13,15 +13,18 @@
 
 [中文](./README.md) ·  **English**
 
-> Tips: If you find this plugin useful or have suggestions, feel free to give it a **Star** or open an **issue** on GitHub.
+> Tips: If you find this plugin useful or have suggestions, feel free to give it a [**Start**](https://github.com/zdt1013/ai-git-commiter/stargazers) or open an [**Issue**](https://github.com/zdt1013/ai-git-commiter/issues/) on GitHub.
 
-> As of the release of this version (v1.0.46), the cumulative number of downloads of the dual-plugin store has exceeded **860**. It is planned to reconstruct a more intelligent version after the number of downloads exceeds **1000**.
+> As of the release of this version (**v1.0.47**), the cumulative number of downloads of the dual-plugin store has exceeded **1000+**. We are officially collecting requirements for the **2.x version**. You are welcome to submit feedback and requirements in the [Issue](https://github.com/zdt1013/ai-git-commiter/issues/).
   <p align="center">
-   <img src="docs/2025112102.png" alt="" width="300">
-   <img src="docs/2025112103.png" alt="" width="300">
+   <img src="docs/2025120201.png" alt="" width="400">
+   <img src="docs/2025120202.png" alt="" width="335">
   </p>
 
 ## 🕑 Changelog
+- **v1.0.47**
+  * Fix: Resolve the issue where the "AI-generated Commit Message" command in the command palette fails to correctly recognize the repository under specific scenarios.
+
 - **v1.0.46**
   * New feature (including emergency bug fixes): Intelligently determine the project repository that the user wants to operate on when executing "Manually Polish Commit Messages".
     1. When a single project is opened, the current project repository is used by default.

@@ -13,15 +13,18 @@
 
  **中文** · [English](./README_en.md)
 
-> Tips: 如果觉得好用或有使用的建议，欢迎去Github上 **Start** 或 **issue**。
+> Tips: 如果觉得好用或有使用的建议，欢迎去Github上 [**Start**](https://github.com/zdt1013/ai-git-commiter/stargazers)或 [**Issue**](https://github.com/zdt1013/ai-git-commiter/issues/)。
 
-> 截止此版本（v1.0.46）发布，双插件商店下载量已累计下载超过 **860+** 次，计划超过 **1000** 次后，重构更智能版本，敬请期待。
+> 截止此版本（v1.0.47）发布，双插件商店下载量已累计下载超过 **1000+** 次，正式收集2.x版本的需求，欢迎大家去[**Issue**](https://github.com/zdt1013/ai-git-commiter/issues/)提交反馈和需求。
   <p align="center">
-   <img src="docs/2025112102.png" alt="" width="300">
-   <img src="docs/2025112103.png" alt="" width="300">
+   <img src="docs/2025120201.png" alt="" width="400">
+   <img src="docs/2025120202.png" alt="" width="335">
   </p>
 
 ## 🕑 更新历史
+- **v1.0.47**
+  * 修复：修复命令面板中《AI生成Commit消息》命令在特定场景下的仓库识别异常问题。
+
 - **v1.0.46**
   * 新增特性（含bug紧急修复）：执行《手动润色Commit消息》时智能判断用户想要操作的项目仓库。
     1. 当打开单个项目时，默认为当前项目仓库。
