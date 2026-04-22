@@ -28,6 +28,15 @@ export interface GeminiConfig {
 }
 
 /**
+ * Anthropic配置
+ */
+export interface AnthropicConfig {
+    apiKey: string;
+    model: string;
+    baseUrl: string;
+}
+
+/**
  * 扩展配置
  */
 export interface ExtensionConfig {
@@ -35,6 +44,7 @@ export interface ExtensionConfig {
     language: string;
     openai: OpenAIConfig;
     gemini: GeminiConfig;
+    anthropic: AnthropicConfig;
     git: {
         diff: GitDiffConfig;
     };

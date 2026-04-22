@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { IAIService } from './ai-service.interface';
 import { OpenAIService } from './openai';
 import { GeminiService } from './gemini';
+import { AnthropicService } from './anthropic';
 import { CONFIG_CONSTANTS } from '../constants';
 
 export class AIServiceFactory {
@@ -21,6 +22,9 @@ export class AIServiceFactory {
                 break;
             case 'Gemini':
                 this.instance = GeminiService.getInstance();
+                break;
+            case 'Anthropic':
+                this.instance = AnthropicService.getInstance();
                 break;
             default:
                 throw new Error(`不支持的AI服务提供商: ${provider}`);
