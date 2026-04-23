@@ -195,6 +195,16 @@ export const CONFIG_CONSTANTS = {
         BASE_URL: 'gemini.baseUrl'
     },
 
+    // Anthropic配置
+    ANTHROPIC: {
+        BASE_URL: 'anthropic.baseUrl',
+        API_KEY: 'anthropic.apiKey',
+        MODEL: 'anthropic.model',
+        TEMPERATURE: 'anthropic.temperature',
+        TOP_P: 'anthropic.topP',
+        MAX_TOKENS: 'anthropic.maxTokens'
+    },
+
     // 默认值
     DEFAULTS: {
         PROVIDER: 'OpenAI',
@@ -214,6 +224,13 @@ export const CONFIG_CONSTANTS = {
             MAX_OUTPUT_TOKENS: 500,
             BASE_URL: 'https://generativelanguage.googleapis.com'
         },
+        ANTHROPIC: {
+            BASE_URL: 'https://open.bigmodel.cn/api/anthropic',
+            MODEL: 'glm-5.1',
+            TEMPERATURE: 0.7,
+            TOP_P: 1,
+            MAX_TOKENS: 500
+        },
         GIT: {
             DIFF: {
                 MAX_CHANGES: 100,
@@ -231,7 +248,8 @@ export const CONFIG_CONSTANTS = {
     // AI提供商
     PROVIDERS: {
         OPENAI: 'OpenAI',
-        GEMINI: 'Gemini'
+        GEMINI: 'Gemini',
+        ANTHROPIC: 'Anthropic'
     },
     LANGUAGE: "language"
 }; 

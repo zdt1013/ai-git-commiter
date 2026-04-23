@@ -2,7 +2,7 @@
   "name": "ai-git-commiter",
   "displayName": "AI Git Commiter",
   "description": "使用AI大模型自动生成Git Commit消息",
-  "version": "1.0.47",
+  "version": "1.0.48",
   "publisher": "zdt1013",
   "repository": {
     "type": "git",
@@ -102,11 +102,13 @@
           "order": 2,
           "enum": [
             "OpenAI",
-            "Gemini"
+            "Gemini",
+            "Anthropic"
           ],
           "enumDescriptions": [
             "使用OpenAI或类OpenAI的API生成Commit消息",
-            "使用Google Gemini的API生成Commit消息"
+            "使用Google Gemini的API生成Commit消息",
+            "使用Anthropic或类Anthropic的API生成Commit消息（支持智谱等兼容服务商）"
           ],
           "description": "AI提供商"
         },
@@ -219,9 +221,56 @@
           "description": "Gemini模型最大输出长度",
           "when": "ai-git-commiter.provider == Gemini"
         },
-        "ai-git-commiter.git-diff.area": {
+        "ai-git-commiter.anthropic.baseUrl": {
           "type": "string",
           "order": 17,
+          "default": "https://open.bigmodel.cn/api/anthropic",
+          "description": "Anthropic API基础URL",
+          "when": "ai-git-commiter.provider == Anthropic"
+        },
+        "ai-git-commiter.anthropic.apiKey": {
+          "type": "string",
+          "order": 18,
+          "default": "",
+          "description": "Anthropic API密钥",
+          "when": "ai-git-commiter.provider == Anthropic"
+        },
+        "ai-git-commiter.anthropic.model": {
+          "type": "string",
+          "order": 19,
+          "default": "glm-5.1",
+          "description": "Anthropic模型名称",
+          "when": "ai-git-commiter.provider == Anthropic"
+        },
+        "ai-git-commiter.anthropic.temperature": {
+          "type": "number",
+          "order": 20,
+          "default": 0.7,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Anthropic模型温度参数",
+          "when": "ai-git-commiter.provider == Anthropic"
+        },
+        "ai-git-commiter.anthropic.topP": {
+          "type": "number",
+          "order": 21,
+          "default": 1,
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Anthropic模型top_p参数",
+          "when": "ai-git-commiter.provider == Anthropic"
+        },
+        "ai-git-commiter.anthropic.maxTokens": {
+          "type": "number",
+          "order": 22,
+          "default": 500,
+          "minimum": 1,
+          "description": "Anthropic模型最大输出长度",
+          "when": "ai-git-commiter.provider == Anthropic"
+        },
+        "ai-git-commiter.git-diff.area": {
+          "type": "string",
+          "order": 23,
           "default": "auto",
           "enum": [
             "auto",
@@ -237,77 +286,77 @@
         },
         "ai-git-commiter.git-diff.wordDiff": {
           "type": "boolean",
-          "order": 18,
+          "order": 24,
           "default": true,
           "description": "显示单词级别的变更（而非整行），减少冗余内容"
         },
         "ai-git-commiter.git-diff.unified": {
           "type": "number",
-          "order": 19,
+          "order": 25,
           "default": 0,
           "minimum": 0,
           "description": "去除上下文行，仅保留实际变更"
         },
         "ai-git-commiter.git-diff.noColor": {
           "type": "boolean",
-          "order": 20,
+          "order": 26,
           "default": true,
           "description": "移除颜色代码，避免额外 Token 开销"
         },
         "ai-git-commiter.git-diff.diffFilter": {
           "type": "string",
-          "order": 21,
+          "order": 27,
           "default": "ACDMRT",
           "description": "过滤文件变更类型：A(添加)、C(复制)、D(删除)、M(修改)、R(重命名)、T(类型变更)"
         },
         "ai-git-commiter.git-diff.filterMeta": {
           "type": "boolean",
-          "order": 22,
+          "order": 28,
           "default": false,
           "description": "过滤掉冗余行（如 index、diff、Binary file 等元信息）"
         },
         "ai-git-commiter.git-diff.maxChanges": {
           "type": "number",
-          "order": 23,
+          "order": 29,
           "default": 500,
           "minimum": 1,
           "description": "AI生成建议最大变更行数，超过此值将提示用户减少暂存文件或手动输入"
         },
         "ai-git-commiter.prompt.selectedPromptTemplateId": {
           "type": "string",
-          "order": 24,
+          "order": 30,
           "default": "",
           "readonly": true,
           "description": "当前选中的提示词模板ID"
         },
         "ai-git-commiter.prompt.selectedTemplatePrompt": {
           "type": "string",
-          "order": 25,
+          "order": 31,
           "default": "",
           "readonly": true,
           "description": "当前选中的提示词模板内容"
         },
         "ai-git-commiter.prompt.languageAwareness": {
           "type": "string",
-          "order": 26,
+          "order": 32,
           "default": "",
           "description": "编程语言感知"
         },
         "ai-git-commiter.prompt.libraryAwareness": {
           "type": "string",
-          "order": 27,
+          "order": 33,
           "default": "",
           "description": "三方库感知"
         },
         "ai-git-commiter.prompt.enableLanguageAwareness": {
           "type": "boolean",
-          "order": 28,
+          "order": 34,
           "default": false,
           "description": "是否启用编程语言感知"
         },
         "ai-git-commiter.prompt.enableLibraryAwareness": {
           "type": "boolean",
-          "order": 29,
+          "order": 35,
           "default": false,
           "description": "是否启用三方库感知"
         }
@@ -341,6 +390,7 @@
     "vite": "^6.2.5"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.90.0",
     "@google/genai": "^0.8.0",
     "@types/xml2js": "^0.4.14",
     "axios": "^1.6.7",

@@ -68,6 +68,11 @@ export class ConfigService {
             gemini: {
                 apiKey: config.get<string>(CONFIG_CONSTANTS.GEMINI.API_KEY) || ''
             },
+            anthropic: {
+                apiKey: config.get<string>(CONFIG_CONSTANTS.ANTHROPIC.API_KEY) || '',
+                model: config.get<string>(CONFIG_CONSTANTS.ANTHROPIC.MODEL) || CONFIG_CONSTANTS.DEFAULTS.ANTHROPIC.MODEL,
+                baseUrl: config.get<string>(CONFIG_CONSTANTS.ANTHROPIC.BASE_URL) || CONFIG_CONSTANTS.DEFAULTS.ANTHROPIC.BASE_URL
+            },
             git: {
                 diff: {
                     wordDiff: config.get<boolean>(CONFIG_CONSTANTS.GIT.DIFF.WORD_DIFF) ?? CONFIG_CONSTANTS.DEFAULTS.GIT.DIFF.WORD_DIFF,
@@ -112,6 +117,20 @@ export class ConfigService {
             if (!apiKey) {
                 const result = await vscode.window.showWarningMessage(
                     'Gemini配置不完整，是否立即配置？',
+                    { modal: true },
+                    '配置',
+                );
+
+                if (result === '配置') {
+                    await vscode.commands.executeCommand('workbench.action.openSettings', CONFIG_CONSTANTS.ROOT);
+                }
+                return false;
+            }
+        } else if (provider === CONFIG_CONSTANTS.PROVIDERS.ANTHROPIC) {
+            const { apiKey, model, baseUrl } = config.anthropic;
+            if (!baseUrl || !apiKey || !model) {
+                const result = await vscode.window.showWarningMessage(
+                    'Anthropic配置不完整，是否立即配置？',
                     { modal: true },
                     '配置',
                 );
