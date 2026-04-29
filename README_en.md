@@ -19,6 +19,9 @@
 
 
 ## 🕑 Changelog
+- **v1.0.50**
+  * Added support for custom User-Agent configuration. [PR #9](https://github.com/zdt1013/ai-git-commiter/pull/9)
+
 - **v1.0.49**
   * Fix: Declared `vscode.git` as an extension dependency to ensure the Git extension is ready when the plugin activates, resolving the "No Git repository found" error when clicking the button. [Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
   * Fix: Added a wait mechanism for when the Git API is in an uninitialized state, preventing false "no repository" errors during VS Code startup. [Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
