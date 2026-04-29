@@ -2,7 +2,7 @@
   "name": "ai-git-commiter",
   "displayName": "AI Git Commiter",
   "description": "使用AI大模型自动生成Git Commit消息",
-  "version": "1.0.49",
+  "version": "1.0.51",
   "publisher": "zdt1013",
   "repository": {
     "type": "git",
@@ -121,6 +121,12 @@
           "default": false,
           "order": 3,
           "description": "是否启用推理"
+        },
+        "ai-git-commiter.userAgent": {
+          "type": "string",
+          "order": 3.5,
+          "default": "",
+          "description": "自定义请求User-Agent，留空则使用SDK默认。部分模型服务商可能会限制默认User-Agent导致请求被拒绝。"
         },
         "ai-git-commiter.openai.baseUrl": {
           "type": "string",

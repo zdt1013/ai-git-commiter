@@ -150,6 +150,7 @@ export const CONFIG_CONSTANTS = {
 
     // 通用配置
     ENABLE_THINKING: 'enable_thinking',
+    USER_AGENT: 'userAgent',
 
     // 提示词配置
     PROMPT: {

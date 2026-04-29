@@ -60,6 +60,7 @@ export class ConfigService {
         return {
             provider: config.get<string>('provider') || CONFIG_CONSTANTS.PROVIDERS.OPENAI,
             language: config.get<string>(CONFIG_CONSTANTS.LANGUAGE) || CONFIG_CONSTANTS.DEFAULTS.LANGUAGE,
+            userAgent: config.get<string>(CONFIG_CONSTANTS.USER_AGENT) || '',
             openai: {
                 apiKey: config.get<string>(CONFIG_CONSTANTS.OPENAI.API_KEY) || '',
                 model: config.get<string>(CONFIG_CONSTANTS.OPENAI.MODEL) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.MODEL,
