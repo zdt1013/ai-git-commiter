@@ -39,10 +39,17 @@ export class OpenAIService implements IAIService {
                 throw new Error('请在设置中配置OpenAI API密钥');
             }
 
-            this.openaiClient = new OpenAI({
+            const userAgent = config.get<string>(CONFIG_CONSTANTS.USER_AGENT) || '';
+            const clientConfig: OpenAI.ClientOptions = {
                 apiKey: apiKey,
                 baseURL: baseUrl
-            });
+            };
+            if (userAgent) {
+                clientConfig.defaultHeaders = {
+                    'User-Agent': userAgent
+                };
+            }
+            this.openaiClient = new OpenAI(clientConfig);
         }
         return this.openaiClient;
     }

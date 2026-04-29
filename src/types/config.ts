@@ -42,6 +42,7 @@ export interface AnthropicConfig {
 export interface ExtensionConfig {
     provider: string;
     language: string;
+    userAgent: string;
     openai: OpenAIConfig;
     gemini: GeminiConfig;
     anthropic: AnthropicConfig;

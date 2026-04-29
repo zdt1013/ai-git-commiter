@@ -33,10 +33,17 @@ export class AnthropicService implements IAIService {
                 throw new Error('请在设置中配置Anthropic API密钥');
             }
 
-            this.anthropicClient = new Anthropic({
+            const userAgent = config.get<string>(CONFIG_CONSTANTS.USER_AGENT) || '';
+            const clientConfig: Anthropic.ClientOptions = {
                 apiKey: apiKey,
                 baseURL: baseUrl
-            });
+            };
+            if (userAgent) {
+                clientConfig.defaultHeaders = {
+                    'User-Agent': userAgent
+                };
+            }
+            this.anthropicClient = new Anthropic(clientConfig);
         }
         return this.anthropicClient;
     }
