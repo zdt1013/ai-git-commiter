@@ -8,6 +8,7 @@ import { AIModel } from '../types/model';
 import { ChatCompletionChunk, ChatCompletionCreateParamsStreaming } from 'openai/resources/chat/completions';
 import { Stream } from 'openai/streaming';
 import { ConfigService } from '../config';
+import { Logger } from '../utils/logger';
 
 
 export class OpenAIService implements IAIService {
@@ -66,7 +67,7 @@ export class OpenAIService implements IAIService {
 
             return models;
         } catch (error: any) {
-            console.error('获取OpenAI模型列表失败:', error);
+            Logger.error('获取OpenAI模型列表失败', error);
             throw new Error(`获取OpenAI模型列表失败: ${error.message}`);
         }
     }
@@ -97,8 +98,12 @@ export class OpenAIService implements IAIService {
             top_p: topP,
             max_tokens: maxTokens,
             stream: true,
-            chat_template_kwargs: { "enable_thinking": enableThinking },
-            enable_thinking: enableThinking,
+            // chat_template_kwargs / enable_thinking 仅在用户显式开启时才传递，
+            // 标准 OpenAI 及大多数兼容服务商不支持这两个字段，传了会返回 400
+            ...(enableThinking && {
+                chat_template_kwargs: { enable_thinking: true },
+                enable_thinking: true,
+            }),
         } as any;
 
         try {
@@ -110,7 +115,7 @@ export class OpenAIService implements IAIService {
                 }
             }
         } catch (error: any) {
-            console.error('OpenAI API调用失败:', error);
+            Logger.error('OpenAI API调用失败', error);
             throw new Error(`OpenAI API调用失败: ${error.message}`);
         }
     }

@@ -15,13 +15,17 @@
 
 > Tips: If you find this plugin useful or have suggestions, feel free to give it a [**Start**](https://github.com/zdt1013/ai-git-commiter/stargazers) or open an [**Issue**](https://github.com/zdt1013/ai-git-commiter/issues/) on GitHub.
 
-> As of the release of this version (**v1.0.47**), the cumulative number of downloads of the dual-plugin store has exceeded **1000+**. We are officially collecting requirements for the **2.x version**. You are welcome to submit feedback and requirements in the [Issue](https://github.com/zdt1013/ai-git-commiter/issues/).
-  <p align="center">
-   <img src="docs/2025120201.png" alt="" width="400">
-   <img src="docs/2025120202.png" alt="" width="335">
-  </p>
+> As of the release of this version (**v1.0.49**), the cumulative number of downloads of the dual-plugin store has exceeded **2600+**. We are officially collecting requirements for the **2.x version**. You are welcome to submit feedback and requirements in the [Issue](https://github.com/zdt1013/ai-git-commiter/issues/).
+
 
 ## 🕑 Changelog
+- **v1.0.49**
+  * Fix: Declared `vscode.git` as an extension dependency to ensure the Git extension is ready when the plugin activates, resolving the "No Git repository found" error when clicking the button. [Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
+  * Fix: Added a wait mechanism for when the Git API is in an uninitialized state, preventing false "no repository" errors during VS Code startup. [Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
+  * Fix: `chat_template_kwargs` and `enable_thinking` fields are now only sent to the API when the user explicitly enables the thinking feature, resolving `400` errors from standard OpenAI and most compatible providers. [Issue #6](https://github.com/zdt1013/ai-git-commiter/issues/6)
+  * New: Introduced an Output Channel logging system for easier troubleshooting and debugging.
+  * Fix: Automatically detect and strip base64-encoded image data from git diffs, resolving errors caused by oversized diff content in files with embedded images (HTML, Markdown, Jupyter Notebook, source code, etc.).
+
 - **v1.0.47**
   * Fix: Resolve the issue where the "AI-generated Commit Message" command in the command palette fails to correctly recognize the repository under specific scenarios.
 

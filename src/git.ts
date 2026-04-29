@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import { simpleGit, SimpleGit } from 'simple-git';
 import { GitExtension, Repository } from './types/git';
 import { GIT_CONSTANTS } from './constants';
+import { Logger } from './utils/logger';
+import { TextUtils } from './utils/text-utils';
 
 export class GitService {
     private static git: SimpleGit;
@@ -83,9 +85,16 @@ export class GitService {
                     .join('\n');
             }
 
+            // 替换 base64 图片数据，避免内容过大
+            const { result: strippedDiff, count: base64Count } = TextUtils.stripBase64Images(diff);
+            if (base64Count > 0) {
+                Logger.log(`[GitService] Stripped ${base64Count} base64 image(s) from diff`);
+                diff = strippedDiff;
+            }
+
             return diff;
         } catch (error) {
-            console.error('获取Git差异失败:', error);
+            Logger.error('获取Git差异失败', error);
             return undefined;
         }
     }
@@ -95,28 +104,57 @@ export class GitService {
      * @returns 返回当前仓库的Repository对象，如果没有找到则返回null
      */
     static async getCurrentRepository(rootUri: vscode.Uri | null): Promise<Repository | null> {
+        Logger.log(`[GitService] getCurrentRepository called, rootUri=${rootUri?.fsPath ?? 'null'}`);
+
         const gitExtension = vscode.extensions.getExtension<GitExtension>('vscode.git')?.exports;
         if (!gitExtension) {
+            Logger.warn('[GitService] vscode.git extension not found or not exported');
             return null;
         }
+
         const api = gitExtension.getAPI(1);
+
+        // 如果 git API 还未初始化完成，等待就绪（最多 5 秒）
+        if (api.state === 'uninitialized') {
+            Logger.log('[GitService] git API is uninitialized, waiting for it to be ready...');
+            await new Promise<void>((resolve) => {
+                const disposable = api.onDidChangeState((state) => {
+                    if (state !== 'uninitialized') {
+                        Logger.log(`[GitService] git API state changed to: ${state}`);
+                        disposable.dispose();
+                        resolve();
+                    }
+                });
+                // 超时保险：5 秒后不管状态如何都继续
+                setTimeout(() => { disposable.dispose(); resolve(); }, 5000);
+            });
+        }
+
+        Logger.log(`[GitService] git API state=${api.state}, repositories count=${api.repositories.length}`);
+        api.repositories.forEach((r, i) => {
+            Logger.log(`[GitService]   repo[${i}]: ${r.rootUri?.fsPath}`);
+        });
+
         if (!rootUri) {
             const repositories = api.repositories;
             if (repositories.length === 0) {
-                // 没有仓库时返回null
+                Logger.warn('[GitService] No repositories found in workspace');
                 return null;
             } else if (repositories.length === 1) {
-                // 只有一个仓库时直接返回
+                Logger.log(`[GitService] Single repository found: ${repositories[0].rootUri?.fsPath}`);
                 return repositories[0];
             } else {
                 // 多个仓库时，尝试获取活动编辑器所在的仓库
                 const activeEditor = vscode.window.activeTextEditor;
+                Logger.log(`[GitService] Multiple repos (${repositories.length}), activeEditor=${activeEditor?.document.uri.fsPath ?? 'none'}`);
                 if (activeEditor) {
                     const activeDocUri = activeEditor.document.uri;
                     const activeRepo = api.getRepository(activeDocUri);
                     if (activeRepo) {
+                        Logger.log(`[GitService] Resolved repo from active editor: ${activeRepo.rootUri?.fsPath}`);
                         return activeRepo;
                     }
+                    Logger.warn(`[GitService] Could not resolve repo for active editor: ${activeDocUri.fsPath}`);
                 } else {
                     // 如果没有活动编辑器，弹窗让用户选择仓库
                     const repoItems = repositories.map(repo => ({
@@ -127,11 +165,15 @@ export class GitService {
                     const selected = await vscode.window.showQuickPick(repoItems, {
                         placeHolder: GIT_CONSTANTS.NEED_SELECTION
                     });
+                    Logger.log(`[GitService] User selected repo: ${selected?.label ?? 'none (cancelled)'}`);
                     return selected ? selected.repo : null;
                 }
             }
         }
-        return rootUri ? api.getRepository(rootUri) : null;
+
+        const resolved = rootUri ? api.getRepository(rootUri) : null;
+        Logger.log(`[GitService] getRepository(rootUri) => ${resolved?.rootUri?.fsPath ?? 'null'}`);
+        return resolved;
     }
 
     /**
@@ -197,7 +239,7 @@ export class GitService {
 
             return totalChanges;
         } catch (error) {
-            console.error('获取变更行数失败:', error);
+            Logger.error('获取变更行数失败', error);
             return -1;
         }
     }

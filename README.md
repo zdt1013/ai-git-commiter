@@ -15,13 +15,16 @@
 
 > Tips: 如果觉得好用或有使用的建议，欢迎去Github上 [**Start**](https://github.com/zdt1013/ai-git-commiter/stargazers)或 [**Issue**](https://github.com/zdt1013/ai-git-commiter/issues/)。
 
-> 截止此版本（v1.0.48）发布，双插件商店下载量已累计下载超过 **1000+** 次，正式收集2.x版本的需求，欢迎大家去[**Issue**](https://github.com/zdt1013/ai-git-commiter/issues/)提交反馈和需求。
-  <p align="center">
-   <img src="docs/2025120201.png" alt="" width="400">
-   <img src="docs/2025120202.png" alt="" width="335">
-  </p>
+> 截止此版本（v1.0.49）发布，双插件商店下载量已累计下载超过 **2600+** 次，正式收集2.x版本的需求，欢迎大家去[**Issue**](https://github.com/zdt1013/ai-git-commiter/issues/)提交反馈和需求。
 
 ## 🕑 更新历史
+- **v1.0.49**
+  * 修复：声明对 `vscode.git` 扩展的依赖，确保插件激活时 Git 扩展已就绪，解决点击按钮提示"未找到Git仓库"的问题。[Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
+  * 修复：Git API 处于未初始化状态时，等待其就绪后再获取仓库列表，避免在 VS Code 启动初期误报无仓库。[Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
+  * 修复：变更内容中含base64图片导致AI生成报错问题 [Issue #6](https://github.com/zdt1013/ai-git-commiter/issues/6)
+  * 新增：引入输出频道（Output Channel）日志系统，方便问题排查与调试。
+  * 修复：自动识别并移除 git diff 中嵌入的 base64 图片数据，解决含内嵌图片的文件（HTML、Markdown、Jupyter Notebook、源码等）导致变更内容过大而报错的问题。
+
 - **v1.0.48**
   * 新增：增加对Anthropic及兼容服务商的支持。
 
