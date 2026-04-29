@@ -7,6 +7,7 @@ import { AIServiceFactory } from '../ai/ai-service.factory';
 import { ExtensionConfig } from '../types/config';
 import { Repository } from '../types/git';
 import { TextUtils } from '../utils/text-utils';
+import { Logger } from '../utils/logger';
 
 export class CommitCommand {
     constructor(
@@ -17,12 +18,16 @@ export class CommitCommand {
 
     public async execute(args: any): Promise<void> {
         try {
+            Logger.log(`[CommitCommand] execute called, args.rootUri=${args?.rootUri?.fsPath ?? 'undefined'}`);
+
             // 获取当前选中的仓库的Repository对象
             const repository = await GitService.getCurrentRepository(args?.rootUri);
             if (!repository) {
+                Logger.warn('[CommitCommand] No repository resolved → showing error to user');
                 vscode.window.showErrorMessage(GIT_CONSTANTS.ERROR.NO_REPOSITORY);
                 return;
             }
+            Logger.log(`[CommitCommand] Repository resolved: ${repository.rootUri?.fsPath}`);
 
             // 获取配置
             const config = this.configService.getExtensionConfig();
@@ -42,6 +47,7 @@ export class CommitCommand {
                 return Promise.resolve();
             });
         } catch (error: any) {
+            Logger.error('[CommitCommand] Unexpected error in execute', error);
             vscode.window.showErrorMessage(`执行命令时出错: ${error.message}`);
         }
     }

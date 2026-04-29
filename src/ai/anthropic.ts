@@ -4,6 +4,7 @@ import { PromptTemplate } from '../types/types';
 import { CONFIG_CONSTANTS } from '../constants';
 import { IAIService } from './ai-service.interface';
 import { AIModel } from '../types/model';
+import { Logger } from '../utils/logger';
 
 export class AnthropicService implements IAIService {
     private static instance: AnthropicService | null = null;
@@ -76,7 +77,7 @@ export class AnthropicService implements IAIService {
                 }
             }
         } catch (error: any) {
-            console.error('Anthropic API调用失败:', error);
+            Logger.error('Anthropic API调用失败', error);
             throw new Error(`Anthropic API调用失败: ${error.message}`);
         }
     }

@@ -5,6 +5,7 @@ import { CONFIG_CONSTANTS } from '../constants';
 import { IAIService } from './ai-service.interface';
 import { TextUtils } from '../utils/text-utils';
 import { AIModel } from '../types/model';
+import { Logger } from '../utils/logger';
 
 export class GeminiService implements IAIService {
     private static instance: GeminiService | null = null;
@@ -84,7 +85,7 @@ export class GeminiService implements IAIService {
                 yield text;
             }
         } catch (error: any) {
-            console.error('Gemini API调用失败:', error);
+            Logger.error('Gemini API调用失败', error);
             throw new Error(`Gemini API调用失败: ${error.message}`);
         }
     }
