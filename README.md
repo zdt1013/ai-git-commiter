@@ -15,9 +15,16 @@
 
 > Tips: 如果觉得好用或有使用的建议，欢迎去Github上 [**Start**](https://github.com/zdt1013/ai-git-commiter/stargazers)或 [**Issue**](https://github.com/zdt1013/ai-git-commiter/issues/)。
 
-> 截止此版本（v1.0.49）发布，双插件商店下载量已累计下载超过 **2600+** 次，正式收集2.x版本的需求，欢迎大家去[**Issue**](https://github.com/zdt1013/ai-git-commiter/issues/)提交反馈和需求。
+> Tips: 如需 **Pull Request**，请选择合并到dev分支，默认拒绝合并到main分支
+
+> 截止此版本（v1.0.52 **2800+** 次，正式收集2.x版本的需求，欢迎大家去[**Issue**](https://github.com/zdt1013/ai-git-commiter/issues/)提交反馈和需求。
 
 ## 🕑 更新历史
+- **v1.0.52**
+  * 新增：增加了对VLLM自部署推理模型的支持
+  * 新增：配置选项中新增了思考模式参数，支持 standard、legacy 和 vllm 三种思考模式，并优化推理内容检测与日志输出。
+- **v1.0.50/51**
+  * 自动发布错误，导致版本号错误，跳过此版本号，更新内容同v1.0.49
 - **v1.0.49**
   * 修复：声明对 `vscode.git` 扩展的依赖，确保插件激活时 Git 扩展已就绪，解决点击按钮提示"未找到Git仓库"的问题。[Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
   * 修复：Git API 处于未初始化状态时，等待其就绪后再获取仓库列表，避免在 VS Code 启动初期误报无仓库。[Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)

@@ -15,10 +15,16 @@
 
 > Tips: If you find this plugin useful or have suggestions, feel free to give it a [**Start**](https://github.com/zdt1013/ai-git-commiter/stargazers) or open an [**Issue**](https://github.com/zdt1013/ai-git-commiter/issues/) on GitHub.
 
-> As of the release of this version (**v1.0.49**), the cumulative number of downloads of the dual-plugin store has exceeded **2600+**. We are officially collecting requirements for the **2.x version**. You are welcome to submit feedback and requirements in the [Issue](https://github.com/zdt1013/ai-git-commiter/issues/).
+> Tips: If you need to create a **Pull Request**, please choose to merge into the dev branch. Merging into the main branch will be rejected by default.
 
+> As of the release of this version (**v1.0.52**), the cumulative number of downloads of the dual-plugin store has exceeded **2800+**. We are officially collecting requirements for the **2.x version**. You are welcome to submit feedback and requirements in the [Issue](https://github.com/zdt1013/ai-git-commiter/issues/).
 
 ## 🕑 Changelog
+- **v1.0.52**
+  * New: Added support for self-deployed inference models of VLLM.
+  * New: Added thinking mode parameters in configuration options, supporting three thinking modes including standard, legacy and vllm; optimized inference content detection and log output.
+- **v1.0.50/51**
+  * Skipped these version numbers due to incorrect version numbers caused by automatic release errors. The update content is the same as v1.0.49.
 - **v1.0.49**
   * Fix: Declared `vscode.git` as an extension dependency to ensure the Git extension is ready when the plugin activates, resolving the "No Git repository found" error when clicking the button. [Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
   * Fix: Added a wait mechanism for when the Git API is in an uninitialized state, preventing false "no repository" errors during VS Code startup. [Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
