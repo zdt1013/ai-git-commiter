@@ -150,6 +150,7 @@ export const CONFIG_CONSTANTS = {
 
     // 通用配置
     ENABLE_THINKING: 'enable_thinking',
+    THINKING_MODE: 'openai.thinkingMode',
 
     // 提示词配置
     PROMPT: {
@@ -209,6 +210,7 @@ export const CONFIG_CONSTANTS = {
     DEFAULTS: {
         PROVIDER: 'OpenAI',
         ENABLE_THINKING: false,
+        THINKING_MODE: 'disabled' as 'disabled' | 'standard' | 'legacy' | 'vllm',
         OPENAI: {
             BASE_URL: 'https://api.openai.com/v1',
             MODEL: 'gpt-3.5-turbo',
