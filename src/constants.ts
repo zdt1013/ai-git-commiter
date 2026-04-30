@@ -151,6 +151,7 @@ export const CONFIG_CONSTANTS = {
     // 通用配置
     ENABLE_THINKING: 'enable_thinking',
     THINKING_MODE: 'openai.thinkingMode',
+    USER_AGENT: 'userAgent',
 
     // 提示词配置
     PROMPT: {

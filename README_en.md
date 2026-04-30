@@ -23,14 +23,22 @@
 - **v1.0.52**
   * New: Added support for self-deployed inference models of VLLM.
   * New: Added thinking mode parameters in configuration options, supporting three thinking modes including standard, legacy and vllm; optimized inference content detection and log output.
-- **v1.0.50/51**
-  * Skipped these version numbers due to incorrect version numbers caused by automatic release errors. The update content is the same as v1.0.49.
+
+- **v1.0.51**
+  * Skipped these version numbers due to incorrect version numbers caused by automatic release errors. The update content is the same as v1.0.50.
+
+- **v1.0.50**
+  * Added support for custom User-Agent configuration. [PR #9](https://github.com/zdt1013/ai-git-commiter/pull/9)
+
 - **v1.0.49**
   * Fix: Declared `vscode.git` as an extension dependency to ensure the Git extension is ready when the plugin activates, resolving the "No Git repository found" error when clicking the button. [Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
   * Fix: Added a wait mechanism for when the Git API is in an uninitialized state, preventing false "no repository" errors during VS Code startup. [Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
   * Fix: `chat_template_kwargs` and `enable_thinking` fields are now only sent to the API when the user explicitly enables the thinking feature, resolving `400` errors from standard OpenAI and most compatible providers. [Issue #6](https://github.com/zdt1013/ai-git-commiter/issues/6)
   * New: Introduced an Output Channel logging system for easier troubleshooting and debugging.
   * Fix: Automatically detect and strip base64-encoded image data from git diffs, resolving errors caused by oversized diff content in files with embedded images (HTML, Markdown, Jupyter Notebook, source code, etc.).
+
+- **v1.0.48**
+  * Newly added: Added support for Anthropic and compatible service providers.
 
 - **v1.0.47**
   * Fix: Resolve the issue where the "AI-generated Commit Message" command in the command palette fails to correctly recognize the repository under specific scenarios.
