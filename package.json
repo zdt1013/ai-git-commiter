@@ -364,6 +364,19 @@
           "default": "",
           "readonly": true,
           "description": "当前选中的提示词模板内容"
+        },
+        "ai-git-commiter.prompt.enableProjectPerception": {
+          "type": "boolean",
+          "order": 34,
+          "default": false,
+          "description": "是否开启项目信息感知。开启后，生成 Commit 消息时将自动读取项目上下文文档（如 CLAUDE.md）。"
+        },
+        "ai-git-commiter.prompt.projectInfoPath": {
+          "type": "string",
+          "scope": "resource",
+          "order": 35,
+          "default": "",
+          "description": "项目信息感知文档路径。留空时默认自动在项目根目录寻找 CLAUDE.md, .cursorrules 或 project-context.md。如果你的项目使用了其他名称，请在此配置（建议在工作区设置中配置）。支持相对或绝对路径。"
         }
       }
     }

@@ -8,6 +8,8 @@ import { ExtensionConfig } from '../types/config';
 import { Repository } from '../types/git';
 import { TextUtils } from '../utils/text-utils';
 import { Logger } from '../utils/logger';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 
 export class CommitCommand {
     constructor(
@@ -61,6 +63,35 @@ export class CommitCommand {
         }
     }
 
+    private async getProjectInfoContent(repository: Repository, config: ExtensionConfig): Promise<string> {
+        if (!config.prompt.enableProjectPerception || !repository.rootUri) {
+            return '';
+        }
+
+        const infoPath = config.prompt.projectInfoPath;
+        const defaultPaths = ['CLAUDE.md', '.cursorrules', 'project-context.md'];
+        const pathsToCheck = infoPath ? [infoPath] : defaultPaths;
+
+        for (const p of pathsToCheck) {
+            try {
+                const fullPath = path.isAbsolute(p) 
+                    ? p 
+                    : path.join(repository.rootUri.fsPath, p);
+                
+                const content = await fs.readFile(fullPath, 'utf-8');
+                if (content.trim()) {
+                    Logger.log(`[CommitCommand] Successfully loaded project info from ${p}`);
+                    return content.trim();
+                }
+            } catch (error) {
+                // Ignore errors for missing files and continue trying
+                continue;
+            }
+        }
+        
+        return '';
+    }
+
     /**
      * 处理大量变更的情况
      * @param repository - 仓库对象，包含仓库相关信息
@@ -92,11 +123,15 @@ export class CommitCommand {
 
         // 获取当前选定的提示模板
         const promptTemplate = this.promptService.getSelectedPrompt();
+        
+        // 获取项目信息感知文档内容
+        const projectInfo = await this.getProjectInfoContent(repository, config);
+        
         // 获取AI服务实例
         const aiService = AIServiceFactory.getAIService();
         try {
             // 使用AI服务优化提交信息，以流式方式处理
-            const stream = aiService.polishCommitMessage(message, config.language, promptTemplate);
+            const stream = aiService.polishCommitMessage(message, config.language, promptTemplate, projectInfo);
             let aggregated = ''; // 用于累积流式数据的变量
             // 遍历流式数据，实时更新输入框内容
             for await (const chunk of stream) {
@@ -141,12 +176,16 @@ export class CommitCommand {
             return;
         }
 
-        // 获取选定的提示模板和AI服务实例
+        // 获取选定的提示模板
         const promptTemplate = this.promptService.getSelectedPrompt();
+        
+        // 获取项目信息感知文档内容
+        const projectInfo = await this.getProjectInfoContent(repository, config);
+        
         const aiService = AIServiceFactory.getAIService();
         try {
             // 生成提交信息的流式处理
-            const stream = aiService.generateCommitMessage(diff, config.language, promptTemplate);
+            const stream = aiService.generateCommitMessage(diff, config.language, promptTemplate, projectInfo);
             let aggregated = '';
             // 逐步处理流式数据并更新输入框内容
             for await (const chunk of stream) {

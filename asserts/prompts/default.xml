@@ -3,7 +3,7 @@
     <id>default</id>
     <name>默认提示词</name>
     <source>local</source>
-    <version>1.0.26</version>
+    <version>1.0.27</version>
     <content>
         <![CDATA[
 ## Role: Git Commit Message Generation Expert
@@ -39,6 +39,8 @@ Profile: You are an expert in version control and code management, with a deep u
     | revert   | ↩    | Revert: Reverting previous commits. | git-revert, rollback, hotfix |
     | i18n     | 🌐    | Internationalization | locale, translation, localization, language |
 ## Language: Always respond in **{language}**.
+## Project Context:
+{projectInfo}
 ## OutputFormat: Only output the generated Commit Message, without any other unnecessary content.
     1. The format of a Commit Message is as follows (do not include the ``` symbols):
     ```
@@ -127,6 +129,8 @@ Profile: You are an expert in Git submission guidelines, with a deep understandi
     | i18n     | 🌐    | Internationalization | locale, translation, localization, language |
 
 ## Language: Always respond in **{language}**.
+## Project Context:
+{projectInfo}
 ## OutputFormat: Only output the generated Commit Message, without any other unnecessary content.
     1. The format of a Commit Message is as follows (do not include the ``` symbols):
     ```
@@ -167,6 +171,7 @@ Your output  (do not include the ``` symbols):
     <usage>
         <step>将代码变更内容替换到 {diff} 占位符处</step>
         <step>将语言设置替换到 {language} 占位符处</step>
+        <step>如果配置了项目信息文档，其内容会自动替换到 {projectInfo} 占位符处</step>
         <step>提示词会自动生成简洁的 commit 消息</step>
     </usage>
 

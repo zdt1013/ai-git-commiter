@@ -52,5 +52,7 @@ export interface ExtensionConfig {
     prompt: {
         selectedTemplatePrompt: string;
         selectedPromptTemplateId: string;
+        enableProjectPerception: boolean;
+        projectInfoPath: string;
     };
 } 

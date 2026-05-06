@@ -90,19 +90,39 @@ export class GeminiService implements IAIService {
         }
     }
 
-    generateCommitMessage(diff: string, language: string, promptTemplate: PromptTemplate): AsyncGenerator<string> {
+    generateCommitMessage(diff: string, language: string, promptTemplate: PromptTemplate, projectInfo?: string): AsyncGenerator<string> {
         // 构建提示词：替换模板中的占位符
         let prompt = promptTemplate.content
             .replace('{diff}', diff)
             .replaceAll('{language}', language);
 
+        if (projectInfo) {
+            if (prompt.includes('{projectInfo}')) {
+                prompt = prompt.replaceAll('{projectInfo}', projectInfo);
+            } else {
+                prompt += `\n\n【项目基础信息】\n${projectInfo}`;
+            }
+        } else {
+            prompt = prompt.replaceAll('{projectInfo}', '');
+        }
+
         return this.callGemini(prompt, promptTemplate);
     }
 
-    polishCommitMessage(message: string, language: string, promptTemplate: PromptTemplate): AsyncGenerator<string> {
+    polishCommitMessage(message: string, language: string, promptTemplate: PromptTemplate, projectInfo?: string): AsyncGenerator<string> {
         let prompt = promptTemplate.polishContent
             .replace('{diff}', message)
             .replaceAll('{language}', language);
+
+        if (projectInfo) {
+            if (prompt.includes('{projectInfo}')) {
+                prompt = prompt.replaceAll('{projectInfo}', projectInfo);
+            } else {
+                prompt += `\n\n【项目基础信息】\n${projectInfo}`;
+            }
+        } else {
+            prompt = prompt.replaceAll('{projectInfo}', '');
+        }
 
         return this.callGemini(prompt, promptTemplate);
     }

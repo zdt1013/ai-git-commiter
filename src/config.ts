@@ -88,6 +88,8 @@ export class ConfigService {
             prompt: {
                 selectedTemplatePrompt: config.get<string>(CONFIG_CONSTANTS.PROMPT.SELECTED_TEMPLATE_PROMPT) || '',
                 selectedPromptTemplateId: config.get<string>(CONFIG_CONSTANTS.PROMPT.SELECTED_PROMPT_TEMPLATE_ID) || '',
+                enableProjectPerception: config.get<boolean>(CONFIG_CONSTANTS.PROMPT.ENABLE_PROJECT_PERCEPTION) ?? false,
+                projectInfoPath: config.get<string>(CONFIG_CONSTANTS.PROMPT.PROJECT_INFO_PATH) || '',
             }
         };
     }

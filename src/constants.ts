@@ -146,7 +146,9 @@ export const CONFIG_CONSTANTS = {
     // 提示词配置
     PROMPT: {
         SELECTED_TEMPLATE_PROMPT: 'prompt.selectedTemplatePrompt',
-        SELECTED_PROMPT_TEMPLATE_ID: 'prompt.selectedPromptTemplateId'
+        SELECTED_PROMPT_TEMPLATE_ID: 'prompt.selectedPromptTemplateId',
+        ENABLE_PROJECT_PERCEPTION: 'prompt.enableProjectPerception',
+        PROJECT_INFO_PATH: 'prompt.projectInfoPath'
     },
 
     // Git配置
