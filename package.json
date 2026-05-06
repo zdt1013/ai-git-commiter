@@ -388,6 +388,8 @@
     "package-dev": "vite build --mode development",
     "package-latest": "vite build --mode production-latest",
     "lint": "eslint src --ext ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "vscode:package": "pnpm run package && vsce package --no-dependencies",
     "vscode:package-dev": "pnpm run package-dev && vsce package --no-dependencies --out ai-git-commiter-dev.vsix",
     "vscode:package-latest": "pnpm run package-latest && vsce package --no-dependencies --out ai-git-commiter-latest.vsix"
@@ -405,7 +407,8 @@
     "mocha": "^10.3.0",
     "terser": "^5.39.0",
     "typescript": "^5.4.2",
-    "vite": "^6.2.5"
+    "vite": "^6.2.5",
+    "vitest": "^4.1.5"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",

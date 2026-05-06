@@ -17,7 +17,7 @@ export class TextUtils {
         // 去除首尾的```符号，如果有的话
         const lines = result.split('\n');
         if (lines.length > 0) {
-            if (lines[0].trim() === '```') {
+            if (lines[0].trim().startsWith('```')) {
                 lines.shift();
             }
             if (lines.length > 0 && lines[lines.length - 1].trim() === '```') {
