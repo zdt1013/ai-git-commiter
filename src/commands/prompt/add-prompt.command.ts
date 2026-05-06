@@ -42,32 +42,12 @@ export class AddPromptCommand extends BasePromptCommand {
 
             if (!polishContent) return;
 
-            // 获取用户输入的偏好语言
-            const languagesInput = await vscode.window.showInputBox({
-                prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LANGUAGES.PROMPT,
-                placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LANGUAGES.PLACEHOLDER,
-                ignoreFocusOut: true
-            });
-
-            // 获取用户输入的偏好库
-            const librariesInput = await vscode.window.showInputBox({
-                prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LIBRARIES.PROMPT,
-                placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LIBRARIES.PLACEHOLDER,
-                ignoreFocusOut: true
-            });
-
-            // 处理语言和库的输入
-            const languages = languagesInput ? languagesInput.split(',').map(lang => lang.trim()) : [];
-            const libraries = librariesInput ? librariesInput.split(',').map(lib => lib.trim()) : [];
-
             // 创建新提示词并保存
             const newPrompt = {
                 id: uuidv4(),
                 name,
                 content,
                 polishContent,
-                preferredLanguages: languages,
-                preferredLibraries: libraries,
                 source: 'local'
             };
 

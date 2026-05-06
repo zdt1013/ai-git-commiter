@@ -51,34 +51,12 @@ export class EditPromptCommand extends BasePromptCommand {
 
             if (!polishContent) return;
 
-            // 获取修改后的偏好语言
-            const languagesInput = await vscode.window.showInputBox({
-                prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LANGUAGES.PROMPT,
-                value: selected.preferredLanguages?.join(', ') || '',
-                placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LANGUAGES.PLACEHOLDER,
-                ignoreFocusOut: true
-            });
-
-            // 获取修改后的偏好库
-            const librariesInput = await vscode.window.showInputBox({
-                prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LIBRARIES.PROMPT,
-                value: selected.preferredLibraries?.join(', ') || '',
-                placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.PREFERRED_LIBRARIES.PLACEHOLDER,
-                ignoreFocusOut: true
-            });
-
-            // 处理语言和库的输入
-            const preferredLanguages = languagesInput ? languagesInput.split(',').map(lang => lang.trim()) : [];
-            const preferredLibraries = librariesInput ? librariesInput.split(',').map(lib => lib.trim()) : [];
-
             // 更新提示词并保存
             const updatedPrompt = {
                 ...selected,
                 name,
                 content,
-                polishContent,
-                preferredLanguages,
-                preferredLibraries
+                polishContent
             };
 
             this.promptService.updatePrompt(updatedPrompt);

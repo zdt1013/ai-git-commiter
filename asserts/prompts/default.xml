@@ -169,20 +169,5 @@ Your output  (do not include the ``` symbols):
         <step>将语言设置替换到 {language} 占位符处</step>
         <step>提示词会自动生成简洁的 commit 消息</step>
     </usage>
-    <preferredLanguagePrompt>The preferred programming language for this project is: {preferredLanguages}</preferredLanguagePrompt>
-    <preferredLibraryPrompt>The project uses the following third-party libraries: {preferredLibraries}</preferredLibraryPrompt>
-    <preferredLanguages>
-        <language>typescript</language>
-        <language>javascript</language>
-        <language>python</language>
-        <language>java</language>
-        <language>go</language>
-    </preferredLanguages>
-    <preferredLibraries>
-        <library>react</library>
-        <library>vue</library>
-        <library>angular</library>
-        <library>express</library>
-        <library>django</library>
-    </preferredLibraries>
+
 </prompt> 

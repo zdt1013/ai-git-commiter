@@ -35,14 +35,6 @@ export const PROMPT_CONSTANTS = {
                 PROMPT: '输入润色提示词内容 (使用 {diff} 作为原始消息的占位符)',
                 PLACEHOLDER: '例如：请根据以下原始消息生成一个更规范的commit消息：\n\n{diff}'
             },
-            PREFERRED_LANGUAGES: {
-                PROMPT: '输入偏好编程语言（多个语言用逗号分隔）',
-                PLACEHOLDER: '例如：TypeScript, JavaScript, Python'
-            },
-            PREFERRED_LIBRARIES: {
-                PROMPT: '输入偏好三方库（多个库用逗号分隔）',
-                PLACEHOLDER: '例如：React, Vue, Express'
-            },
             REMOTE_URL: {
                 PROMPT: '输入远程提示词列表地址',
                 PLACEHOLDER: 'https://example.com/prompts.json'
@@ -82,8 +74,6 @@ export const PROMPT_CONSTANTS = {
 
     // 标签显示
     TAGS: {
-        LANGUAGES: (languages: string[]) => `偏好编程语言: ${languages.join(', ')}`,
-        LIBRARIES: (libraries: string[]) => `偏好三方库: ${libraries.join(', ')}`,
         SOURCE: (source: string) => `来源: ${source}`,
         VERSION: (version: string) => `版本: ${version}`,
     }
@@ -156,11 +146,7 @@ export const CONFIG_CONSTANTS = {
     // 提示词配置
     PROMPT: {
         SELECTED_TEMPLATE_PROMPT: 'prompt.selectedTemplatePrompt',
-        SELECTED_PROMPT_TEMPLATE_ID: 'prompt.selectedPromptTemplateId',
-        LIBRARY_AWARENESS: 'prompt.libraryAwareness',
-        LANGUAGE_AWARENESS: 'prompt.languageAwareness',
-        ENABLE_LANGUAGE_AWARENESS: 'prompt.enableLanguageAwareness',
-        ENABLE_LIBRARY_AWARENESS: 'prompt.enableLibraryAwareness'
+        SELECTED_PROMPT_TEMPLATE_ID: 'prompt.selectedPromptTemplateId'
     },
 
     // Git配置

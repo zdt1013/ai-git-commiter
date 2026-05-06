@@ -100,10 +100,6 @@ export class PromptService {
                 polishContent: prompt.polishContent[0].trim(),  // 润色提示词内容(去除首尾空格)
                 source: prompt.source?.[0] || 'local',  // 来源(默认为本地)
                 description: prompt.description?.[0],  // 描述信息(可选)
-                preferredLanguages: prompt.preferredLanguages?.[0]?.language || [],  // 偏好语言列表
-                preferredLibraries: prompt.preferredLibraries?.[0]?.library || [],  // 偏好库列表
-                preferredLanguagePrompt: prompt.preferredLanguagePrompt?.[0],  // 语言相关提示(可选)
-                preferredLibraryPrompt: prompt.preferredLibraryPrompt?.[0],  // 库相关提示(可选)
                 version: prompt.version?.[0]  // 版本号(可选)
             };
         } catch (error) {
@@ -311,8 +307,6 @@ export class PromptService {
         const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
         await config.update(CONFIG_CONSTANTS.PROMPT.SELECTED_PROMPT_TEMPLATE_ID, prompt.id, true);
         await config.update(CONFIG_CONSTANTS.PROMPT.SELECTED_TEMPLATE_PROMPT, prompt.content, true);
-        await config.update(CONFIG_CONSTANTS.PROMPT.LANGUAGE_AWARENESS, prompt.preferredLanguages?.join(', ') || '', true);
-        await config.update(CONFIG_CONSTANTS.PROMPT.LIBRARY_AWARENESS, prompt.preferredLibraries?.join(', ') || '', true);
     }
 
     public addPrompt(prompt: PromptTemplate): void {

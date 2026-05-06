@@ -13,10 +13,6 @@ export interface XmlPrompt {
     polishContent: string[];
     source?: string[];
     description?: string[];
-    preferredLanguages?: Array<{ language: string[] }>;
-    preferredLibraries?: Array<{ library: string[] }>;
-    preferredLanguagePrompt?: string[];
-    preferredLibraryPrompt?: string[];
     version?: string[];
 }
 
@@ -27,10 +23,6 @@ export interface PromptTemplate {
     polishContent: string;
     source?: string;
     description?: string;
-    preferredLanguages?: string[];
-    preferredLibraries?: string[];
-    preferredLanguagePrompt?: string;
-    preferredLibraryPrompt?: string;
     url?: string;
     version?: string;
 } 

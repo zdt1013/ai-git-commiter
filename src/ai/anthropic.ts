@@ -87,24 +87,6 @@ export class AnthropicService implements IAIService {
             .replace('{diff}', diff)
             .replaceAll('{language}', language);
 
-        const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
-        const enableLanguageAwareness = config.get<boolean>(CONFIG_CONSTANTS.PROMPT.ENABLE_LANGUAGE_AWARENESS) ?? true;
-        const enableLibraryAwareness = config.get<boolean>(CONFIG_CONSTANTS.PROMPT.ENABLE_LIBRARY_AWARENESS) ?? true;
-
-        if (enableLanguageAwareness && promptTemplate.preferredLanguages?.length) {
-            const prefix = promptTemplate.preferredLanguagePrompt || '项目主要使用的编程语言：';
-            prompt = prompt.replace('{preferredLanguages}', `\n${prefix}${promptTemplate.preferredLanguages.join(', ')}`);
-        } else {
-            prompt = prompt.replace('{preferredLanguages}', '');
-        }
-
-        if (enableLibraryAwareness && promptTemplate.preferredLibraries?.length) {
-            const prefix = promptTemplate.preferredLibraryPrompt || '项目主要使用的三方库：';
-            prompt = prompt.replace('{preferredLibraries}', `\n${prefix}${promptTemplate.preferredLibraries.join(', ')}`);
-        } else {
-            prompt = prompt.replace('{preferredLibraries}', '');
-        }
-
         return this.callAnthropic(prompt, promptTemplate);
     }
 

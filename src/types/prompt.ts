@@ -3,7 +3,5 @@ export interface Prompt {
     name: string;
     content: string;
     polishContent: string;
-    preferredLanguages?: string[];
-    preferredLibraries?: string[];
     source: 'default' | 'local' | 'remote';
 } 

@@ -170,27 +170,6 @@ export class OpenAIService implements IAIService {
             .replace('{diff}', diff)
             .replaceAll('{language}', language);
 
-        // 从配置中获取是否启用语言和库感知
-        const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
-        const enableLanguageAwareness = config.get<boolean>(CONFIG_CONSTANTS.PROMPT.ENABLE_LANGUAGE_AWARENESS) ?? true;
-        const enableLibraryAwareness = config.get<boolean>(CONFIG_CONSTANTS.PROMPT.ENABLE_LIBRARY_AWARENESS) ?? true;
-
-        // 如果启用了语言感知且有首选语言，添加到提示词中
-        if (enableLanguageAwareness && promptTemplate.preferredLanguages?.length) {
-            const prefix = promptTemplate.preferredLanguagePrompt || '项目主要使用的编程语言：';
-            prompt = prompt.replace('{preferredLanguages}', `\n${prefix}${promptTemplate.preferredLanguages.join(', ')}`);
-        } else {
-            prompt = prompt.replace('{preferredLanguages}', '');
-        }
-
-        // 如果启用了库感知且有首选库，添加到提示词中
-        if (enableLibraryAwareness && promptTemplate.preferredLibraries?.length) {
-            const prefix = promptTemplate.preferredLibraryPrompt || '项目主要使用的三方库：';
-            prompt = prompt.replace('{preferredLibraries}', `\n${prefix}${promptTemplate.preferredLibraries.join(', ')}`);
-        } else {
-            prompt = prompt.replace('{preferredLibraries}', '');
-        }
-
         return this.callOpenAI(prompt, promptTemplate);
     }
 
