@@ -94,3 +94,4 @@ npx vite build --mode production && npx vsce package --no-dependencies
 - Vite 构建已有 `simple-git` 的兼容性问题（node:path externalize），这是已知问题
 - `@anthropic-ai/sdk` 和 `openai` 的 `ClientOptions` 类型在当前版本有已知类型错误，不影响运行
 - 编辑模板时临时文件存在 `globalStorage/.tmp/`，扩展激活时自动清理残留
+- package.json 中的 版本号不需要手动维护，每次打包后会自动更新
