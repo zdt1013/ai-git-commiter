@@ -1,13 +1,11 @@
-import { OpenAI } from 'openai';
+import { OpenAI, ClientOptions } from 'openai';
 import * as vscode from 'vscode';
 import { PromptTemplate } from '../types/types';
 import { CONFIG_CONSTANTS } from '../constants';
 import { IAIService } from './ai-service.interface';
-import { TextUtils } from '../utils/text-utils';
 import { AIModel } from '../types/model';
 import { ChatCompletionChunk, ChatCompletionCreateParamsStreaming } from 'openai/resources/chat/completions';
 import { Stream } from 'openai/streaming';
-import { ConfigService } from '../config';
 import { Logger } from '../utils/logger';
 
 
@@ -41,7 +39,7 @@ export class OpenAIService implements IAIService {
             }
 
             const userAgent = config.get<string>(CONFIG_CONSTANTS.USER_AGENT) || '';
-            const clientConfig: OpenAI.ClientOptions = {
+            const clientConfig: ClientOptions = {
                 apiKey: apiKey,
                 baseURL: baseUrl
             };

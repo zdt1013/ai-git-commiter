@@ -1,4 +1,4 @@
-import Anthropic from '@anthropic-ai/sdk';
+import Anthropic, { ClientOptions } from '@anthropic-ai/sdk';
 import * as vscode from 'vscode';
 import { PromptTemplate } from '../types/types';
 import { CONFIG_CONSTANTS } from '../constants';
@@ -35,7 +35,7 @@ export class AnthropicService implements IAIService {
             }
 
             const userAgent = config.get<string>(CONFIG_CONSTANTS.USER_AGENT) || '';
-            const clientConfig: Anthropic.ClientOptions = {
+            const clientConfig: ClientOptions = {
                 apiKey: apiKey,
                 baseURL: baseUrl
             };
