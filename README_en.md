@@ -17,9 +17,12 @@
 
 > Tips: If you need to create a **Pull Request**, please choose to merge into the dev branch. Merging into the main branch will be rejected by default.
 
-> As of the release of this version (**v1.0.52**), the cumulative number of downloads of the dual-plugin store has exceeded **2800+**. We are officially collecting requirements for the **2.x version**. You are welcome to submit feedback and requirements in the [Issue](https://github.com/zdt1013/ai-git-commiter/issues/).
+> As of the release of this version (**v1.0.53**), the cumulative number of downloads of the dual-plugin store has exceeded **3200+**. We are officially collecting requirements for the **2.x version**. You are welcome to submit feedback and requirements in the [Issue](https://github.com/zdt1013/ai-git-commiter/issues/).
 
 ## 🕑 Changelog
+- **v1.0.53**
+  * New: Optimized project awareness configuration, supporting automatic awareness of AI programming documents such as CLAUDE.md. （Thanks to Xiaomi [MiMo Orbit Plan](https://100t.xiaomimimo.com) for providing Free Token support）
+  
 - **v1.0.52**
   * New: Added support for self-deployed inference models of VLLM.
   * New: Added thinking mode parameters in configuration options, supporting three thinking modes including standard, legacy and vllm; optimized inference content detection and log output.
