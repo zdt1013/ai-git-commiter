@@ -316,13 +316,13 @@
         "ai-git-commiter.git-diff.wordDiff": {
           "type": "boolean",
           "order": 26,
-          "default": true,
+          "default": false,
           "description": "显示单词级别的变更（而非整行），减少冗余内容"
         },
         "ai-git-commiter.git-diff.unified": {
           "type": "number",
           "order": 27,
-          "default": 0,
+          "default": 10,
           "minimum": 0,
           "description": "去除上下文行，仅保留实际变更"
         },
