@@ -23,6 +23,7 @@ export class CommitCommand {
             Logger.log(`[CommitCommand] execute called, args.rootUri=${args?.rootUri?.fsPath ?? 'undefined'}`);
 
             // 获取当前选中的仓库的Repository对象
+            // Get Repository object of currently selected repo
             const repository = await GitService.getCurrentRepository(args?.rootUri);
             if (!repository) {
                 Logger.warn('[CommitCommand] No repository resolved → showing error to user');
@@ -31,15 +32,16 @@ export class CommitCommand {
             }
             Logger.log(`[CommitCommand] Repository resolved: ${repository.rootUri?.fsPath}`);
 
-            // 获取配置
+            // 获取Configure
             const config = this.configService.getExtensionConfig();
 
-            // 检查AI配置是否完整
+            // 检查AIConfigure是否完整
             if (!(await this.configService.checkAIConfig(config, config.provider))) {
                 return;
             }
 
             // 显示加载中提示
+            // Show loading indicator
             await vscode.window.withProgress({
                 location: vscode.ProgressLocation.SourceControl,
                 title: AI_CONSTANTS.PROGRESS.TITLE,
@@ -50,12 +52,13 @@ export class CommitCommand {
             });
         } catch (error: any) {
             Logger.error('[CommitCommand] Unexpected error in execute', error);
-            vscode.window.showErrorMessage(`执行命令时出错: ${error.message}`);
+            vscode.window.showErrorMessage(vscode.l10n.t("Error executing command: {0}", error.message));
         }
     }
 
     private async handleCommitMessageGeneration(repository: Repository, config: ExtensionConfig): Promise<void> {
         // 检查变更行数
+        // Check changed lines count
         if (await GitService.checkChangesLimit(repository, config.git.diff.maxChanges, config.git.diff.area, config.git.diff.diffFilter)) {
             await this.handleLargeChanges(repository, config);
         } else {
@@ -95,55 +98,72 @@ export class CommitCommand {
     /**
      * 处理大量变更的情况
      * @param repository - 仓库对象，包含仓库相关信息
-     * @param config - 扩展配置对象，包含各种配置参数
+     * @param config - 扩展Configure对象，包含各种Configure参数
      */
     private async handleLargeChanges(repository: Repository, config: ExtensionConfig): Promise<void> {
         // 显示警告消息，提示变更数量过多，并提供手动输入按钮
+        // Show warning message for too many changes, provide manual input button
         const confirmResult = await vscode.window.showWarningMessage(
-            GIT_CONSTANTS.ERROR.TOO_MANY_CHANGES(config.git.diff.maxChanges), // 使用配置中的最大变更数生成错误消息
+            GIT_CONSTANTS.ERROR.TOO_MANY_CHANGES(config.git.diff.maxChanges), // 使用Configure中的最大变更数生成错误消息
             { modal: true }, // 设置为模态对话框
+ // Set as modal dialog
             GIT_CONSTANTS.BUTTONS.MANUAL_INPUT, // 提供手动输入按钮选项
+ // Provide manual input button option
         );
 
         // 如果用户没有点击手动输入按钮，则直接返回
+        // Return directly if user didn't click manual input button
         if (confirmResult !== GIT_CONSTANTS.BUTTONS.MANUAL_INPUT) {
             return;
         }
 
         // 显示输入框，让用户输入提交信息
+        // Show input box for user to enter commit message
         const message = await vscode.window.showInputBox({
             placeHolder: GIT_CONSTANTS.INPUT.COMMIT_MESSAGE_PLACEHOLDER, // 输入框占位符文本
+ // Input box placeholder text
             prompt: GIT_CONSTANTS.WARNING.MANUAL_INPUT // 输入框提示文本
+ // Input box prompt text
         });
 
         // 如果用户没有输入消息，则直接返回
+        // Return directly if user didn't input message
         if (!message) {
             return;
         }
 
         // 获取当前选定的提示模板
+        // Get currently selected prompt template
         const promptTemplate = this.promptService.getSelectedPrompt();
         
         // 获取项目信息感知文档内容
+        // Get project context document content
         const projectInfo = await this.getProjectInfoContent(repository, config);
         
         // 获取AI服务实例
+        // Get AI service instance
         const aiService = AIServiceFactory.getAIService();
         try {
             // 使用AI服务优化提交信息，以流式方式处理
+            // Use AI service to polish commit message via streaming
             const stream = aiService.polishCommitMessage(message, config.language, promptTemplate, projectInfo);
             let aggregated = ''; // 用于累积流式数据的变量
+ // Variable to accumulate streaming data
             // 遍历流式数据，实时更新输入框内容
+            // Iterate stream data, update input box in real-time
             for await (const chunk of stream) {
                 aggregated += chunk;
                 repository.inputBox.value = aggregated;
             }
             // 移除代码块标记符并更新输入框的最终内容
+            // Remove code block markers and update final input box content
             repository.inputBox.value = TextUtils.removeCodeBlockMarkers(aggregated.trim());
             // 显示成功消息
+            // Show success message
             vscode.window.showInformationMessage(AI_CONSTANTS.SUCCESS.POLISH);
         } catch (error: any) {
             // 显示错误消息，使用错误对象的message属性或默认错误消息
+            // Show error message using error object's message property or default message
             vscode.window.showErrorMessage(error?.message || AI_CONSTANTS.ERROR.POLISH);
         }
     }
@@ -151,52 +171,66 @@ export class CommitCommand {
     /**
      * 处理普通变更情况，生成提交信息
      * @param repository - 仓库对象，包含仓库相关信息
-     * @param config - 扩展配置对象，包含各种设置选项
+     * @param config - 扩展Configure对象，包含各种设置选项
      */
     private async handleNormalChanges(repository: Repository, config: ExtensionConfig): Promise<void> {
         // 检查仓库是否存在根目录URI，如果不存在则显示错误信息并返回
+        // Check if repo has root URI, if not show error and return
         if (!repository.rootUri) {
             vscode.window.showErrorMessage(GIT_CONSTANTS.ERROR.NO_REPOSITORY);
             return;
         }
 
-        // 获取Git差异信息，使用配置中的各种diff选项
+        // 获取Git差异信息，使用Configure中的各种diff选项
         const diff = await GitService.getDiff(repository.rootUri.fsPath, {
             wordDiff: config.git.diff.wordDiff,       // 是否启用词级差异
+       // Whether to enable word-level diff
             unified: config.git.diff.unified,         // 统一差异格式的上下文行数
+         // Unified diff context lines count
             noColor: config.git.diff.noColor,         // 是否禁用颜色输出
+         // Whether to disable color output
             diffFilter: config.git.diff.diffFilter,   // 差异过滤器，指定显示哪些类型的变更
+   // Diff filter, specify which types of changes to show
             filterMeta: config.git.diff.filterMeta,   // 过滤元数据
+   // Filter meta data
             area: config.git.diff.area                 // 指定差异区域
+                 // Specify diff area
         });
 
         // 如果没有检测到任何变更，显示提示信息并返回
+        // Show info message and return if no changes detected
         if (!diff) {
             vscode.window.showInformationMessage(GIT_CONSTANTS.ERROR.NO_CHANGES, { modal: true });
             return;
         }
 
         // 获取选定的提示模板
+        // Get selected prompt template
         const promptTemplate = this.promptService.getSelectedPrompt();
         
         // 获取项目信息感知文档内容
+        // Get project context document content
         const projectInfo = await this.getProjectInfoContent(repository, config);
         
         const aiService = AIServiceFactory.getAIService();
         try {
             // 生成提交信息的流式处理
+            // Streaming generation of commit message
             const stream = aiService.generateCommitMessage(diff, config.language, promptTemplate, projectInfo);
             let aggregated = '';
             // 逐步处理流式数据并更新输入框内容
+            // Process stream data progressively and update input box
             for await (const chunk of stream) {
                 aggregated += chunk;
                 repository.inputBox.value = aggregated;
             }
             // 移除代码块标记并更新最终输入框内容，显示成功信息
+            // Remove code block markers and update final input box, show success info
             repository.inputBox.value = TextUtils.removeCodeBlockMarkers(aggregated.trim());
             vscode.window.showInformationMessage(AI_CONSTANTS.SUCCESS.GENERATE);
         } catch (error: any) {
             // 处理生成过程中可能出现的错误
+            // Handle potential errors during generation process
             vscode.window.showErrorMessage(error?.message || AI_CONSTANTS.ERROR.GENERATE);
         }
     }

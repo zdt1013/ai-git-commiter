@@ -95,3 +95,11 @@ npx vite build --mode production && npx vsce package --no-dependencies
 - `@anthropic-ai/sdk` 和 `openai` 的 `ClientOptions` 类型在当前版本有已知类型错误，不影响运行
 - 编辑模板时临时文件存在 `globalStorage/.tmp/`，扩展激活时自动清理残留
 - package.json 中的 版本号不需要手动维护，每次打包后会自动更新
+
+## 本地化 (Localization) 规则
+
+为保证亚洲用户的体验以及多语言支持，AI 在修改或生成代码时请遵守以下规则：
+1. **优先使用简单易懂的英语**作为基础文本。
+2. 源代码中的所有向用户展示的文本（如日志、UI 提示、错误信息等）必须使用 `vscode.l10n.t("Simple English Text")` 进行包裹。
+3. 当新增或修改带有 `vscode.l10n.t()` 的字符串时，请务必同步更新 `l10n/bundle.l10n.zh-cn.json` 中的中文翻译，以保持完整的中文支持。
+4. 当修改或新增 `package.json` 中的配置项（命令、设置项等）时，务必使用 `%key%` 作为占位符，并在 `package.nls.json`（英文）和 `package.nls.zh-cn.json`（中文）中分别提供翻译。

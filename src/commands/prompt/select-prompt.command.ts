@@ -6,15 +6,17 @@ export class SelectPromptCommand extends BasePromptCommand {
     public async execute(): Promise<void> {
         try {
             // 让用户选择要使用的提示词
+            // Let user select prompt to use
             const selected = await this.selectPrompt(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.SELECT.USE);
             if (!selected) return;
 
             // 更新设置项为选中的提示词
+            // Update setting item to selected prompt
             await this.promptService.updateSelectedPrompt(selected);
 
             vscode.window.showInformationMessage(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.SUCCESS.USE(selected.name));
         } catch (error: any) {
-            vscode.window.showErrorMessage(`选择提示词时出错: ${error.message}`);
+            vscode.window.showErrorMessage(vscode.l10n.t("Error selecting prompt: {0}", error.message));
         }
     }
 } 

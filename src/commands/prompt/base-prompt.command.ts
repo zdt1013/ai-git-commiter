@@ -11,8 +11,8 @@ export abstract class BasePromptCommand {
     protected async selectPrompt(placeHolder: string) {
         const items = this.promptService.getPrompts().map(prompt => ({
             label: prompt.name,
-            description: prompt.source === 'default' ? '默认提示词' : '自定义提示词',
-            detail: `版本号: ${prompt.version || '无'}`,
+            description: prompt.source === 'default' ? vscode.l10n.t("Default prompt") : vscode.l10n.t("Custom prompt"),
+            detail: `版本号: ${prompt.version || vscode.l10n.t("None")}`,
             prompt
         }));
 

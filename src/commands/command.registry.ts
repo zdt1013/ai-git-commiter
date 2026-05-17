@@ -21,6 +21,7 @@ export class CommandRegistry {
 
     public registerCommands(): void {
         // 注册生成提交消息命令
+        // Register generate commit message command
         const commitCommand = new CommitCommand(
             this.context,
             this.promptService,
@@ -33,6 +34,7 @@ export class CommandRegistry {
         );
 
         // 注册切换AI模型命令
+        // Register switch AI model command
         const switchModelCommand = new SwitchModelCommand(
             this.context,
             this.configService
@@ -44,6 +46,7 @@ export class CommandRegistry {
         );
 
         // 注册添加提示词命令
+        // Register add prompt command
         const addPromptCommand = new AddPromptCommand(
             this.context,
             this.promptService
@@ -55,6 +58,7 @@ export class CommandRegistry {
         );
 
         // 注册编辑提示词命令
+        // Register edit prompt command
         const editPromptCommand = new EditPromptCommand(
             this.context,
             this.promptService
@@ -66,6 +70,7 @@ export class CommandRegistry {
         );
 
         // 注册删除提示词命令
+        // Register delete prompt command
         const deletePromptCommand = new DeletePromptCommand(
             this.context,
             this.promptService
@@ -77,6 +82,7 @@ export class CommandRegistry {
         );
 
         // 注册选择提示词命令
+        // Register select prompt command
         const selectPromptCommand = new SelectPromptCommand(
             this.context,
             this.promptService
@@ -88,6 +94,7 @@ export class CommandRegistry {
         );
 
         // 注册下载提示词命令
+        // Register download prompt command
         const downloadPromptCommand = new DownloadPromptCommand(
             this.context,
             this.promptService
@@ -99,6 +106,7 @@ export class CommandRegistry {
         );
 
         // 注册手动润色命令
+        // Register manual polish command
         const manualPolishCommand = new ManualPolishCommand(
             this.context,
             this.promptService,
@@ -111,6 +119,7 @@ export class CommandRegistry {
         );
 
         // 注册打开设置命令
+        // Register open settings command
         const openSettingsCommand = new OpenSettingsCommand(
             this.context
         );
@@ -121,6 +130,7 @@ export class CommandRegistry {
         );
 
         // 将命令添加到订阅列表
+        // Add command to subscriptions
         this.context.subscriptions.push(
             commitDisposable,
             switchModelDisposable,

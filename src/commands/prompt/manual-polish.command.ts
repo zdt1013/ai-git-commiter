@@ -18,24 +18,26 @@ export class ManualPolishCommand extends BasePromptCommand {
     public async execute(): Promise<void> {
         try {
             // 获取Git仓库
+            // Get Git repository
             const repository = await GitService.getCurrentRepository(null);
             if (!repository) {
                 vscode.window.showErrorMessage(GIT_CONSTANTS.ERROR.NO_REPOSITORY);
                 return;
             }
 
-            // 获取配置
+            // 获取Configure
             const config = this.configService.getExtensionConfig();
 
-            // 检查AI配置是否完整
+            // 检查AIConfigure是否完整
             if (!(await this.configService.checkAIConfig(config, config.provider))) {
                 return;
             }
 
             // 获取用户输入的原始Commit消息
+            // Get original commit message from user input
             const message = await vscode.window.showInputBox({
-                placeHolder: '请输入简短的Commit消息',
-                prompt: '请输入您想要润色的Commit消息'
+                placeHolder: vscode.l10n.t("Please enter a short commit message"),
+                prompt: vscode.l10n.t("Please enter the commit message to polish")
             });
 
             if (!message) {
@@ -43,15 +45,17 @@ export class ManualPolishCommand extends BasePromptCommand {
             }
 
             // 显示加载中提示
+            // Show loading indicator
             await vscode.window.withProgress({
                 location: vscode.ProgressLocation.SourceControl,
                 title: AI_CONSTANTS.PROGRESS.POLISHING,
                 cancellable: false
             }, async (_: vscode.Progress<{ message?: string; increment?: number }>) => {
-                // 从配置中获取选中的提示词模板
+                // 从Configure中获取选中的提示词模板
                 const promptTemplate = this.promptService.getSelectedPrompt();
 
                 // 使用工厂创建AI服务并润色消息（流式）
+                // Use factory to create AI service and polish message (streaming)
                 const aiService = AIServiceFactory.getAIService();
                 try {
                     const stream = aiService.polishCommitMessage(message, config.language, promptTemplate);
@@ -61,6 +65,7 @@ export class ManualPolishCommand extends BasePromptCommand {
                         repository.inputBox.value = aggregated;
                     }
                     // 移除代码块标记符并更新输入框的最终内容
+                    // Remove code block markers and update final input box content
                     repository.inputBox.value = TextUtils.removeCodeBlockMarkers(aggregated.trim());
                     vscode.window.showInformationMessage(AI_CONSTANTS.SUCCESS.POLISH);
                 } catch (error: any) {
@@ -69,7 +74,7 @@ export class ManualPolishCommand extends BasePromptCommand {
                 return Promise.resolve();
             });
         } catch (error: any) {
-            vscode.window.showErrorMessage(`执行命令时出错: ${error.message}`);
+            vscode.window.showErrorMessage(vscode.l10n.t("Error executing command: {0}", error.message));
         }
     }
 } 

@@ -8,6 +8,7 @@ export class Logger {
     private static channel: vscode.OutputChannel | null = null;
 
     /** 在 activate() 中调用一次 */
+    /** Called once in activate() */
     static init(channelName: string): void {
         if (!this.channel) {
             this.channel = vscode.window.createOutputChannel(channelName);
@@ -15,16 +16,19 @@ export class Logger {
     }
 
     /** 普通信息日志 */
+    /** Normal info log */
     static log(message: string, ...args: any[]): void {
         this.write('INFO', message, ...args);
     }
 
     /** 警告日志 */
+    /** Warning log */
     static warn(message: string, ...args: any[]): void {
         this.write('WARN', message, ...args);
     }
 
     /** 错误日志 */
+    /** Error log */
     static error(message: string, error?: any): void {
         this.write('ERROR', message);
         if (error) {
@@ -40,11 +44,13 @@ export class Logger {
     }
 
     /** 在输出面板中显示频道（不强制抢焦点） */
+    /** Show channel in output panel (without stealing focus) */
     static show(): void {
         this.channel?.show(true);
     }
 
     /** 释放资源，在 deactivate() 中调用 */
+    /** Release resources, called in deactivate() */
     static dispose(): void {
         this.channel?.dispose();
         this.channel = null;
@@ -56,6 +62,7 @@ export class Logger {
         const line = `[${timestamp}] [${level}] ${message}${extra}`;
 
         // 同时写到 VS Code 输出频道和开发者控制台
+        // Write to both VS Code output channel and developer console
         this.channel?.appendLine(line);
         console.log(line);
     }

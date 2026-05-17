@@ -1,5 +1,5 @@
 /**
- * Git差异配置
+ * Git差异Configure
  */
 export interface GitDiffConfig {
     wordDiff: boolean;
@@ -12,7 +12,7 @@ export interface GitDiffConfig {
 }
 
 /**
- * OpenAI配置
+ * OpenAIConfigure
  */
 export interface OpenAIConfig {
     apiKey: string;
@@ -21,14 +21,14 @@ export interface OpenAIConfig {
 }
 
 /**
- * Gemini配置
+ * GeminiConfigure
  */
 export interface GeminiConfig {
     apiKey: string;
 }
 
 /**
- * Anthropic配置
+ * AnthropicConfigure
  */
 export interface AnthropicConfig {
     apiKey: string;
@@ -37,7 +37,7 @@ export interface AnthropicConfig {
 }
 
 /**
- * 扩展配置
+ * 扩展Configure
  */
 export interface ExtensionConfig {
     provider: string;
