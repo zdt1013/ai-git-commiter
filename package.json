@@ -2,7 +2,7 @@
   "name": "ai-git-commiter",
   "displayName": "AI Git Commiter",
   "description": "%extension.description%",
-  "version": "1.0.54",
+  "version": "1.0.53",
   "publisher": "zdt1013",
   "repository": {
     "type": "git",
