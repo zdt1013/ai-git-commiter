@@ -8,6 +8,7 @@ export class OpenSettingsCommand {
 
     public async execute(): Promise<void> {
         // 打开设置页面
+        // Open settings page
         await vscode.commands.executeCommand(
             'workbench.action.openSettings',
             CONFIG_CONSTANTS.ROOT

@@ -6,16 +6,18 @@ export class EditPromptCommand extends BasePromptCommand {
     public async execute(): Promise<void> {
         try {
             // 让用户选择要编辑的提示词
+            // Let user select prompt to edit
             const selected = await this.selectPrompt(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.SELECT.EDIT);
             if (!selected) return;
 
-            // 检查是否为默认提示词（不可编辑）
+            // 检查是否为Default prompt（不可编辑）
             if (this.isDefaultPrompt(selected)) {
-                vscode.window.showWarningMessage('默认提示词不能修改');
+                vscode.window.showWarningMessage('Default prompt不能修改');
                 return;
             }
 
             // 获取修改后的名称
+            // Get modified name
             const name = await vscode.window.showInputBox({
                 prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.NAME.PROMPT,
                 value: selected.name,
@@ -34,6 +36,7 @@ export class EditPromptCommand extends BasePromptCommand {
             if (!name) return;
 
             // 获取修改后的内容
+            // Get modified content
             const content = await vscode.window.showInputBox({
                 prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.CONTENT.PROMPT,
                 value: selected.content,
@@ -43,6 +46,7 @@ export class EditPromptCommand extends BasePromptCommand {
             if (!content) return;
 
             // 获取修改后的润色提示词内容
+            // Get modified polish prompt content
             const polishContent = await vscode.window.showInputBox({
                 prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.POLISH_CONTENT.PROMPT,
                 value: selected.polishContent,
@@ -52,6 +56,7 @@ export class EditPromptCommand extends BasePromptCommand {
             if (!polishContent) return;
 
             // 更新提示词并保存
+            // Update prompt and save
             const updatedPrompt = {
                 ...selected,
                 name,
@@ -62,7 +67,7 @@ export class EditPromptCommand extends BasePromptCommand {
             this.promptService.updatePrompt(updatedPrompt);
             vscode.window.showInformationMessage(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.SUCCESS.EDIT(name));
         } catch (error: any) {
-            vscode.window.showErrorMessage(`编辑提示词时出错: ${error.message}`);
+            vscode.window.showErrorMessage(vscode.l10n.t("Error editing prompt: {0}", error.message));
         }
     }
 } 

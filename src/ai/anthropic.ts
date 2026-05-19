@@ -31,7 +31,7 @@ export class AnthropicService implements IAIService {
             const apiKey = config.get<string>(CONFIG_CONSTANTS.ANTHROPIC.API_KEY);
 
             if (!apiKey) {
-                throw new Error('请在设置中配置Anthropic API密钥');
+                throw new Error(vscode.l10n.t("Please configure Anthropic API key in settings"));
             }
 
             const userAgent = config.get<string>(CONFIG_CONSTANTS.USER_AGENT) || '';
@@ -50,7 +50,7 @@ export class AnthropicService implements IAIService {
     }
 
     public async getAvailableModels(): Promise<AIModel[]> {
-        throw new Error('当前AI服务商不支持读取可用模型列表');
+        throw new Error(vscode.l10n.t("Current AI provider does not support fetching available model list"));
     }
 
     private async *callAnthropic(prompt: string, _promptTemplate: PromptTemplate): AsyncGenerator<string> {
@@ -77,8 +77,8 @@ export class AnthropicService implements IAIService {
                 }
             }
         } catch (error: any) {
-            Logger.error('Anthropic API调用失败', error);
-            throw new Error(`Anthropic API调用失败: ${error.message}`);
+            Logger.error(vscode.l10n.t("Anthropic API call failed"), error);
+            throw new Error(`Anthropic API call failed: ${error.message}`);
         }
     }
 

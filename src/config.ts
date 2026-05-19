@@ -4,7 +4,7 @@ import { CONFIG_CONSTANTS } from './constants';
 import { AIServiceFactory } from './ai/ai-service.factory';
 
 /**
- * 配置服务类 - 单例模式
+ * Configure服务类 - 单例模式
  */
 export class ConfigService {
     private static _instance: ConfigService | null = null;
@@ -14,11 +14,12 @@ export class ConfigService {
     public readonly onDidChangeConfig: vscode.Event<void> = this._onDidChangeConfig.event;
 
     private constructor() {
-        // 监听配置变更
+        // 监听Configure变更
         this._disposables.push(
             vscode.workspace.onDidChangeConfiguration(e => {
                 if (e.affectsConfiguration(`${CONFIG_CONSTANTS.ROOT}`)) {
                     // 当供应商设置变更时，重置AI服务实例
+                    // Reset AI service instance when provider setting changes
                     AIServiceFactory.resetInstance();
                     this._onDidChangeConfig.fire();
                 }
@@ -27,11 +28,13 @@ export class ConfigService {
     }
 
     /**
-     * 初始化配置服务
+     * 初始化Configure服务
      */
     private async initialize(): Promise<void> {
         // 这里可以添加任何需要的异步初始化逻辑
+        // Any required async initialization logic can be added here
         // 目前没有异步初始化需求，但保留此方法以保持一致性
+        // No async init requirement currently, but keep this method for consistency
         await Promise.resolve();
     }
 
@@ -46,13 +49,14 @@ export class ConfigService {
         }
 
         // 等待初始化完成
+        // Wait for initialization to complete
         await ConfigService._initializing;
         return ConfigService._instance;
     }
 
     /**
-     * 获取扩展配置
-     * @returns 扩展配置对象
+     * 获取扩展Configure
+     * @returns 扩展Configure对象
      */
     public getExtensionConfig(): ExtensionConfig {
         const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
@@ -95,22 +99,22 @@ export class ConfigService {
     }
 
     /**
-     * 检查AI配置是否完整
-     * @param config 扩展配置
+     * 检查AIConfigure是否完整
+     * @param config 扩展Configure
      * @param provider AI提供商
-     * @returns 配置是否完整
+     * @returns Configure是否完整
      */
     public async checkAIConfig(config: ExtensionConfig, provider: string): Promise<boolean> {
         if (provider === CONFIG_CONSTANTS.PROVIDERS.OPENAI) {
             const { apiKey, model, baseUrl } = config.openai;
             if (!baseUrl || !apiKey || !model) {
                 const result = await vscode.window.showWarningMessage(
-                    'OpenAI配置不完整，是否立即配置？',
+                    vscode.l10n.t("OpenAI config is incomplete, configure now?"),
                     { modal: true },
-                    '配置',
+                    vscode.l10n.t("Configure"),
                 );
 
-                if (result === '配置') {
+                if (result === vscode.l10n.t("Configure")) {
                     await vscode.commands.executeCommand('workbench.action.openSettings', CONFIG_CONSTANTS.ROOT);
                 }
                 return false;
@@ -119,12 +123,12 @@ export class ConfigService {
             const { apiKey } = config.gemini;
             if (!apiKey) {
                 const result = await vscode.window.showWarningMessage(
-                    'Gemini配置不完整，是否立即配置？',
+                    'GeminiConfigure不完整，是否立即Configure？',
                     { modal: true },
-                    '配置',
+                    vscode.l10n.t("Configure"),
                 );
 
-                if (result === '配置') {
+                if (result === vscode.l10n.t("Configure")) {
                     await vscode.commands.executeCommand('workbench.action.openSettings', CONFIG_CONSTANTS.ROOT);
                 }
                 return false;
@@ -133,12 +137,12 @@ export class ConfigService {
             const { apiKey, model, baseUrl } = config.anthropic;
             if (!baseUrl || !apiKey || !model) {
                 const result = await vscode.window.showWarningMessage(
-                    'Anthropic配置不完整，是否立即配置？',
+                    'AnthropicConfigure不完整，是否立即Configure？',
                     { modal: true },
-                    '配置',
+                    vscode.l10n.t("Configure"),
                 );
 
-                if (result === '配置') {
+                if (result === vscode.l10n.t("Configure")) {
                     await vscode.commands.executeCommand('workbench.action.openSettings', CONFIG_CONSTANTS.ROOT);
                 }
                 return false;

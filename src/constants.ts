@@ -1,8 +1,10 @@
+import * as vscode from 'vscode';
+
 /**
- * 提示词管理相关常量
+ * Prompt management constants
  */
 export const PROMPT_CONSTANTS = {
-    // 命令ID
+    // Commands
     COMMANDS: {
         ADD_PROMPT: 'ai-git-commiter.addPrompt',
         EDIT_PROMPT: 'ai-git-commiter.editPrompt',
@@ -15,135 +17,129 @@ export const PROMPT_CONSTANTS = {
         OPEN_SETTINGS: 'ai-git-commiter.settings'
     },
 
-    // 提示词管理相关文本
+    // Prompt management text
     PROMPT_MANAGEMENT: {
-        // 输入框提示
         INPUT: {
             NAME: {
-                PROMPT: '输入提示词名称',
-                PLACEHOLDER: '例如：功能更新提示词',
+                get PROMPT() { return vscode.l10n.t('Enter prompt name'); },
+                get PLACEHOLDER() { return vscode.l10n.t('For example: Feature update prompt'); },
                 VALIDATION: {
-                    EMPTY: '提示词名称不能为空',
-                    EXISTS: '该名称已存在，请使用其他名称'
+                    get EMPTY() { return vscode.l10n.t('Prompt name cannot be empty'); },
+                    get EXISTS() { return vscode.l10n.t('This name already exists, please use another one'); }
                 }
             },
             CONTENT: {
-                PROMPT: '输入提示词内容 (使用 {diff} 作为代码差异的占位符)',
-                PLACEHOLDER: '例如：请根据以下代码变更生成一个关于功能更新的commit消息：\n\n{diff}'
+                get PROMPT() { return vscode.l10n.t('Enter prompt content (use {diff} as a placeholder for code changes)'); },
+                get PLACEHOLDER() { return vscode.l10n.t('For example: Please generate a commit message for the following changes:\n\n{diff}'); }
             },
             POLISH_CONTENT: {
-                PROMPT: '输入润色提示词内容 (使用 {diff} 作为原始消息的占位符)',
-                PLACEHOLDER: '例如：请根据以下原始消息生成一个更规范的commit消息：\n\n{diff}'
+                get PROMPT() { return vscode.l10n.t('Enter polish prompt content (use {diff} as a placeholder for the original message)'); },
+                get PLACEHOLDER() { return vscode.l10n.t('For example: Please generate a standard commit message based on this original message:\n\n{diff}'); }
             },
             REMOTE_URL: {
-                PROMPT: '输入远程提示词列表地址',
-                PLACEHOLDER: 'https://example.com/prompts.json'
+                get PROMPT() { return vscode.l10n.t('Enter remote prompts list URL'); },
+                get PLACEHOLDER() { return vscode.l10n.t('https://example.com/prompts.json'); }
             }
         },
 
-        // 选择框提示
         SELECT: {
-            TITLE: "选择提示词",
-            EDIT: '选择要编辑的提示词',
-            DELETE: '选择要删除的提示词',
-            USE: '选择要使用的提示词'
+            get TITLE() { return vscode.l10n.t("Select Prompt"); },
+            get EDIT() { return vscode.l10n.t('Select a prompt to edit'); },
+            get DELETE() { return vscode.l10n.t('Select a prompt to delete'); },
+            get USE() { return vscode.l10n.t('Select a prompt to use'); }
         },
 
-        // 确认提示
         CONFIRM: {
-            DELETE: (name: string) => `确定要删除提示词 "${name}" 吗？`,
-            CONFIRM_BUTTON: '确定'
+            DELETE: (name: string) => vscode.l10n.t("Are you sure you want to delete prompt '{0}'?", name),
+            get CONFIRM_BUTTON() { return vscode.l10n.t('OK'); }
         },
 
-        // 成功提示
         SUCCESS: {
-            ADD: (name: string) => `提示词 "${name}" 已添加`,
-            EDIT: (name: string) => `提示词 "${name}" 已更新`,
-            DELETE: (name: string) => `提示词 "${name}" 已删除`,
-            USE: (name: string) => `已设置使用提示词 "${name}"`,
-            DOWNLOAD: '远程提示词下载成功'
+            ADD: (name: string) => vscode.l10n.t("Prompt '{0}' has been added", name),
+            EDIT: (name: string) => vscode.l10n.t("Prompt '{0}' has been updated", name),
+            DELETE: (name: string) => vscode.l10n.t("Prompt '{0}' has been deleted", name),
+            USE: (name: string) => vscode.l10n.t("Set to use prompt '{0}'", name),
+            get DOWNLOAD() { return vscode.l10n.t('Remote prompts downloaded successfully'); }
         },
 
-        // 错误提示
         ERROR: {
-            LOAD: '加载提示词失败',
-            SAVE: '保存提示词失败',
-            DOWNLOAD: '下载远程提示词失败'
+            get LOAD() { return vscode.l10n.t('Failed to load prompts'); },
+            get SAVE() { return vscode.l10n.t('Failed to save prompts'); },
+            get DOWNLOAD() { return vscode.l10n.t('Failed to download remote prompts'); }
         }
     },
 
-    // 标签显示
     TAGS: {
-        SOURCE: (source: string) => `来源: ${source}`,
-        VERSION: (version: string) => `版本: ${version}`,
+        SOURCE: (source: string) => vscode.l10n.t("Source: {0}", source),
+        VERSION: (version: string) => vscode.l10n.t("Version: {0}", version),
     }
 };
 
 /**
- * Git相关常量
+ * Git constants
  */
 export const GIT_CONSTANTS = {
     ERROR: {
-        NO_REPOSITORY: '未找到Git仓库',
-        NO_CHANGES: '未检测到代码变更',
-        TOO_MANY_CHANGES: (maxChanges: number) => `变更行数过多（超过${maxChanges}行），请减少暂存文件数量或选择手动输入`
+        get NO_REPOSITORY() { return vscode.l10n.t('No Git repository found'); },
+        get NO_CHANGES() { return vscode.l10n.t('No code changes detected'); },
+        TOO_MANY_CHANGES: (maxChanges: number) => vscode.l10n.t("Too many line changes (over {0} lines). Please reduce staged files or choose manual input", maxChanges)
     },
     WARNING: {
-        MANUAL_INPUT: '您选择了手动输入，请输入简短的Commit消息，我们将帮您润色'
+        get MANUAL_INPUT() { return vscode.l10n.t('You chose manual input. Please enter a short Commit message, and we will polish it for you'); }
     },
     BUTTONS: {
-        MANUAL_INPUT: '手动输入'
+        get MANUAL_INPUT() { return vscode.l10n.t('Manual Input'); }
     },
     INPUT: {
-        COMMIT_MESSAGE_PLACEHOLDER: '请输入简短的Commit消息'
+        get COMMIT_MESSAGE_PLACEHOLDER() { return vscode.l10n.t('Please enter a short Commit message'); }
     },
-    NEED_SELECTION: '需要选择一个Git仓库才能继续操作'
+    get NEED_SELECTION() { return vscode.l10n.t('You need to select a Git repository to continue'); }
 };
 
 /**
- * AI服务相关常量
+ * AI Service constants
  */
 export const AI_CONSTANTS = {
     PROGRESS: {
-        TITLE: '正在生成Commit消息...',
-        POLISHING: '正在润色Commit消息...',
-        LOADING_MODELS: '正在加载可用模型列表...'
+        get TITLE() { return vscode.l10n.t('Generating Commit message...'); },
+        get POLISHING() { return vscode.l10n.t('Polishing Commit message...'); },
+        get LOADING_MODELS() { return vscode.l10n.t('Loading available models...'); }
     },
     SUCCESS: {
-        GENERATE: '成功生成Commit消息',
-        POLISH: '成功润色Commit消息',
-        SWITCH_MODEL: '成功切换AI模型'
+        get GENERATE() { return vscode.l10n.t('Successfully generated Commit message'); },
+        get POLISH() { return vscode.l10n.t('Successfully polished Commit message'); },
+        get SWITCH_MODEL() { return vscode.l10n.t('Successfully switched AI model'); }
     },
     ERROR: {
-        GENERATE: '生成Commit消息失败',
-        POLISH: '润色Commit消息失败',
-        LOAD_MODELS: '加载可用模型列表失败',
-        UNSUPPORTED_PROVIDER: '当前AI服务商不支持读取可用模型列表',
-        NO_BASE_URL: '未设置OpenAI基础URL，请先配置',
-        NO_AVAILABLE_MODELS: '未找到可用的AI模型'
+        get GENERATE() { return vscode.l10n.t('Failed to generate Commit message'); },
+        get POLISH() { return vscode.l10n.t('Failed to polish Commit message'); },
+        get LOAD_MODELS() { return vscode.l10n.t('Failed to load available models'); },
+        get UNSUPPORTED_PROVIDER() { return vscode.l10n.t('Current AI provider does not support reading available models'); },
+        get NO_BASE_URL() { return vscode.l10n.t('OpenAI Base URL is not set. Please configure it first'); },
+        get NO_AVAILABLE_MODELS() { return vscode.l10n.t('No available AI models found'); }
     },
     UI: {
-        MODEL_SELECTION_PLACEHOLDER: '选择要使用的AI模型',
-        MODEL_SELECTION_TITLE: 'AI模型选择'
+        get MODEL_SELECTION_PLACEHOLDER() { return vscode.l10n.t('Select an AI model to use'); },
+        get MODEL_SELECTION_TITLE() { return vscode.l10n.t('AI Model Selection'); }
     }
 };
 
 /**
- * 配置相关常量
+ * Config constants
  */
 export const CONFIG_CONSTANTS = {
-    // 配置根节点
+    // Config Root
     ROOT: 'ai-git-commiter',
 
-    // 提供商配置
+    // Provider
     PROVIDER: 'provider',
 
-    // 通用配置
+    // General Config
     ENABLE_THINKING: 'enable_thinking',
     THINKING_MODE: 'openai.thinkingMode',
     USER_AGENT: 'userAgent',
 
-    // 提示词配置
+    // Prompt Config
     PROMPT: {
         SELECTED_TEMPLATE_PROMPT: 'prompt.selectedTemplatePrompt',
         SELECTED_PROMPT_TEMPLATE_ID: 'prompt.selectedPromptTemplateId',
@@ -151,7 +147,7 @@ export const CONFIG_CONSTANTS = {
         PROJECT_INFO_PATH: 'prompt.projectInfoPath'
     },
 
-    // Git配置
+    // Git Config
     GIT: {
         DIFF: {
             MAX_CHANGES: 'git-diff.maxChanges',
@@ -164,7 +160,7 @@ export const CONFIG_CONSTANTS = {
         }
     },
 
-    // OpenAI配置
+    // OpenAI Config
     OPENAI: {
         BASE_URL: 'openai.baseUrl',
         API_KEY: 'openai.apiKey',
@@ -174,7 +170,7 @@ export const CONFIG_CONSTANTS = {
         MAX_TOKENS: 'openai.maxTokens'
     },
 
-    // Gemini配置
+    // Gemini Config
     GEMINI: {
         API_KEY: 'gemini.apiKey',
         MODEL: 'gemini.model',
@@ -185,7 +181,7 @@ export const CONFIG_CONSTANTS = {
         BASE_URL: 'gemini.baseUrl'
     },
 
-    // Anthropic配置
+    // Anthropic Config
     ANTHROPIC: {
         BASE_URL: 'anthropic.baseUrl',
         API_KEY: 'anthropic.apiKey',
@@ -195,7 +191,7 @@ export const CONFIG_CONSTANTS = {
         MAX_TOKENS: 'anthropic.maxTokens'
     },
 
-    // 默认值
+    // Default Values
     DEFAULTS: {
         PROVIDER: 'OpenAI',
         ENABLE_THINKING: false,
@@ -233,14 +229,14 @@ export const CONFIG_CONSTANTS = {
                 AREA: 'auto'
             }
         },
-        LANGUAGE: '中文'
+        LANGUAGE: 'English'
     },
 
-    // AI提供商
+    // Providers
     PROVIDERS: {
         OPENAI: 'OpenAI',
         GEMINI: 'Gemini',
         ANTHROPIC: 'Anthropic'
     },
     LANGUAGE: "language"
-}; 
+};

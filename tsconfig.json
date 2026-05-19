@@ -9,8 +9,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "bundler",
-    "ignoreDeprecations": "6.0",
+    "moduleResolution": "node",
     "types": ["node"]
   },
   "include": ["src/**/*", "vite.config.ts", "src/test"],

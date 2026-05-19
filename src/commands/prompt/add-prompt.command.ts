@@ -7,6 +7,7 @@ export class AddPromptCommand extends BasePromptCommand {
     public async execute(): Promise<void> {
         try {
             // 获取用户输入的新提示词名称
+            // Get new prompt name from user input
             const name = await vscode.window.showInputBox({
                 prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.NAME.PROMPT,
                 placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.NAME.PLACEHOLDER,
@@ -25,6 +26,7 @@ export class AddPromptCommand extends BasePromptCommand {
             if (!name) return;
 
             // 获取用户输入的提示词内容
+            // Get prompt content from user input
             const content = await vscode.window.showInputBox({
                 prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.CONTENT.PROMPT,
                 placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.CONTENT.PLACEHOLDER,
@@ -34,6 +36,7 @@ export class AddPromptCommand extends BasePromptCommand {
             if (!content) return;
 
             // 获取用户输入的润色提示词内容
+            // Get polish prompt content from user input
             const polishContent = await vscode.window.showInputBox({
                 prompt: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.POLISH_CONTENT.PROMPT,
                 placeHolder: PROMPT_CONSTANTS.PROMPT_MANAGEMENT.INPUT.POLISH_CONTENT.PLACEHOLDER,
@@ -43,6 +46,7 @@ export class AddPromptCommand extends BasePromptCommand {
             if (!polishContent) return;
 
             // 创建新提示词并保存
+            // Create new prompt and save
             const newPrompt = {
                 id: uuidv4(),
                 name,
@@ -54,7 +58,7 @@ export class AddPromptCommand extends BasePromptCommand {
             this.promptService.addPrompt(newPrompt);
             vscode.window.showInformationMessage(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.SUCCESS.ADD(name));
         } catch (error: any) {
-            vscode.window.showErrorMessage(`添加提示词时出错: ${error.message}`);
+            vscode.window.showErrorMessage(vscode.l10n.t("Error adding prompt: {0}", error.message));
         }
     }
 } 
