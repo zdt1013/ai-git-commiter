@@ -12,7 +12,7 @@ export class EditPromptCommand extends BasePromptCommand {
 
             // 检查是否为Default prompt（不可编辑）
             if (this.isDefaultPrompt(selected)) {
-                vscode.window.showWarningMessage('Default prompt不能修改');
+                vscode.window.showWarningMessage(vscode.l10n.t("Default prompts cannot be edited"));
                 return;
             }
 
