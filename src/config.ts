@@ -94,6 +94,8 @@ export class ConfigService {
                 selectedPromptTemplateId: config.get<string>(CONFIG_CONSTANTS.PROMPT.SELECTED_PROMPT_TEMPLATE_ID) || '',
                 enableProjectPerception: config.get<boolean>(CONFIG_CONSTANTS.PROMPT.ENABLE_PROJECT_PERCEPTION) ?? false,
                 projectInfoPath: config.get<string>(CONFIG_CONSTANTS.PROMPT.PROJECT_INFO_PATH) || '',
+                enableRecentCommits: config.get<boolean>(CONFIG_CONSTANTS.PROMPT.ENABLE_RECENT_COMMITS) ?? CONFIG_CONSTANTS.DEFAULTS.PROMPT.ENABLE_RECENT_COMMITS,
+                recentCommitsCount: config.get<number>(CONFIG_CONSTANTS.PROMPT.RECENT_COMMITS_COUNT) ?? CONFIG_CONSTANTS.DEFAULTS.PROMPT.RECENT_COMMITS_COUNT,
             }
         };
     }

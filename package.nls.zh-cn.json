@@ -53,5 +53,7 @@
   "config.prompt.selectedPromptTemplateId.description": "当前选中的提示词模板ID",
   "config.prompt.selectedTemplatePrompt.description": "当前选中的提示词模板内容",
   "config.prompt.enableProjectPerception.description": "是否开启项目信息感知。开启后，生成 Commit 消息时将自动读取项目上下文文档（如 CLAUDE.md）。 (默认值: false)",
-  "config.prompt.projectInfoPath.description": "项目信息感知文档路径。留空时默认自动在项目根目录寻找 CLAUDE.md, .cursorrules 或 project-context.md。如果你的项目使用了其他名称，请在此配置（建议在工作区设置中配置）。支持相对或绝对路径。"
+  "config.prompt.projectInfoPath.description": "项目信息感知文档路径。留空时默认自动在项目根目录寻找 CLAUDE.md, .cursorrules 或 project-context.md。如果你的项目使用了其他名称，请在此配置（建议在工作区设置中配置）。支持相对或绝对路径。",
+  "config.prompt.enableRecentCommits.description": "是否将最近的 commit 历史作为风格参考注入 Prompt。开启后，模型会参考历史记录中使用过的 scope 词汇和语气风格，生成更贴合项目习惯的 commit 消息。默认值: false",
+  "config.prompt.recentCommitsCount.description": "注入 Prompt 的最近 commit 条数，merge commit、revert 及版本号自动提交会被自动过滤。范围: 1–20。默认值: 3"
 }

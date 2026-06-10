@@ -53,5 +53,7 @@
   "config.prompt.selectedPromptTemplateId.description": "Currently selected prompt template ID",
   "config.prompt.selectedTemplatePrompt.description": "Currently selected prompt template content",
   "config.prompt.enableProjectPerception.description": "Enable project context perception. When enabled, project context docs (like CLAUDE.md) will be read automatically. (Default: false)",
-  "config.prompt.projectInfoPath.description": "Path to project context doc. Leave empty to auto-detect CLAUDE.md, .cursorrules or project-context.md in root."
+  "config.prompt.projectInfoPath.description": "Path to project context doc. Leave empty to auto-detect CLAUDE.md, .cursorrules or project-context.md in root.",
+  "config.prompt.enableRecentCommits.description": "Include recent commit history as style reference when generating commit messages. Helps the model match your project's scope vocabulary and tone. (Default: false)",
+  "config.prompt.recentCommitsCount.description": "Number of recent commits to include as style reference. Merge, revert, and version-bump commits are filtered out automatically. Range: 1–20. (Default: 3)"
 }

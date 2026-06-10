@@ -82,7 +82,7 @@ export class AnthropicService implements IAIService {
         }
     }
 
-    generateCommitMessage(diff: string, language: string, promptTemplate: PromptTemplate, projectInfo?: string): AsyncGenerator<string> {
+    generateCommitMessage(diff: string, language: string, promptTemplate: PromptTemplate, projectInfo?: string, recentCommits?: string): AsyncGenerator<string> {
         let prompt = promptTemplate.content
             .replace('{diff}', diff)
             .replaceAll('{language}', language);
@@ -95,6 +95,16 @@ export class AnthropicService implements IAIService {
             }
         } else {
             prompt = prompt.replaceAll('{projectInfo}', '');
+        }
+
+        if (recentCommits) {
+            if (prompt.includes('{recentCommits}')) {
+                prompt = prompt.replaceAll('{recentCommits}', recentCommits);
+            } else {
+                prompt += `\n\n## Style Reference\n${recentCommits}`;
+            }
+        } else {
+            prompt = prompt.replaceAll('{recentCommits}', '');
         }
 
         return this.callAnthropic(prompt, promptTemplate);

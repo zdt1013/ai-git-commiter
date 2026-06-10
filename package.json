@@ -377,6 +377,20 @@
           "order": 35,
           "default": "",
           "description": "%config.prompt.projectInfoPath.description%"
+        },
+        "ai-git-commiter.prompt.enableRecentCommits": {
+          "type": "boolean",
+          "order": 36,
+          "default": false,
+          "description": "%config.prompt.enableRecentCommits.description%"
+        },
+        "ai-git-commiter.prompt.recentCommitsCount": {
+          "type": "number",
+          "order": 37,
+          "default": 3,
+          "minimum": 1,
+          "maximum": 20,
+          "description": "%config.prompt.recentCommitsCount.description%"
         }
       }
     }

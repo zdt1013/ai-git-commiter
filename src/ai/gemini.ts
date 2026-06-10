@@ -93,7 +93,7 @@ export class GeminiService implements IAIService {
         }
     }
 
-    generateCommitMessage(diff: string, language: string, promptTemplate: PromptTemplate, projectInfo?: string): AsyncGenerator<string> {
+    generateCommitMessage(diff: string, language: string, promptTemplate: PromptTemplate, projectInfo?: string, recentCommits?: string): AsyncGenerator<string> {
         // 构建提示词：替换模板中的占位符
         // Build prompt: replace placeholders in template
         let prompt = promptTemplate.content
@@ -108,6 +108,16 @@ export class GeminiService implements IAIService {
             }
         } else {
             prompt = prompt.replaceAll('{projectInfo}', '');
+        }
+
+        if (recentCommits) {
+            if (prompt.includes('{recentCommits}')) {
+                prompt = prompt.replaceAll('{recentCommits}', recentCommits);
+            } else {
+                prompt += `\n\n## Style Reference\n${recentCommits}`;
+            }
+        } else {
+            prompt = prompt.replaceAll('{recentCommits}', '');
         }
 
         return this.callGemini(prompt, promptTemplate);

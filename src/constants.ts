@@ -144,7 +144,9 @@ export const CONFIG_CONSTANTS = {
         SELECTED_TEMPLATE_PROMPT: 'prompt.selectedTemplatePrompt',
         SELECTED_PROMPT_TEMPLATE_ID: 'prompt.selectedPromptTemplateId',
         ENABLE_PROJECT_PERCEPTION: 'prompt.enableProjectPerception',
-        PROJECT_INFO_PATH: 'prompt.projectInfoPath'
+        PROJECT_INFO_PATH: 'prompt.projectInfoPath',
+        ENABLE_RECENT_COMMITS: 'prompt.enableRecentCommits',
+        RECENT_COMMITS_COUNT: 'prompt.recentCommitsCount'
     },
 
     // Git Config
@@ -229,7 +231,11 @@ export const CONFIG_CONSTANTS = {
                 AREA: 'auto'
             }
         },
-        LANGUAGE: 'English'
+        LANGUAGE: 'English',
+        PROMPT: {
+            ENABLE_RECENT_COMMITS: false,
+            RECENT_COMMITS_COUNT: 3
+        }
     },
 
     // Providers

@@ -54,5 +54,7 @@ export interface ExtensionConfig {
         selectedPromptTemplateId: string;
         enableProjectPerception: boolean;
         projectInfoPath: string;
+        enableRecentCommits: boolean;
+        recentCommitsCount: number;
     };
 } 

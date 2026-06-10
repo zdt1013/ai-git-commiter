@@ -268,6 +268,33 @@ export class GitService {
     }
 
     /**
+     * 获取最近的 commit 记录（仅 subject 行），过滤 merge/bot/ci 提交
+     * @param repoPath 仓库路径
+     * @param count 期望返回条数
+     * @returns subject 列表
+     */
+    static async getRecentCommits(repoPath: string, count: number = 8): Promise<string[]> {
+        try {
+            this.git = simpleGit(repoPath);
+            // fetch extra to have enough after filtering
+            const log = await this.git.log([`-n`, String(count * 3), `--no-merges`]);
+            const SKIP_PATTERNS = [
+                /^revert\b/i,
+                /^bump\s+version/i,
+                /update\s+version\s+to\b/i,
+                /^merge\b/i,
+            ];
+            return log.all
+                .map(c => c.message.trim())
+                .filter(s => s.length > 0 && !SKIP_PATTERNS.some(p => p.test(s)))
+                .slice(0, count);
+        } catch (error) {
+            Logger.error(vscode.l10n.t("Failed to get recent commits"), error);
+            return [];
+        }
+    }
+
+    /**
      * 检查变更行数是否超过限制
      * @param repository Git仓库
      * @param maxChanges 最大变更行数

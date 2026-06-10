@@ -207,16 +207,27 @@ export class CommitCommand {
         // 获取选定的提示模板
         // Get selected prompt template
         const promptTemplate = this.promptService.getSelectedPrompt();
-        
+
         // 获取项目信息感知文档内容
         // Get project context document content
         const projectInfo = await this.getProjectInfoContent(repository, config);
-        
+
+        // 获取历史 commit 风格参考（开关默认关闭）
+        // Fetch recent commit style reference (disabled by default)
+        let recentCommits: string | undefined;
+        if (config.prompt.enableRecentCommits) {
+            const subjects = await GitService.getRecentCommits(repository.rootUri.fsPath, config.prompt.recentCommitsCount);
+            if (subjects.length > 0) {
+                recentCommits = subjects.map(s => `- ${s}`).join('\n');
+                Logger.log(`[CommitCommand] Loaded ${subjects.length} recent commits for style reference`);
+            }
+        }
+
         const aiService = AIServiceFactory.getAIService();
         try {
             // 生成提交信息的流式处理
             // Streaming generation of commit message
-            const stream = aiService.generateCommitMessage(diff, config.language, promptTemplate, projectInfo);
+            const stream = aiService.generateCommitMessage(diff, config.language, promptTemplate, projectInfo, recentCommits);
             let aggregated = '';
             // 逐步处理流式数据并更新输入框内容
             // Process stream data progressively and update input box
