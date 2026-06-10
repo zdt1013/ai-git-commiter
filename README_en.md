@@ -17,9 +17,19 @@
 
 > Tips: If you need to create a **Pull Request**, please choose to merge into the dev branch. Merging into the main branch will be rejected by default.
 
-> As of the release of this version (**v1.0.54**), the cumulative number of downloads of the dual-plugin store has exceeded **3200+**. We are officially collecting requirements for the **2.x version**. You are welcome to submit feedback and requirements in the [Issue](https://github.com/zdt1013/ai-git-commiter/issues/).
+> As of the release of this version (**v1.0.55**), the cumulative number of downloads of the dual-plugin store has exceeded **3200+**. We are officially collecting requirements for the **2.x version**. You are welcome to submit feedback and requirements in the [Issue](https://github.com/zdt1013/ai-git-commiter/issues/).
 
 ## 🕑 Changelog
+- **v1.0.55**
+  * Optimization: Default prompt upgraded to v1.0.28, with new type-selection rules to reduce type misclassification.
+    1. The model is explicitly forbidden from inferring `type` from the `Example Scopes` column; type is now determined solely by the nature of the change.
+    2. Added disambiguation rules for commonly confused types (feat/fix, refactor/style/perf, build/ci/chore) with a priority order for ambiguous cases.
+    3. Revised multi-type splitting strategy: prefer a single message with one dominant type; only split when changes are genuinely unrelated. Added a single-type example to balance the existing multi-type one.
+  * New: Support injecting recent commit history as a style reference into the prompt (disabled by default).
+    1. When enabled, the model references the scope vocabulary and tone from your project's actual commit history to generate more consistent messages.
+    2. Merge commits, reverts, and version-bump commits are automatically filtered out to avoid polluting the style reference.
+    3. The number of commits injected can be configured via `prompt.recentCommitsCount` (default: 3).
+
 - **v1.0.54**
   * New: Introduced comprehensive internationalization (i18n) support with all user-facing text localized via `vscode.l10n.t()` and bilingual annotations added. [PR #12](https://github.com/zdt1013/ai-git-commiter/pull/12)
   * Optimization: Adjusted default values for git-diff related configuration for a better out-of-the-box experience.

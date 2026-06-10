@@ -17,9 +17,19 @@
 
 > Tips: 如需 **Pull Request**，请选择合并到dev分支，默认拒绝合并到main分支
 
-> 截止此版本（v1.0.54 **3200+** 次，正式收集2.x版本的需求，欢迎大家去[**Issue**](https://github.com/zdt1013/ai-git-commiter/issues/)提交反馈和需求。
+> 截止此版本（v1.0.55 **3200+** 次，正式收集2.x版本的需求，欢迎大家去[**Issue**](https://github.com/zdt1013/ai-git-commiter/issues/)提交反馈和需求。
 
 ## 🕑 更新历史
+- **v1.0.55**
+  * 优化：默认提示词升级至 v1.0.28，新增 Type 判定规则，解决模型对 type 误识别的问题。
+    1. 明确禁止模型用 `Example Scopes` 列反推 type，改为以变更性质判断。
+    2. 新增常见易混淆类型辨析（feat/fix、refactor/style/perf、build/ci/chore）及优先级规则。
+    3. 调整多类型拆分策略：默认单条消息，仅在变更明显无关时才拆分，并补充单类型示例。
+  * 新增：支持将仓库最近的 commit 历史作为风格参考注入 Prompt（默认关闭）。
+    1. 开启后模型会参考历史 commit 中实际使用的 scope 词汇和语气风格，生成更贴合项目习惯的消息。
+    2. merge commit、revert 及版本号自动提交会被自动过滤，避免污染风格参考。
+    3. 可通过 `prompt.recentCommitsCount` 配置注入条数，默认 3 条。
+
 - **v1.0.54**
   * 新增：引入全面的国际化（i18n）支持，所有用户界面文本均通过 `vscode.l10n.t()` 实现本地化，并添加双语注释。[PR #12](https://github.com/zdt1013/ai-git-commiter/pull/12)
   * 优化：调整 git-diff 相关配置的默认值，提升开箱即用体验。
