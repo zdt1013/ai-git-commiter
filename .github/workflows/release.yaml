@@ -1,13 +1,13 @@
 name: Release VSCode Extension
 
-# 触发条件：当version文件变更时触发
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g. 1.0.56)'
+        required: true
+        type: string
 
-# 添加权限配置
 permissions:
   contents: write
   pull-requests: write
@@ -15,10 +15,7 @@ permissions:
 jobs:
   build-and-release:
     permissions:
-      # write permission is required to create a github release
       contents: write
-      # write permission is required for autolabeler
-      # otherwise, read permission is required at least
       pull-requests: write
     runs-on: ubuntu-latest
 
@@ -27,7 +24,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # 获取完整的git历史用于生成changelog
+          fetch-depth: 0
 
       # 2. 全局安装 pnpm
       - uses: pnpm/action-setup@v4
@@ -47,18 +44,16 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      # 5. Build Changelog
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      # 5. 获取上一个 tag（用于生成 changelog）
+      - name: Get previous tag
+        id: prev_tag
+        run: |
+          PREV=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          echo "tag=$PREV" >> $GITHUB_OUTPUT
 
-      # 6. 打包 VSCode 扩展（这会自动更新package.json中的版本号）
+      # 6. 打包 VSCode 扩展
       - name: Package VSCode Extension
         run: pnpm run vscode:package-latest
-        env:
-          BUILD_VERSION: ${{ steps.tag_version.outputs.new_version }}
 
       # 7. 生成 Changelog
       - name: Build Changelog
@@ -66,7 +61,7 @@ jobs:
         uses: mikepenz/release-changelog-builder-action@v5
         with:
           mode: "COMMIT"
-          fromTag: ${{ steps.tag_version.outputs.previous_tag }}
+          fromTag: ${{ steps.prev_tag.outputs.tag }}
           configurationJson: |
             {
               "template": "#{{CHANGELOG}}",
@@ -101,8 +96,8 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          tag: v${{ inputs.version }}
+          name: Release v${{ inputs.version }}
           body: ${{ steps.build_changelog.outputs.changelog }}
           draft: true
 
@@ -114,11 +109,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./ai-git-commiter-latest.vsix
-          asset_name: ai-git-commiter-v${{ steps.tag_version.outputs.new_version }}.vsix
+          asset_name: ai-git-commiter-v${{ inputs.version }}.vsix
           asset_content_type: application/octet-stream
-      
-      # 10. 自动提交代码
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        id: auto-commit-action
-        with:
-          commit_message: "👷 ci(package.json): Update version to ${{ steps.tag_version.outputs.new_version }}"

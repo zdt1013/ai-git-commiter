@@ -6,7 +6,7 @@ import versionIncrPlugin from './plugins/vite-plugin-version-incr';
 export default defineConfig(({ mode }) => {
   return {
     plugins: [versionIncrPlugin({
-      env: ['production'],
+      env: [],
       mode: mode
     })],
     build: {
