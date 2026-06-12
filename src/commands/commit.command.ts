@@ -193,6 +193,7 @@ export class CommitCommand {
    // Diff filter, specify which types of changes to show
             filterMeta: config.git.diff.filterMeta,   // 过滤元数据
    // Filter meta data
+            includeSummary: config.git.diff.includeSummary,
             area: config.git.diff.area                 // 指定差异区域
                  // Specify diff area
         });

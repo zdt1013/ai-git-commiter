@@ -171,7 +171,7 @@
         "ai-git-commiter.openai.temperature": {
           "type": "number",
           "order": 9,
-          "default": 0.7,
+          "default": 0.3,
           "minimum": 0,
           "maximum": 2,
           "description": "%config.openai.temperature.description%",
@@ -218,7 +218,7 @@
         "ai-git-commiter.gemini.temperature": {
           "type": "number",
           "order": 15,
-          "default": 0.7,
+          "default": 0.3,
           "minimum": 0,
           "maximum": 1,
           "description": "%config.gemini.temperature.description%",
@@ -274,7 +274,7 @@
         "ai-git-commiter.anthropic.temperature": {
           "type": "number",
           "order": 22,
-          "default": 0.7,
+          "default": 0.3,
           "minimum": 0,
           "maximum": 1,
           "description": "%config.anthropic.temperature.description%",
@@ -344,49 +344,55 @@
           "default": false,
           "description": "%config.gitDiff.filterMeta.description%"
         },
+        "ai-git-commiter.git-diff.includeSummary": {
+          "type": "boolean",
+          "order": 31,
+          "default": true,
+          "description": "%config.gitDiff.includeSummary.description%"
+        },
         "ai-git-commiter.git-diff.maxChanges": {
           "type": "number",
-          "order": 31,
+          "order": 32,
           "default": 500,
           "minimum": 1,
           "description": "%config.gitDiff.maxChanges.description%"
         },
         "ai-git-commiter.prompt.selectedPromptTemplateId": {
           "type": "string",
-          "order": 32,
+          "order": 33,
           "default": "",
           "readonly": true,
           "description": "%config.prompt.selectedPromptTemplateId.description%"
         },
         "ai-git-commiter.prompt.selectedTemplatePrompt": {
           "type": "string",
-          "order": 33,
+          "order": 34,
           "default": "",
           "readonly": true,
           "description": "%config.prompt.selectedTemplatePrompt.description%"
         },
         "ai-git-commiter.prompt.enableProjectPerception": {
           "type": "boolean",
-          "order": 34,
+          "order": 35,
           "default": false,
           "description": "%config.prompt.enableProjectPerception.description%"
         },
         "ai-git-commiter.prompt.projectInfoPath": {
           "type": "string",
           "scope": "resource",
-          "order": 35,
+          "order": 36,
           "default": "",
           "description": "%config.prompt.projectInfoPath.description%"
         },
         "ai-git-commiter.prompt.enableRecentCommits": {
           "type": "boolean",
-          "order": 36,
+          "order": 37,
           "default": false,
           "description": "%config.prompt.enableRecentCommits.description%"
         },
         "ai-git-commiter.prompt.recentCommitsCount": {
           "type": "number",
-          "order": 37,
+          "order": 38,
           "default": 3,
           "minimum": 1,
           "maximum": 20,

@@ -7,6 +7,7 @@ export interface GitDiffConfig {
     noColor: boolean;
     diffFilter: string;
     filterMeta: boolean;
+    includeSummary: boolean;
     maxChanges: number;
     area: string;
 }

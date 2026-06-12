@@ -85,6 +85,7 @@ export class ConfigService {
                     noColor: config.get<boolean>(CONFIG_CONSTANTS.GIT.DIFF.NO_COLOR) ?? CONFIG_CONSTANTS.DEFAULTS.GIT.DIFF.NO_COLOR,
                     diffFilter: config.get<string>(CONFIG_CONSTANTS.GIT.DIFF.DIFF_FILTER) ?? CONFIG_CONSTANTS.DEFAULTS.GIT.DIFF.DIFF_FILTER,
                     filterMeta: config.get<boolean>(CONFIG_CONSTANTS.GIT.DIFF.FILTER_META) ?? CONFIG_CONSTANTS.DEFAULTS.GIT.DIFF.FILTER_META,
+                    includeSummary: config.get<boolean>(CONFIG_CONSTANTS.GIT.DIFF.INCLUDE_SUMMARY) ?? CONFIG_CONSTANTS.DEFAULTS.GIT.DIFF.INCLUDE_SUMMARY,
                     maxChanges: config.get<number>(CONFIG_CONSTANTS.GIT.DIFF.MAX_CHANGES) ?? CONFIG_CONSTANTS.DEFAULTS.GIT.DIFF.MAX_CHANGES,
                     area: config.get<string>(CONFIG_CONSTANTS.GIT.DIFF.AREA) ?? CONFIG_CONSTANTS.DEFAULTS.GIT.DIFF.AREA,
                 }

@@ -158,6 +158,7 @@ export const CONFIG_CONSTANTS = {
             NO_COLOR: 'git-diff.noColor',
             DIFF_FILTER: 'git-diff.diffFilter',
             FILTER_META: 'git-diff.filterMeta',
+            INCLUDE_SUMMARY: 'git-diff.includeSummary',
             AREA: 'git-diff.area'
         }
     },
@@ -201,13 +202,13 @@ export const CONFIG_CONSTANTS = {
         OPENAI: {
             BASE_URL: 'https://api.openai.com/v1',
             MODEL: 'gpt-3.5-turbo',
-            TEMPERATURE: 0.7,
+            TEMPERATURE: 0.3,
             TOP_P: 1,
             MAX_TOKENS: 500
         },
         GEMINI: {
             MODEL: 'gemini-pro',
-            TEMPERATURE: 0.7,
+            TEMPERATURE: 0.3,
             TOP_K: 40,
             TOP_P: 0.95,
             MAX_OUTPUT_TOKENS: 500,
@@ -216,7 +217,7 @@ export const CONFIG_CONSTANTS = {
         ANTHROPIC: {
             BASE_URL: 'https://open.bigmodel.cn/api/anthropic',
             MODEL: 'glm-5.1',
-            TEMPERATURE: 0.7,
+            TEMPERATURE: 0.3,
             TOP_P: 1,
             MAX_TOKENS: 500
         },
@@ -228,6 +229,7 @@ export const CONFIG_CONSTANTS = {
                 NO_COLOR: true,
                 DIFF_FILTER: 'ACDMRT',
                 FILTER_META: false,
+                INCLUDE_SUMMARY: true,
                 AREA: 'auto'
             }
         },

@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { simpleGit, SimpleGit } from 'simple-git';
 import { GitExtension, Repository } from './types/git';
+import type { DiffOptions } from './types/diff';
 import { GIT_CONSTANTS } from './constants';
 import { Logger } from './utils/logger';
 import { TextUtils } from './utils/text-utils';
@@ -8,53 +9,81 @@ import { TextUtils } from './utils/text-utils';
 export class GitService {
     private static git: SimpleGit;
 
+    private static async buildBaseDiffOptions(repoPath: string, area?: string, diffFilter?: string): Promise<string[] | undefined> {
+        const diffOptions: string[] = [];
+
+        if (area === 'staged' || area === 'cached') {
+            diffOptions.push('--cached');
+        } else if (area === 'working') {
+            diffOptions.push('HEAD');
+        } else if (area === 'auto') {
+            const stagedChanges = await this.getChangesCount(repoPath, 'staged', diffFilter);
+            if (stagedChanges > 0) {
+                diffOptions.push('--cached');
+            } else {
+                const workingChanges = await this.getChangesCount(repoPath, 'working', diffFilter);
+                if (workingChanges > 0) {
+                    diffOptions.push('HEAD');
+                } else {
+                    return undefined;
+                }
+            }
+        } else {
+            return undefined;
+        }
+
+        if (diffFilter) {
+            diffOptions.push(`--diff-filter=${diffFilter}`);
+        }
+
+        return diffOptions;
+    }
+
+    private static async getDiffSummary(repoPath: string, baseDiffOptions: string[]): Promise<string> {
+        const sections: string[] = [];
+
+        const nameStatus = (await this.git.diff([...baseDiffOptions, '--name-status'])).trim();
+        if (nameStatus) {
+            sections.push(`### Name Status\n${nameStatus}`);
+        }
+
+        const stat = (await this.git.diff([...baseDiffOptions, '--stat'])).trim();
+        if (stat) {
+            sections.push(`### Stat\n${stat}`);
+        }
+
+        const summary = (await this.git.diff([...baseDiffOptions, '--summary'])).trim();
+        if (summary) {
+            sections.push(`### Summary\n${summary}`);
+        }
+
+        if (sections.length === 0) {
+            return '';
+        }
+
+        return [
+            '## Change Summary',
+            'Use this summary for file status, scope, and high-level classification. Use the full diff below as the source of truth.',
+            '',
+            ...sections,
+        ].join('\n\n');
+    }
+
     /**
      * 获取当前Git仓库的路径
      * @param repoPath 仓库路径
      * @param options diff选项
      * @returns 返回当前Git仓库的路径，如果没有找到则返回undefined
      * */
-    static async getDiff(repoPath: string, options?: {
-        wordDiff?: boolean;
-        unified?: number;
-        noColor?: boolean;
-        diffFilter?: string;
-        filterMeta?: boolean;
-        area?: string;
-    }): Promise<string | undefined> {
+    static async getDiff(repoPath: string, options?: DiffOptions): Promise<string | undefined> {
         try {
             this.git = simpleGit(repoPath);
-            const diffOptions: string[] = [];
-
-            // 根据areaConfigure决定是否使用--cached选项
-            if (options?.area === 'staged' || options?.area === 'cached') {
-                diffOptions.push('--cached');
-            } else if (options?.area === "working") {
-                diffOptions.push(`HEAD`);
-            } else if (options?.area === "auto") {
-                // 自动判断：先检查暂存区，如果有变更则返回暂存区变更，否则检查工作区
-                // Auto determine: check staged first, if changes exist return staged changes, else check working area
-                const stagedChanges = await this.getChangesCount(repoPath, 'staged', options?.diffFilter);
-                if (stagedChanges > 0) {
-                    // 暂存区有变更，使用暂存区
-                    // Staged area has changes, use staged area
-                    diffOptions.push('--cached');
-                } else {
-                    // 暂存区None变更，检查工作区
-                    const workingChanges = await this.getChangesCount(repoPath, 'working', options?.diffFilter);
-                    if (workingChanges > 0) {
-                        // 工作区有变更，使用工作区
-                        // Working area has changes, use working area
-                        diffOptions.push('HEAD');
-                    } else {
-                        // 两个区域都没有变更
-                        // Neither area has changes
-                        return undefined;
-                    }
-                }
-            } else {
+            const baseDiffOptions = await this.buildBaseDiffOptions(repoPath, options?.area, options?.diffFilter);
+            if (!baseDiffOptions) {
                 return undefined;
             }
+
+            const diffOptions = [...baseDiffOptions];
 
             // 添加word diff选项
             // Add word diff option
@@ -72,12 +101,6 @@ export class GitService {
             // Add color option
             if (options?.noColor) {
                 diffOptions.push('--no-color');
-            }
-
-            // 添加文件过滤选项
-            // Add file filter option
-            if (options?.diffFilter) {
-                diffOptions.push(`--diff-filter=${options.diffFilter}`);
             }
 
             let diff = await this.git.diff(diffOptions);
@@ -102,7 +125,16 @@ export class GitService {
                 diff = strippedDiff;
             }
 
-            return diff;
+            if (!options?.includeSummary) {
+                return diff;
+            }
+
+            const summary = await this.getDiffSummary(repoPath, baseDiffOptions);
+            if (!summary) {
+                return diff;
+            }
+
+            return `${summary}\n\n## Full Diff\n${diff}`;
         } catch (error) {
             Logger.error(vscode.l10n.t("Failed to get Git diff"), error);
             return undefined;
