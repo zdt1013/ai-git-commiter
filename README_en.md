@@ -17,75 +17,7 @@
 
 > Tips: If you need to create a **Pull Request**, please choose to merge into the dev branch. Merging into the main branch will be rejected by default.
 
-> As of the release of this version (**v1.0.55**), the cumulative number of downloads of the dual-plugin store has exceeded **3200+**. We are officially collecting requirements for the **2.x version**. You are welcome to submit feedback and requirements in the [Issue](https://github.com/zdt1013/ai-git-commiter/issues/).
-
-## 🕑 Changelog
-- **v1.0.55**
-  * Optimization: Default prompt upgraded to v1.0.28, with new type-selection rules to reduce type misclassification.
-    1. The model is explicitly forbidden from inferring `type` from the `Example Scopes` column; type is now determined solely by the nature of the change.
-    2. Added disambiguation rules for commonly confused types (feat/fix, refactor/style/perf, build/ci/chore) with a priority order for ambiguous cases.
-    3. Revised multi-type splitting strategy: prefer a single message with one dominant type; only split when changes are genuinely unrelated. Added a single-type example to balance the existing multi-type one.
-  * New: Support injecting recent commit history as a style reference into the prompt (disabled by default).
-    1. When enabled, the model references the scope vocabulary and tone from your project's actual commit history to generate more consistent messages.
-    2. Merge commits, reverts, and version-bump commits are automatically filtered out to avoid polluting the style reference.
-    3. The number of commits injected can be configured via `prompt.recentCommitsCount` (default: 3).
-
-- **v1.0.54**
-  * New: Introduced comprehensive internationalization (i18n) support with all user-facing text localized via `vscode.l10n.t()` and bilingual annotations added. [PR #12](https://github.com/zdt1013/ai-git-commiter/pull/12)
-  * Optimization: Adjusted default values for git-diff related configuration for a better out-of-the-box experience.
-  * Optimization: Updated build and packaging parameters.
-
-- **v1.0.53**
-  * New: Optimized project awareness configuration, supporting automatic awareness of AI programming documents such as CLAUDE.md. （Thanks to Xiaomi [MiMo Orbit Plan](https://100t.xiaomimimo.com) for providing Free Token support）
-  
-- **v1.0.52**
-  * New: Added support for self-deployed inference models of VLLM.
-  * New: Added thinking mode parameters in configuration options, supporting three thinking modes including standard, legacy and vllm; optimized inference content detection and log output.
-
-- **v1.0.51**
-  * Skipped these version numbers due to incorrect version numbers caused by automatic release errors. The update content is the same as v1.0.50.
-
-- **v1.0.50**
-  * Added support for custom User-Agent configuration. [PR #9](https://github.com/zdt1013/ai-git-commiter/pull/9)
-
-- **v1.0.49**
-  * Fix: Declared `vscode.git` as an extension dependency to ensure the Git extension is ready when the plugin activates, resolving the "No Git repository found" error when clicking the button. [Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
-  * Fix: Added a wait mechanism for when the Git API is in an uninitialized state, preventing false "no repository" errors during VS Code startup. [Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
-  * Fix: `chat_template_kwargs` and `enable_thinking` fields are now only sent to the API when the user explicitly enables the thinking feature, resolving `400` errors from standard OpenAI and most compatible providers. [Issue #6](https://github.com/zdt1013/ai-git-commiter/issues/6)
-  * New: Introduced an Output Channel logging system for easier troubleshooting and debugging.
-  * Fix: Automatically detect and strip base64-encoded image data from git diffs, resolving errors caused by oversized diff content in files with embedded images (HTML, Markdown, Jupyter Notebook, source code, etc.).
-
-- **v1.0.48**
-  * Newly added: Added support for Anthropic and compatible service providers.
-
-- **v1.0.47**
-  * Fix: Resolve the issue where the "AI-generated Commit Message" command in the command palette fails to correctly recognize the repository under specific scenarios.
-
-- **v1.0.46**
-  * New feature (including emergency bug fixes): Intelligently determine the project repository that the user wants to operate on when executing "Manually Polish Commit Messages".
-    1. When a single project is opened, the current project repository is used by default.
-    2. When a multi-project workspace is opened, check if there is an active editor window. If there is, the project repository to which the active window belongs is used by default.
-    3. When a multi-project workspace is opened, check if there is an active editor window. If there is not, a drop-down menu will pop up for the user to independently select the project repository.
-  <p align="center">
-   <img src="docs/2025112101.png" alt="" width="600">
-   </p>
-- **v1.0.45**
-  * Fixed an issue where the plugin button was not displayed in VS Code version >= 1.106 when using multiple workspaces [Issue #4](https://github.com/zdt1013/ai-git-commiter/issues/4).
-  * Also fixed an issue where, when using multiple workspaces, clicking the plugin would only generate a commit message for the first repository.
-
-- **v1.0.44**
-  * Optimization: Improved the default prompt template to enhance output quality.
-  * Optimization: Implemented streaming output for Commit Message generation, significantly improving the user experience during the generation process.
-   <p align="center">
-   <img src="docs/stream_output.gif" alt="Commit Message Streaming Output Demo" width="400">
-   </p>
-
-- **v1.0.43**
-  * Fixed the issue of incorrect switching between Chinese and English README links.
-- **v1.0.42**
-  * This version only adds the English version of the README documentation.
-- **v1.0.41**
-  * Optimized prompt wording for generating commit messages when multiple binary files are changed.
+> As of the release of this version (**v1.0.56**), the cumulative number of downloads of the dual-plugin store has exceeded **4584+**. We are officially collecting requirements for the **2.x version**. You are welcome to submit feedback and requirements in the [Issue](https://github.com/zdt1013/ai-git-commiter/issues/).
 
 ## 🎯 Background
 
@@ -182,6 +114,77 @@ We plan to add the following features in future versions to further enhance the 
    - Support intelligent batch processing of large file changes
    - Automatically associate related changes to generate more meaningful commit messages
    - Provide change grouping suggestions
+
+## 🕑 Changelog
+- **v1.0.56**
+  * Fix: Resolved a network error when calling the OpenAI API after upgrading to the latest version of VS Code.
+
+- **v1.0.55**
+  * Optimization: Default prompt upgraded to v1.0.28, with new type-selection rules to reduce type misclassification.
+    1. The model is explicitly forbidden from inferring `type` from the `Example Scopes` column; type is now determined solely by the nature of the change.
+    2. Added disambiguation rules for commonly confused types (feat/fix, refactor/style/perf, build/ci/chore) with a priority order for ambiguous cases.
+    3. Revised multi-type splitting strategy: prefer a single message with one dominant type; only split when changes are genuinely unrelated. Added a single-type example to balance the existing multi-type one.
+  * New: Support injecting recent commit history as a style reference into the prompt (disabled by default).
+    1. When enabled, the model references the scope vocabulary and tone from your project's actual commit history to generate more consistent messages.
+    2. Merge commits, reverts, and version-bump commits are automatically filtered out to avoid polluting the style reference.
+    3. The number of commits injected can be configured via `prompt.recentCommitsCount` (default: 3).
+
+- **v1.0.54**
+  * New: Introduced comprehensive internationalization (i18n) support with all user-facing text localized via `vscode.l10n.t()` and bilingual annotations added. [PR #12](https://github.com/zdt1013/ai-git-commiter/pull/12)
+  * Optimization: Adjusted default values for git-diff related configuration for a better out-of-the-box experience.
+  * Optimization: Updated build and packaging parameters.
+
+- **v1.0.53**
+  * New: Optimized project awareness configuration, supporting automatic awareness of AI programming documents such as CLAUDE.md. （Thanks to Xiaomi [MiMo Orbit Plan](https://100t.xiaomimimo.com) for providing Free Token support）
+  
+- **v1.0.52**
+  * New: Added support for self-deployed inference models of VLLM.
+  * New: Added thinking mode parameters in configuration options, supporting three thinking modes including standard, legacy and vllm; optimized inference content detection and log output.
+
+- **v1.0.51**
+  * Skipped these version numbers due to incorrect version numbers caused by automatic release errors. The update content is the same as v1.0.50.
+
+- **v1.0.50**
+  * Added support for custom User-Agent configuration. [PR #9](https://github.com/zdt1013/ai-git-commiter/pull/9)
+
+- **v1.0.49**
+  * Fix: Declared `vscode.git` as an extension dependency to ensure the Git extension is ready when the plugin activates, resolving the "No Git repository found" error when clicking the button. [Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
+  * Fix: Added a wait mechanism for when the Git API is in an uninitialized state, preventing false "no repository" errors during VS Code startup. [Issue #8](https://github.com/zdt1013/ai-git-commiter/issues/8)
+  * Fix: `chat_template_kwargs` and `enable_thinking` fields are now only sent to the API when the user explicitly enables the thinking feature, resolving `400` errors from standard OpenAI and most compatible providers. [Issue #6](https://github.com/zdt1013/ai-git-commiter/issues/6)
+  * New: Introduced an Output Channel logging system for easier troubleshooting and debugging.
+  * Fix: Automatically detect and strip base64-encoded image data from git diffs, resolving errors caused by oversized diff content in files with embedded images (HTML, Markdown, Jupyter Notebook, source code, etc.).
+
+- **v1.0.48**
+  * Newly added: Added support for Anthropic and compatible service providers.
+
+- **v1.0.47**
+  * Fix: Resolve the issue where the "AI-generated Commit Message" command in the command palette fails to correctly recognize the repository under specific scenarios.
+
+- **v1.0.46**
+  * New feature (including emergency bug fixes): Intelligently determine the project repository that the user wants to operate on when executing "Manually Polish Commit Messages".
+    1. When a single project is opened, the current project repository is used by default.
+    2. When a multi-project workspace is opened, check if there is an active editor window. If there is, the project repository to which the active window belongs is used by default.
+    3. When a multi-project workspace is opened, check if there is an active editor window. If there is not, a drop-down menu will pop up for the user to independently select the project repository.
+  <p align="center">
+   <img src="docs/2025112101.png" alt="" width="600">
+   </p>
+- **v1.0.45**
+  * Fixed an issue where the plugin button was not displayed in VS Code version >= 1.106 when using multiple workspaces [Issue #4](https://github.com/zdt1013/ai-git-commiter/issues/4).
+  * Also fixed an issue where, when using multiple workspaces, clicking the plugin would only generate a commit message for the first repository.
+
+- **v1.0.44**
+  * Optimization: Improved the default prompt template to enhance output quality.
+  * Optimization: Implemented streaming output for Commit Message generation, significantly improving the user experience during the generation process.
+   <p align="center">
+   <img src="docs/stream_output.gif" alt="Commit Message Streaming Output Demo" width="400">
+   </p>
+
+- **v1.0.43**
+  * Fixed the issue of incorrect switching between Chinese and English README links.
+- **v1.0.42**
+  * This version only adds the English version of the README documentation.
+- **v1.0.41**
+  * Optimized prompt wording for generating commit messages when multiple binary files are changed.
 
 ## 🔒 Privacy Statement
 
