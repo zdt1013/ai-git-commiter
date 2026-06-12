@@ -118,6 +118,7 @@ We plan to add the following features in future versions to further enhance the 
 ## 🕑 Changelog
 - **v1.0.56**
   * Fix: Resolved a network error when calling the OpenAI API after upgrading to the latest version of VS Code.
+  * New: Added configuration for Git change summary, enabling AI to better recognize the context of code changes. Enabled by default.
 
 - **v1.0.55**
   * Optimization: Default prompt upgraded to v1.0.28, with new type-selection rules to reduce type misclassification.
