@@ -1,4 +1,4 @@
-import { OpenAI, ClientOptions } from 'openai';
+import { OpenAI, ClientOptions, APIConnectionError } from 'openai';
 import * as vscode from 'vscode';
 import { PromptTemplate } from '../types/types';
 import { CONFIG_CONSTANTS } from '../constants';
@@ -42,7 +42,7 @@ export class OpenAIService implements IAIService {
             const userAgent = config.get<string>(CONFIG_CONSTANTS.USER_AGENT) || '';
             const clientConfig: ClientOptions = {
                 apiKey: apiKey,
-                baseURL: baseUrl
+                baseURL: baseUrl,
             };
             if (userAgent) {
                 clientConfig.defaultHeaders = {
@@ -172,6 +172,11 @@ export class OpenAIService implements IAIService {
             }
         } catch (error: any) {
             Logger.error(vscode.l10n.t("OpenAI API call failed"), error);
+            if (error instanceof APIConnectionError) {
+                const config = vscode.workspace.getConfiguration(CONFIG_CONSTANTS.ROOT);
+                const baseUrl = config.get<string>(CONFIG_CONSTANTS.OPENAI.BASE_URL) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.BASE_URL;
+                throw new Error(vscode.l10n.t("Cannot connect to API endpoint: {0}. Please check your network or baseURL setting.", baseUrl));
+            }
             throw new Error(`OpenAI API call failed: ${error.message}`);
         }
     }

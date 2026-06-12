@@ -2,7 +2,7 @@
   "name": "ai-git-commiter",
   "displayName": "AI Git Commiter",
   "description": "%extension.description%",
-  "version": "1.0.55",
+  "version": "1.0.56",
   "publisher": "zdt1013",
   "repository": {
     "type": "git",
@@ -431,13 +431,13 @@
     "vitest": "^4.1.5"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.90.0",
-    "@google/genai": "^0.8.0",
+    "@anthropic-ai/sdk": "^0.104.1",
+    "@google/genai": "^2.8.0",
     "@types/xml2js": "^0.4.14",
     "axios": "^1.6.7",
-    "openai": "^4.97.0",
+    "openai": "^6.42.0",
     "simple-git": "^3.27.0",
-    "uuid": "^11.1.0",
+    "uuid": "^14.0.0",
     "xml2js": "^0.6.2"
   },
   "keywords": [

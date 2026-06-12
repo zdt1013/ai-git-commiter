@@ -84,5 +84,6 @@
     "Gemini config is incomplete, configure now?": "Gemini配置不完整，是否立即配置？",
     "Anthropic config is incomplete, configure now?": "Anthropic配置不完整，是否立即配置？",
     "Failed to get Git diff": "获取Git差异失败",
-    "Failed to get changed lines count": "获取变更行数失败"
+    "Failed to get changed lines count": "获取变更行数失败",
+    "Cannot connect to API endpoint: {0}. Please check your network or baseURL setting.": "无法连接到API端点: {0}，请检查网络或baseURL设置"
 }

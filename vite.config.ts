@@ -1,7 +1,13 @@
 // vite.config.js
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import { builtinModules } from 'module';
 import versionIncrPlugin from './plugins/vite-plugin-version-incr';
+
+const nodeBuiltins = [
+  ...builtinModules,
+  ...builtinModules.map(m => `node:${m}`),
+];
 
 export default defineConfig(({ mode }) => {
   return {
@@ -15,43 +21,16 @@ export default defineConfig(({ mode }) => {
           extension: resolve(__dirname, 'src/extension.ts'),
         },
         formats: ['cjs'],
-        fileName: (format, entryName) => `${entryName}.js`
+        fileName: (_format, entryName) => `${entryName}.js`
       },
       rollupOptions: {
         external: [
           'vscode',
-          'path',
-          'fs',
-          'fs/promises',
-          'os',
-          'child_process',
-          'util',
-          'crypto',
-          'http',
-          'https',
-          'url',
-          'stream',
-          'zlib',
           '@vscode/test-electron',
           'mocha',
           'glob',
-          'timers',
-          "events",
-          "node:events",
-          "node:path",
-          "node:os",
-          "node:child_process",
-          "node:util",
-          "node:crypto",
-          "node:stream",
-          "node:zlib",
-          "node:fs",
-          "node:fs/promises",
-          "node:timers",
-          "node:url",
-          "node:http",
-          "node:https",
-        ]
+          ...nodeBuiltins,
+        ],
       },
       sourcemap: true,
       outDir: 'dist',
@@ -68,9 +47,6 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       extensions: ['.ts', '.js'],
-      alias: {
-        'node:events': 'events'
-      }
     },
     optimizeDeps: {
       exclude: ['fs', 'fs/promises', 'timers']
