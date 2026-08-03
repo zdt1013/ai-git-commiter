@@ -17,7 +17,7 @@
 
 > Tips: If you need to create a **Pull Request**, please choose to merge into the dev branch. Merging into the main branch will be rejected by default.
 
-> As of the release of this version (**v1.0.56**), the cumulative number of downloads of the dual-plugin store has exceeded **4584+**. We are officially collecting requirements for the **2.x version**. You are welcome to submit feedback and requirements in the [Issue](https://github.com/zdt1013/ai-git-commiter/issues/).
+> As of the release of this version (**v1.0.57**), the cumulative number of downloads of the dual-plugin store has exceeded **5513+**. We are officially collecting requirements for the **2.x version**. You are welcome to submit feedback and requirements in the [Issue](https://github.com/zdt1013/ai-git-commiter/issues/).
 
 ## 🎯 Background
 
@@ -116,6 +116,9 @@ We plan to add the following features in future versions to further enhance the 
    - Provide change grouping suggestions
 
 ## 🕑 Changelog
+- **v1.0.57**
+  * New: Added a default prompt template without Emoji, which can be switched to via the "Select Prompt Template" quick command.
+
 - **v1.0.56**
   * Fix: Resolved a network error when calling the OpenAI API after upgrading to the latest version of VS Code.
   * New: Added configuration for Git change summary, enabling AI to better recognize the context of code changes. Enabled by default.
