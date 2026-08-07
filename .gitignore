@@ -5,6 +5,7 @@ node_modules
 dist
 .DS_Store
 .spec-workflow/
+.worktrees/
 
 # spec-first:start
 # spec-first generated runtime assets
