@@ -1,7 +1,0 @@
----
-description: Project context — read CLAUDE.md before coding
-globs:
-alwaysApply: true
----
-
-Before making changes to this project, read `CLAUDE.md` at the repository root for architecture, conventions, and localization rules.

@@ -116,6 +116,9 @@ We plan to add the following features in future versions to further enhance the 
    - Provide change grouping suggestions
 
 ## 🕑 Changelog
+- **v1.0.58**
+  * Fix: After adding the new default prompt template without Emoji, the default template is now the one containing Emoji.
+
 - **v1.0.57**
   * New: Added a default prompt template without Emoji, which can be switched to via the "Select Prompt Template" quick command.
 

@@ -6,6 +6,7 @@ import * as xml2js from 'xml2js';
 import axios from 'axios';
 import { PromptTemplate, XmlPrompt } from '../types/types';
 import { PROMPT_CONSTANTS, CONFIG_CONSTANTS } from '../constants';
+import { Logger } from '../utils/logger';
 
 /**
  * 提示词管理器类 - 单例模式
@@ -66,9 +67,11 @@ export class PromptService {
 
         // bugfix: 如果用户没有选择任何提示词，则设置Default prompt
         if (!selectedPromptId) {
-            const defaultPrompt = this._prompts.find(p => p.id === 'default');
+            const defaultPrompt = this._prompts.find(p => p.id === PROMPT_CONSTANTS.DEFAULT_PROMPT_ID);
             if (defaultPrompt) {
                 await this.updateSelectedPrompt(defaultPrompt);
+            } else {
+                Logger.error(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.ERROR.DEFAULT_MISSING);
             }
         }
     }
@@ -151,7 +154,11 @@ export class PromptService {
             console.error(vscode.l10n.t("Failed to load default prompt:"), error);
         }
 
-        return prompts;
+        return prompts.sort((a, b) => {
+            if (a.id === PROMPT_CONSTANTS.DEFAULT_PROMPT_ID) return -1;
+            if (b.id === PROMPT_CONSTANTS.DEFAULT_PROMPT_ID) return 1;
+            return a.name.localeCompare(b.name);
+        });
     }
 
     /**
@@ -327,14 +334,13 @@ export class PromptService {
 
         // 如果没有选中模板，返回默认模板
         // Return default template if none selected
-        const defaultPrompt = this._prompts.find(p => p.id === 'default');
+        const defaultPrompt = this._prompts.find(p => p.id === PROMPT_CONSTANTS.DEFAULT_PROMPT_ID);
         if (defaultPrompt) {
             return defaultPrompt;
         }
 
-        // 如果连默认模板都没有，返回第一个模板
-        // Return first template if no default template
-        return this._prompts[0];
+        Logger.error(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.ERROR.DEFAULT_MISSING);
+        throw new Error(PROMPT_CONSTANTS.PROMPT_MANAGEMENT.ERROR.DEFAULT_MISSING);
     }
 
     public async updateSelectedPrompt(prompt: PromptTemplate): Promise<void> {

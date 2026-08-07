@@ -23,6 +23,7 @@
     "Failed to load prompts": "加载提示词失败",
     "Failed to save prompts": "保存提示词失败",
     "Failed to download remote prompts": "下载远程提示词失败",
+    "Default prompt template is missing. Please reinstall the extension": "默认提示词模板缺失，请重新安装扩展",
     "Source: {0}": "来源: {0}",
     "Version: {0}": "版本: {0}",
     "No Git repository found": "未找到Git仓库",

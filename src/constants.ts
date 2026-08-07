@@ -17,6 +17,10 @@ export const PROMPT_CONSTANTS = {
         OPEN_SETTINGS: 'ai-git-commiter.settings'
     },
 
+    // 权威默认提示词模板 id
+    // Authoritative default prompt template id
+    DEFAULT_PROMPT_ID: 'default',
+
     // Prompt management text
     PROMPT_MANAGEMENT: {
         INPUT: {
@@ -65,7 +69,8 @@ export const PROMPT_CONSTANTS = {
         ERROR: {
             get LOAD() { return vscode.l10n.t('Failed to load prompts'); },
             get SAVE() { return vscode.l10n.t('Failed to save prompts'); },
-            get DOWNLOAD() { return vscode.l10n.t('Failed to download remote prompts'); }
+            get DOWNLOAD() { return vscode.l10n.t('Failed to download remote prompts'); },
+            get DEFAULT_MISSING() { return vscode.l10n.t('Default prompt template is missing. Please reinstall the extension'); }
         }
     },
 

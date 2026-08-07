@@ -103,3 +103,15 @@ npx vite build --mode production && npx vsce package --no-dependencies
 2. 源代码中的所有向用户展示的文本（如日志、UI 提示、错误信息等）必须使用 `vscode.l10n.t("Simple English Text")` 进行包裹。
 3. 当新增或修改带有 `vscode.l10n.t()` 的字符串时，请务必同步更新 `l10n/bundle.l10n.zh-cn.json` 中的中文翻译，以保持完整的中文支持。
 4. 当修改或新增 `package.json` 中的配置项（命令、设置项等）时，务必使用 `%key%` 作为占位符，并在 `package.nls.json`（英文）和 `package.nls.zh-cn.json`（中文）中分别提供翻译。
+
+<!-- spec-first:lang:start -->
+## 语言与治理策略
+**语言设置：** `Chinese / 中文`
+语言规则为绝对硬执行要求：除非用户在当前请求中明确要求其他语言、翻译、双语输出或保留原文，所有面向用户的新生成自然语言内容必须使用简体中文。
+适用范围覆盖回答、状态更新、澄清问题、总结、评审、生成文档、需求、计划、任务、变更说明、commit message 和 PR 文案。
+代码标识符、命令、路径、配置键、环境变量、API 名称、协议名、日志、工具输出和引用材料可以保留原文；围绕它们新增的解释、结论和说明仍按本语言设置输出。
+skill、agent、模板、历史上下文或示例文本的原文语言不得覆盖本设置；新增代码注释也按本设置，只说明非显然意图。
+### Workflow 入口治理
+<!-- spec-first:workflow-entry:using-spec-first -->
+- 在执行实质性工作前，加载当前宿主已安装的 `using-spec-first` skill；完整入口路由与边界由该 skill 提供。
+<!-- spec-first:lang:end -->

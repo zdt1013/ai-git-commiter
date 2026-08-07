@@ -1,0 +1,60 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "/Users/zdt/Projects/ai-git-commiter/.claude/hooks/session-start"
+            ]
+          }
+        ]
+      }
+    ],
+    "UserPromptExpansion": [
+      {
+        "matcher": "spec-plan",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "/Users/zdt/Projects/ai-git-commiter/.claude/hooks/spec-plan-guard"
+            ]
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "/Users/zdt/Projects/ai-git-commiter/.claude/hooks/prd-prewrite-guard"
+            ]
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "/Users/zdt/Projects/ai-git-commiter/.claude/hooks/prd-readiness-guard"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

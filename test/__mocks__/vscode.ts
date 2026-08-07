@@ -1,4 +1,8 @@
 // Mock for vscode API
+export const l10n = {
+    t: (message: string) => message,
+};
+
 export const window = {
     showInformationMessage: () => Promise.resolve(),
     showErrorMessage: () => Promise.resolve(),
@@ -54,6 +58,7 @@ export default {
     window,
     workspace,
     commands,
+    l10n,
     Uri,
     EventEmitter,
     ExtensionContext
