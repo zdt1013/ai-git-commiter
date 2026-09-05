@@ -40,6 +40,8 @@
     "Successfully polished Commit message": "成功润色Commit消息",
     "Successfully switched AI model": "成功切换AI模型",
     "Failed to generate Commit message": "生成Commit消息失败",
+    "The AI model returned an empty response. Please try again or increase the max output tokens.": "AI 模型返回了空响应，请重试或提高最大输出 Token 数。",
+    "The AI model returned no final response. Increase the max output tokens or reduce the reasoning effort, then try again.": "AI 模型没有返回最终正文。请提高最大输出 Token 数或降低推理强度后重试。",
     "Failed to polish Commit message": "润色Commit消息失败",
     "Failed to load available models": "加载可用模型列表失败",
     "Current AI provider does not support reading available models": "当前AI服务商不支持读取可用模型列表",

@@ -7,6 +7,7 @@ import { AIModel } from '../types/model';
 import { ChatCompletionChunk, ChatCompletionCreateParamsStreaming } from 'openai/resources/chat/completions';
 import { Stream } from 'openai/streaming';
 import { Logger } from '../utils/logger';
+import { buildOpenAIThinkingConfig, OpenAIThinkingMode } from './openai-thinking';
 
 
 export class OpenAIService implements IAIService {
@@ -93,14 +94,13 @@ export class OpenAIService implements IAIService {
         const topP = config.get<number>(CONFIG_CONSTANTS.OPENAI.TOP_P) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.TOP_P;
         const maxTokens = config.get<number>(CONFIG_CONSTANTS.OPENAI.MAX_TOKENS) || CONFIG_CONSTANTS.DEFAULTS.OPENAI.MAX_TOKENS;
         const enableThinking = config.get<boolean>(CONFIG_CONSTANTS.ENABLE_THINKING) ?? CONFIG_CONSTANTS.DEFAULTS.ENABLE_THINKING;
-        const thinkingMode = config.get<'disabled' | 'standard' | 'legacy' | 'vllm'>(CONFIG_CONSTANTS.THINKING_MODE) ?? CONFIG_CONSTANTS.DEFAULTS.THINKING_MODE;
-
-        const isThinkingEnabled = enableThinking && thinkingMode !== 'disabled';
-        // 思考模式下 reasoning token 和正文 token 共享 max_tokens，
-        // In thinking mode, reasoning token and content token share max_tokens,
-        // 在用户Configure值基础上额外追加 4096 作为思考预留，确保正文有足够配额输出。
-        const THINKING_EXTRA_TOKENS = 4096;
-        const effectiveMaxTokens = isThinkingEnabled ? maxTokens + THINKING_EXTRA_TOKENS : maxTokens;
+        const thinkingMode = config.get<OpenAIThinkingMode>(CONFIG_CONSTANTS.THINKING_MODE) ?? CONFIG_CONSTANTS.DEFAULTS.THINKING_MODE;
+        const { effectiveMaxTokens, requestOptions } = buildOpenAIThinkingConfig(
+            model,
+            maxTokens,
+            enableThinking,
+            thinkingMode,
+        );
 
         // 获取OpenAI客户端实例
         // Get OpenAI client instance
@@ -115,32 +115,14 @@ export class OpenAIService implements IAIService {
             top_p: topP,
             max_tokens: effectiveMaxTokens,
             stream: true,
-            // 根据 thinkingMode 决定传哪个思考参数，始终显式传入，让服务端明确收到开关状态：
-            // Decide which thinking parameter to pass based on thinkingMode, always pass explicitly:
-            // - disabled: 不传任何思考参数，兼容标准 OpenAI 及大多数服务商
-            // - disabled: Do not pass any thinking param, compatible with standard OpenAI and most providers
-            // - standard: 新版标准 OpenAI reasoning API（reasoning.effort），适用于 o1/o3 等官方推理模型
-            // - standard: New standard OpenAI reasoning API (reasoning_effort), suitable for o1/o3 official models
-            //             开启时传 "medium"，关闭时传 "none"
-            //             Pass 'medium' when enabled, 'none' when disabled
-            // - legacy:   旧版标准接口，直接传 enable_thinking: true/false
-            // - legacy: Legacy standard API, directly pass enable_thinking: true/false
-            // - vllm:     vllm 部署的思考模型，使用 chat_template_kwargs.enable_thinking 包装
-            // - vllm: Thinking model deployed via vllm, wrapped with chat_template_kwargs.enable_thinking
-            ...(thinkingMode === 'standard' && {
-                reasoning: enableThinking ? { effort: 'medium' } : "none",
-            }),
-            ...(thinkingMode === 'legacy' && {
-                enable_thinking: enableThinking,
-            }),
-            ...(thinkingMode === 'vllm' && {
-                chat_template_kwargs: { enable_thinking: enableThinking },
-            }),
+            ...requestOptions,
         } as any;
         try {
             const stream = await openai.chat.completions.create(createBody) as Stream<ChatCompletionChunk>;
             let hasLoggedReasoning = false;
             let hasLoggedReasoningDone = false;
+            let hasContent = false;
+            let finishReason: string | null = null;
             for await (const chunk of stream) {
                 // vllm 思考模型在思考阶段结束时可能返回 choices 为空的 chunk，跳过
                 // vllm thinking model might return empty choices chunk when thinking ends, skip
@@ -150,6 +132,7 @@ export class OpenAIService implements IAIService {
 
                 const choice = chunk.choices[0];
                 const delta = choice?.delta as any;
+                finishReason = choice?.finish_reason ?? finishReason;
 
                 // vllm 部署的思考模型实际字段名为 "reasoning"（非 content/reasoning_content）
                 // vllm deployed thinking model actual field name is 'reasoning' (not content/reasoning_content)
@@ -163,12 +146,18 @@ export class OpenAIService implements IAIService {
 
                 const content = delta?.content || '';
                 if (content) {
+                    hasContent = true;
                     if (hasLoggedReasoning && !hasLoggedReasoningDone) {
                         Logger.log(vscode.l10n.t("[OpenAI] Reasoning complete, starting text output"));
                         hasLoggedReasoningDone = true;
                     }
                     yield content;
                 }
+            }
+
+            if (!hasContent) {
+                Logger.warn(`[OpenAI] Stream completed without final content; reasoning=${hasLoggedReasoning}, finishReason=${finishReason ?? 'unknown'}`);
+                throw new Error(vscode.l10n.t('The AI model returned no final response. Increase the max output tokens or reduce the reasoning effort, then try again.'));
             }
         } catch (error: any) {
             Logger.error(vscode.l10n.t("OpenAI API call failed"), error);
@@ -228,4 +217,4 @@ export class OpenAIService implements IAIService {
 
         return this.callOpenAI(prompt, promptTemplate);
     }
-} 
+}
