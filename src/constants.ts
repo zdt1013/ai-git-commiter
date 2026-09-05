@@ -118,6 +118,7 @@ export const AI_CONSTANTS = {
     ERROR: {
         get GENERATE() { return vscode.l10n.t('Failed to generate Commit message'); },
         get POLISH() { return vscode.l10n.t('Failed to polish Commit message'); },
+        get EMPTY_RESPONSE() { return vscode.l10n.t('The AI model returned an empty response. Please try again or increase the max output tokens.'); },
         get LOAD_MODELS() { return vscode.l10n.t('Failed to load available models'); },
         get UNSUPPORTED_PROVIDER() { return vscode.l10n.t('Current AI provider does not support reading available models'); },
         get NO_BASE_URL() { return vscode.l10n.t('OpenAI Base URL is not set. Please configure it first'); },
