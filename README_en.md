@@ -116,6 +116,9 @@ We plan to add the following features in future versions to further enhance the 
    - Provide change grouping suggestions
 
 ## 🕑 Changelog
+- **v1.0.59**
+  * Fix: Fixed GLM 5.3 generating empty commit messages [PR #16](https://github.com/zdt1013/ai-git-commiter/pull/16)
+  
 - **v1.0.58**
   * Fix: After adding the new default prompt template without Emoji, the default template is now the one containing Emoji.
 
