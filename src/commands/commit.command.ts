@@ -157,7 +157,11 @@ export class CommitCommand {
             }
             // 移除代码块标记符并更新输入框的最终内容
             // Remove code block markers and update final input box content
-            repository.inputBox.value = TextUtils.removeCodeBlockMarkers(aggregated.trim());
+            const finalMessage = TextUtils.removeCodeBlockMarkers(aggregated.trim());
+            if (!finalMessage) {
+                throw new Error(AI_CONSTANTS.ERROR.EMPTY_RESPONSE);
+            }
+            repository.inputBox.value = finalMessage;
             // 显示成功消息
             // Show success message
             vscode.window.showInformationMessage(AI_CONSTANTS.SUCCESS.POLISH);
@@ -238,7 +242,11 @@ export class CommitCommand {
             }
             // 移除代码块标记并更新最终输入框内容，显示成功信息
             // Remove code block markers and update final input box, show success info
-            repository.inputBox.value = TextUtils.removeCodeBlockMarkers(aggregated.trim());
+            const finalMessage = TextUtils.removeCodeBlockMarkers(aggregated.trim());
+            if (!finalMessage) {
+                throw new Error(AI_CONSTANTS.ERROR.EMPTY_RESPONSE);
+            }
+            repository.inputBox.value = finalMessage;
             vscode.window.showInformationMessage(AI_CONSTANTS.SUCCESS.GENERATE);
         } catch (error: any) {
             // 处理生成过程中可能出现的错误

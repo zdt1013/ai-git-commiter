@@ -66,7 +66,11 @@ export class ManualPolishCommand extends BasePromptCommand {
                     }
                     // 移除代码块标记符并更新输入框的最终内容
                     // Remove code block markers and update final input box content
-                    repository.inputBox.value = TextUtils.removeCodeBlockMarkers(aggregated.trim());
+                    const finalMessage = TextUtils.removeCodeBlockMarkers(aggregated.trim());
+                    if (!finalMessage) {
+                        throw new Error(AI_CONSTANTS.ERROR.EMPTY_RESPONSE);
+                    }
+                    repository.inputBox.value = finalMessage;
                     vscode.window.showInformationMessage(AI_CONSTANTS.SUCCESS.POLISH);
                 } catch (error: any) {
                     vscode.window.showErrorMessage(error?.message || AI_CONSTANTS.ERROR.POLISH);
@@ -77,4 +81,4 @@ export class ManualPolishCommand extends BasePromptCommand {
             vscode.window.showErrorMessage(vscode.l10n.t("Error executing command: {0}", error.message));
         }
     }
-} 
+}
